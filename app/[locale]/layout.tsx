@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Tajawal, Amiri } from "next/font/google";
+import { Tajawal } from "next/font/google";
 import "../globals.css";
 import { Locale } from "@/i18n";
 import { getTranslations } from "@/lib/i18n";
@@ -8,12 +8,6 @@ const tajawal = Tajawal({
   weight: ["300", "400", "700", "900"],
   subsets: ["arabic", "latin"],
   variable: "--font-tajawal",
-});
-
-const amiri = Amiri({
-  weight: ["400", "700"],
-  subsets: ["arabic", "latin"],
-  variable: "--font-amiri",
 });
 
 export async function generateMetadata({
@@ -43,7 +37,7 @@ export default async function LocaleLayout({
   const isRTL = validLocale === "ar";
 
   return (
-    <div lang={validLocale} dir={isRTL ? "rtl" : "ltr"}>
+    <div lang={validLocale} dir={isRTL ? "rtl" : "ltr"} className={tajawal.variable}>
       {children}
     </div>
   );
