@@ -47,6 +47,19 @@ export default function HomePage() {
 
   useEffect(() => {
     fetchContent();
+    
+    // Re-fetch data when page becomes visible (e.g., after returning from admin)
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        fetchContent();
+      }
+    };
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, []);
 
   const fetchContent = async () => {
