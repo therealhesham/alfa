@@ -1,0 +1,43 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model HomeContent {
+  id            String   @id @default(cuid())
+  heroTitle     String   @default("ظلال المدينة")
+  heroSubtitle  String   @default("نصنع الفخامة والتميّز في كل تفصيلة منذ أكثر من خمسة عشر عامًا")
+  heroLogo      String   @default("/capture.png")
+  aboutTitle    String   @default("من نحن")
+  aboutP1       String   @default("شركة رائدة في التصميم المعماري والهندسة الفاخرة، نجمع بين الأصالة العربية واللمسات العصرية العالمية لنقدم مشاريع تحمل بصمة لا تُنسى.")
+  aboutP2       String   @default("منذ تأسيسنا عام ٢٠٠٨ نفذنا أكثر من ٢٥٠ مشروعًا في ٤٨ دولة وحصدنا ٢٢ جائزة عالمية.")
+  visionTitle   String   @default("رؤيتنا · رسالتنا · قيمنا")
+  visionVision  String   @default("الرؤية")
+  visionVisionText String @default("أن نكون الخيار الأول عالميًا في تقديم حلول معمارية فاخرة تحترم الهوية وتتخطى التوقعات.")
+  visionMission String   @default("الرسالة")
+  visionMissionText String @default("تصميم مساحات تعبر عن طموح أصحابها بأعلى معايير الجودة والإبداع والاستدامة.")
+  visionValues  String   @default("القيم")
+  visionValuesText String @default("التميّز • الأصالة • الالتزام • الابتكار • الثقة")
+  statsTitle    String   @default("إنجازاتنا بالأرقام")
+  statsProjects String   @default("مشروع منجز")
+  statsYears    String   @default("سنوات الخبرة")
+  statsCountries String  @default("دولة حول العالم")
+  statsAwards   String   @default("جائزة عالمية")
+  statsProjectsNum String @default("250+")
+  statsYearsNum String   @default("15+")
+  statsCountriesNum String @default("48")
+  statsAwardsNum String   @default("22")
+  footerCopyright String @default("© 2025 اسم الشركة – جميع الحقوق محفوظة")
+  footerLogo     String   @default("/capture.png")
+  headerLogo      String   @default("/capture.png")
+  updatedAt    DateTime @updatedAt
+  createdAt    DateTime @default(now())
+}
+

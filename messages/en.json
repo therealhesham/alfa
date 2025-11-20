@@ -1,0 +1,42 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About Us",
+    "services": "Services",
+    "projects": "Projects",
+    "contact": "Contact Us"
+  },
+  "hero": {
+    "title": "City Shadows",
+    "subtitle": "We create luxury and excellence in every detail for over fifteen years"
+  },
+  "about": {
+    "title": "About Us",
+    "p1": "A leading company in architectural design and luxury engineering, we combine Arabic authenticity with modern global touches to deliver projects with an unforgettable signature.",
+    "p2": "Since our establishment in 2008, we have completed more than 250 projects in 48 countries and won 22 international awards."
+  },
+  "vision": {
+    "title": "Our Vision · Mission · Values",
+    "vision": "Vision",
+    "visionText": "To be the first choice globally in providing luxury architectural solutions that respect identity and exceed expectations.",
+    "mission": "Mission",
+    "missionText": "Designing spaces that express the ambitions of their owners with the highest standards of quality, creativity and sustainability.",
+    "values": "Values",
+    "valuesText": "Excellence • Authenticity • Commitment • Innovation • Trust"
+  },
+  "stats": {
+    "title": "Our Achievements in Numbers",
+    "projects": "Completed Projects",
+    "years": "Years of Experience",
+    "countries": "Countries Worldwide",
+    "awards": "International Awards"
+  },
+  "footer": {
+    "copyright": "© 2025 Company Name – All Rights Reserved"
+  },
+  "common": {
+    "logoAlt": "Company Logo",
+    "menuLabel": "Navigation Menu"
+  }
+}
+
