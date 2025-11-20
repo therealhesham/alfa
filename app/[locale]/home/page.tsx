@@ -64,7 +64,7 @@ export default function HomePage() {
 
   const fetchContent = async () => {
     try {
-      const response = await fetch("/api/home-content");
+      const response = await fetch(`/api/home-content?locale=${locale}`);
       const data = await response.json();
       setContent(data);
     } catch (error) {

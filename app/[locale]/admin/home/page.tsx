@@ -171,7 +171,7 @@ function EditableField({
 
 export default function AdminHomePage() {
   const params = useParams();
-  const locale = (params?.locale as Locale) || "ar";
+  const [currentLocale, setCurrentLocale] = useState<Locale>("ar");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [content, setContent] = useState<HomeContent | null>(null);
   const [loading, setLoading] = useState(true);
@@ -180,11 +180,12 @@ export default function AdminHomePage() {
 
   useEffect(() => {
     fetchContent();
-  }, []);
+  }, [currentLocale]);
 
   const fetchContent = async () => {
     try {
-      const response = await fetch("/api/home-content");
+      setLoading(true);
+      const response = await fetch(`/api/home-content?locale=${currentLocale}`);
       const data = await response.json();
       setContent(data);
     } catch (error) {
@@ -206,16 +207,21 @@ export default function AdminHomePage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(content),
+        body: JSON.stringify({
+          ...content,
+          locale: currentLocale,
+        }),
       });
       
       if (response.ok) {
         setSaved(true);
         setTimeout(() => setSaved(false), 3000);
+        // Refresh content after save
+        fetchContent();
       }
     } catch (error) {
       console.error("Error saving content:", error);
-      alert("حدث خطأ أثناء الحفظ");
+      alert(currentLocale === "ar" ? "حدث خطأ أثناء الحفظ" : "Error saving content");
     } finally {
       setSaving(false);
     }
@@ -244,7 +250,7 @@ export default function AdminHomePage() {
 
   return (
     <>
-      {/* Save Button - Fixed at top */}
+      {/* Save Button and Language Switcher - Fixed at top */}
       <div style={{
         position: "fixed",
         top: "1rem",
@@ -253,14 +259,54 @@ export default function AdminHomePage() {
         display: "flex",
         gap: "0.5rem",
         alignItems: "center",
+        flexWrap: "wrap",
       }}>
+        <div style={{
+          display: "flex",
+          gap: "0.5rem",
+          alignItems: "center",
+          backgroundColor: "white",
+          padding: "0.5rem",
+          borderRadius: "8px",
+          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+        }}>
+          <button
+            onClick={() => setCurrentLocale("ar")}
+            style={{
+              padding: "0.5rem 1rem",
+              backgroundColor: currentLocale === "ar" ? "#0070f3" : "#f0f0f0",
+              color: currentLocale === "ar" ? "white" : "#333",
+              border: "none",
+              borderRadius: "6px",
+              cursor: "pointer",
+              fontWeight: "600",
+              transition: "all 0.2s",
+            }}
+          >
+            عربي
+          </button>
+          <button
+            onClick={() => setCurrentLocale("en")}
+            style={{
+              padding: "0.5rem 1rem",
+              backgroundColor: currentLocale === "en" ? "#0070f3" : "#f0f0f0",
+              color: currentLocale === "en" ? "white" : "#333",
+              border: "none",
+              borderRadius: "6px",
+              cursor: "pointer",
+              fontWeight: "600",
+              transition: "all 0.2s",
+            }}
+          >
+            English
+          </button>
+        </div>
         <button 
         className="bg-black text-white px-4 py-2 rounded-md"
           onClick={handleSave}
           disabled={saving}
           style={{
             padding: "0.75rem 1.5rem",
-            // backgroundColor: saving ? "" : saved ? "#22c55e" : "#0070f3",
             color: "white",
             border: "none",
             borderRadius: "8px",
@@ -279,11 +325,16 @@ export default function AdminHomePage() {
             e.currentTarget.style.transform = "scale(1)";
           }}
         >
-          {saving ? "جاري الحفظ..." : saved ? " تم الحفظ" : " حفظ التغييرات"}
+          {saving 
+            ? (currentLocale === "ar" ? "جاري الحفظ..." : "Saving...")
+            : saved 
+            ? (currentLocale === "ar" ? " تم الحفظ" : " Saved")
+            : (currentLocale === "ar" ? " حفظ التغييرات" : " Save Changes")
+          }
         </button>
         {saved && (
           <span style={{ color: "#22c55e", fontWeight: "600" }}>
-            تم الحفظ بنجاح!
+            {currentLocale === "ar" ? "تم الحفظ بنجاح!" : "Saved successfully!"}
           </span>
         )}
       </div>
