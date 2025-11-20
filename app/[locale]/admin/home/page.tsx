@@ -1,10 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
 import type { Locale } from "@/i18n";
+import LogoutButton from "@/components/LogoutButton";
+import AdminNav from "@/components/AdminNav";
+import { useAuth } from "@/lib/use-auth";
 
 interface HomeContent {
   id: string;
@@ -171,7 +173,9 @@ function EditableField({
 
 export default function AdminHomePage() {
   const params = useParams();
-  const [currentLocale, setCurrentLocale] = useState<Locale>("ar");
+  const locale = (params?.locale as Locale) || "ar";
+  const { user, loading: authLoading, isAuthenticated } = useAuth(locale);
+  const [currentLocale, setCurrentLocale] = useState<Locale>(locale);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [content, setContent] = useState<HomeContent | null>(null);
   const [loading, setLoading] = useState(true);
@@ -232,10 +236,24 @@ export default function AdminHomePage() {
     setContent({ ...content, [field]: value });
   };
 
+  // Show loading while checking authentication
+  if (authLoading) {
+    return (
+      <div style={{ padding: "2rem", textAlign: "center" }}>
+        <p>{locale === "ar" ? "جاري التحقق من المصادقة..." : "Checking authentication..."}</p>
+      </div>
+    );
+  }
+
+  // If not authenticated, the useAuth hook will redirect to login
+  if (!isAuthenticated) {
+    return null;
+  }
+
   if (loading) {
     return (
       <div style={{ padding: "2rem", textAlign: "center" }}>
-        <p>جاري التحميل...</p>
+        <p>{locale === "ar" ? "جاري التحميل..." : "Loading..."}</p>
       </div>
     );
   }
@@ -250,7 +268,8 @@ export default function AdminHomePage() {
 
   return (
     <>
-      {/* Save Button and Language Switcher - Fixed at top */}
+      <AdminNav locale={locale} />
+      {/* Save Button, Language Switcher, and Logout - Fixed at top */}
       <div style={{
         position: "fixed",
         top: "1rem",
@@ -261,6 +280,7 @@ export default function AdminHomePage() {
         alignItems: "center",
         flexWrap: "wrap",
       }}>
+        <LogoutButton />
         <div style={{
           display: "flex",
           gap: "0.5rem",

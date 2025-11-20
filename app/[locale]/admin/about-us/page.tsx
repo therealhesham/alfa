@@ -4,6 +4,9 @@ import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
 import type { Locale } from "@/i18n";
+import LogoutButton from "@/components/LogoutButton";
+import AdminNav from "@/components/AdminNav";
+import { useAuth } from "@/lib/use-auth";
 
 interface AboutUsContent {
   id: string;
@@ -329,8 +332,10 @@ let currentLocale: Locale = "ar";
 
 export default function AdminAboutUsPage() {
   const params = useParams();
-  const [currentLocaleState, setCurrentLocale] = useState<Locale>("ar");
-  currentLocale = currentLocaleState;
+  const locale = (params?.locale as Locale) || "ar";
+  const { user, loading: authLoading, isAuthenticated } = useAuth(locale);
+  const [currentLocaleState, setCurrentLocale] = useState<Locale>(locale);
+  const currentLocale = currentLocaleState;
   const [content, setContent] = useState<AboutUsContent | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -407,7 +412,8 @@ export default function AdminAboutUsPage() {
 
   return (
     <>
-      {/* Save Button and Language Switcher */}
+      <AdminNav locale={locale} />
+      {/* Save Button, Language Switcher, and Logout */}
       <div style={{
         position: "fixed",
         top: "1rem",
@@ -418,6 +424,7 @@ export default function AdminAboutUsPage() {
         alignItems: "center",
         flexWrap: "wrap",
       }}>
+        <LogoutButton />
         <div style={{
           display: "flex",
           gap: "0.5rem",

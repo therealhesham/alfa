@@ -50,20 +50,36 @@ interface AboutUsContent {
   founder2Bio: string;
 }
 
+interface SiteSettings {
+  id: string;
+  primaryFont: string;
+  headingFont: string;
+  bodyFont: string;
+  showHome: boolean;
+  showAbout: boolean;
+  showServices: boolean;
+  showProjects: boolean;
+  showContact: boolean;
+  showLanguageSwitcher: boolean;
+}
+
 export default function AboutUsPage() {
   const params = useParams();
   const locale = (params?.locale as Locale) || "ar";
   const t = getTranslations(locale);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [content, setContent] = useState<AboutUsContent | null>(null);
+  const [settings, setSettings] = useState<SiteSettings | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchContent();
+    fetchSettings();
     
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
         fetchContent();
+        fetchSettings();
       }
     };
     
@@ -73,6 +89,12 @@ export default function AboutUsPage() {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, [locale]);
+
+  useEffect(() => {
+    if (settings) {
+      applyFonts();
+    }
+  }, [settings]);
 
   const fetchContent = async () => {
     try {
@@ -84,6 +106,27 @@ export default function AboutUsPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const fetchSettings = async () => {
+    try {
+      const response = await fetch("/api/site-settings");
+      const data = await response.json();
+      setSettings(data);
+    } catch (error) {
+      console.error("Error fetching settings:", error);
+    }
+  };
+
+  const applyFonts = () => {
+    if (!settings) return;
+    
+    const root = document.documentElement;
+    root.style.setProperty('--primary-font', settings.primaryFont);
+    root.style.setProperty('--heading-font', settings.headingFont);
+    root.style.setProperty('--body-font', settings.bodyFont);
+    
+    document.body.style.fontFamily = settings.bodyFont;
   };
 
   if (loading) {
@@ -133,22 +176,34 @@ export default function AboutUsPage() {
           />
         )}
         <nav className={isMenuOpen ? "nav-open" : ""}>
-          <Link href={`/${locale}/home`} onClick={() => setIsMenuOpen(false)}>
-            {t.nav.home}
-          </Link>
-          <Link href={`/${locale}/about-us`} onClick={() => setIsMenuOpen(false)}>
-            {t.nav.about}
-          </Link>
-          <Link href={`/${locale}/home`} onClick={() => setIsMenuOpen(false)}>
-            {t.nav.services}
-          </Link>
-          <Link href={`/${locale}/home`} onClick={() => setIsMenuOpen(false)}>
-            {t.nav.projects}
-          </Link>
-          <Link href={`/${locale}/home`} onClick={() => setIsMenuOpen(false)}>
-            {t.nav.contact}
-          </Link>
-          <LanguageSwitcher currentLocale={locale} />
+          {settings?.showHome !== false && (
+            <Link href={`/${locale}/home`} onClick={() => setIsMenuOpen(false)}>
+              {t.nav.home}
+            </Link>
+          )}
+          {settings?.showAbout !== false && (
+            <Link href={`/${locale}/about-us`} onClick={() => setIsMenuOpen(false)}>
+              {t.nav.about}
+            </Link>
+          )}
+          {settings?.showServices !== false && (
+            <Link href={`/${locale}/home`} onClick={() => setIsMenuOpen(false)}>
+              {t.nav.services}
+            </Link>
+          )}
+          {settings?.showProjects !== false && (
+            <Link href={`/${locale}/home`} onClick={() => setIsMenuOpen(false)}>
+              {t.nav.projects}
+            </Link>
+          )}
+          {settings?.showContact !== false && (
+            <Link href={`/${locale}/home`} onClick={() => setIsMenuOpen(false)}>
+              {t.nav.contact}
+            </Link>
+          )}
+          {settings?.showLanguageSwitcher !== false && (
+            <LanguageSwitcher currentLocale={locale} />
+          )}
         </nav>
       </header>
 

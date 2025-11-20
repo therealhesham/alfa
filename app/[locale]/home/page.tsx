@@ -37,21 +37,37 @@ interface HomeContent {
   headerLogo: string;
 }
 
+interface SiteSettings {
+  id: string;
+  primaryFont: string;
+  headingFont: string;
+  bodyFont: string;
+  showHome: boolean;
+  showAbout: boolean;
+  showServices: boolean;
+  showProjects: boolean;
+  showContact: boolean;
+  showLanguageSwitcher: boolean;
+}
+
 export default function HomePage() {
   const params = useParams();
   const locale = (params?.locale as Locale) || "ar";
   const t = getTranslations(locale);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [content, setContent] = useState<HomeContent | null>(null);
+  const [settings, setSettings] = useState<SiteSettings | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchContent();
+    fetchSettings();
     
     // Re-fetch data when page becomes visible (e.g., after returning from admin)
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
         fetchContent();
+        fetchSettings();
       }
     };
     
@@ -61,6 +77,12 @@ export default function HomePage() {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, []);
+
+  useEffect(() => {
+    if (settings) {
+      applyFonts();
+    }
+  }, [settings]);
 
   const fetchContent = async () => {
     try {
@@ -72,6 +94,28 @@ export default function HomePage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const fetchSettings = async () => {
+    try {
+      const response = await fetch("/api/site-settings");
+      const data = await response.json();
+      setSettings(data);
+    } catch (error) {
+      console.error("Error fetching settings:", error);
+    }
+  };
+
+  const applyFonts = () => {
+    if (!settings) return;
+    
+    const root = document.documentElement;
+    root.style.setProperty('--primary-font', settings.primaryFont);
+    root.style.setProperty('--heading-font', settings.headingFont);
+    root.style.setProperty('--body-font', settings.bodyFont);
+    
+    // Apply to body
+    document.body.style.fontFamily = settings.bodyFont;
   };
 
   if (loading) {
@@ -142,26 +186,38 @@ export default function HomePage() {
           />
         )}
         <nav className={isMenuOpen ? "nav-open" : ""}>
-          <Link href={`/${locale}/home`} onClick={() => setIsMenuOpen(false)}>
-            {t.nav.home}
-          </Link>
-          <Link href={`/${locale}/about-us`} onClick={() => setIsMenuOpen(false)}>
-            {t.nav.about}
-          </Link>
-          <Link href={`/${locale}/home`} onClick={() => setIsMenuOpen(false)}>
-            {t.nav.services}
-          </Link>
-          <Link href={`/${locale}/home`} onClick={() => setIsMenuOpen(false)}>
-            {t.nav.projects}
-          </Link>
-          <Link href={`/${locale}/home`} onClick={() => setIsMenuOpen(false)}>
-            {t.nav.contact}
-          </Link>
-          <LanguageSwitcher currentLocale={locale} />
+          {settings?.showHome !== false && (
+            <Link href={`/${locale}/home`} onClick={() => setIsMenuOpen(false)}>
+              {t.nav.home}
+            </Link>
+          )}
+          {settings?.showAbout !== false && (
+            <Link href={`/${locale}/about-us`} onClick={() => setIsMenuOpen(false)}>
+              {t.nav.about}
+            </Link>
+          )}
+          {settings?.showServices !== false && (
+            <Link href={`/${locale}/home`} onClick={() => setIsMenuOpen(false)}>
+              {t.nav.services}
+            </Link>
+          )}
+          {settings?.showProjects !== false && (
+            <Link href={`/${locale}/home`} onClick={() => setIsMenuOpen(false)}>
+              {t.nav.projects}
+            </Link>
+          )}
+          {settings?.showContact !== false && (
+            <Link href={`/${locale}/home`} onClick={() => setIsMenuOpen(false)}>
+              {t.nav.contact}
+            </Link>
+          )}
+          {settings?.showLanguageSwitcher !== false && (
+            <LanguageSwitcher currentLocale={locale} />
+          )}
         </nav>
       </header>
 
-      <section className="hero">
+      <section className="hero" style={{ fontFamily: settings?.bodyFont }}>
         <Image
           src={displayContent.heroLogo || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
           alt={t.common.logoAlt}
@@ -170,51 +226,75 @@ export default function HomePage() {
           className="hero-logo"
           unoptimized
         />
-        <h1>{displayContent.heroTitle}</h1>
-        <p>{displayContent.heroSubtitle}</p>
+        <h1 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
+          {displayContent.heroTitle}
+        </h1>
+        <p style={{ fontFamily: settings?.bodyFont }}>
+          {displayContent.heroSubtitle}
+        </p>
       </section>
 
-      <section className="about">
-        <h2>{displayContent.aboutTitle}</h2>
+      <section className="about" style={{ fontFamily: settings?.bodyFont }}>
+        <h2 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
+          {displayContent.aboutTitle}
+        </h2>
         <p>{displayContent.aboutP1}</p>
         <p>{displayContent.aboutP2}</p>
       </section>
 
-      <section className="vision">
-        <h2>{displayContent.visionTitle}</h2>
+      <section className="vision" style={{ fontFamily: settings?.bodyFont }}>
+        <h2 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
+          {displayContent.visionTitle}
+        </h2>
         <div className="cards">
           <div className="card">
-            <h3>{displayContent.visionVision}</h3>
+            <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
+              {displayContent.visionVision}
+            </h3>
             <p>{displayContent.visionVisionText}</p>
           </div>
           <div className="card">
-            <h3>{displayContent.visionMission}</h3>
+            <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
+              {displayContent.visionMission}
+            </h3>
             <p>{displayContent.visionMissionText}</p>
           </div>
           <div className="card">
-            <h3>{displayContent.visionValues}</h3>
+            <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
+              {displayContent.visionValues}
+            </h3>
             <p>{displayContent.visionValuesText}</p>
           </div>
         </div>
       </section>
 
-      <section className="stats">
-        <h2>{displayContent.statsTitle}</h2>
+      <section className="stats" style={{ fontFamily: settings?.bodyFont }}>
+        <h2 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
+          {displayContent.statsTitle}
+        </h2>
         <div className="stats-grid">
           <div className="stat">
-            <h3>{displayContent.statsProjectsNum}</h3>
+            <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
+              {displayContent.statsProjectsNum}
+            </h3>
             <p>{displayContent.statsProjects}</p>
           </div>
           <div className="stat">
-            <h3>{displayContent.statsYearsNum}</h3>
+            <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
+              {displayContent.statsYearsNum}
+            </h3>
             <p>{displayContent.statsYears}</p>
           </div>
           <div className="stat">
-            <h3>{displayContent.statsCountriesNum}</h3>
+            <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
+              {displayContent.statsCountriesNum}
+            </h3>
             <p>{displayContent.statsCountries}</p>
           </div>
           <div className="stat">
-            <h3>{displayContent.statsAwardsNum}</h3>
+            <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
+              {displayContent.statsAwardsNum}
+            </h3>
             <p>{displayContent.statsAwards}</p>
           </div>
         </div>
