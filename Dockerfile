@@ -9,8 +9,15 @@ WORKDIR /app
 
 # نسخ ملفات التبعيات
 COPY package.json package-lock.json* ./
-# تثبيت التبعيات
+# تثبيت جميع التبعيات (للبناء)
 RUN npm ci
+
+# تثبيت تبعيات الإنتاج فقط
+FROM base AS deps-prod
+RUN apk add --no-cache libc6-compat openssl
+WORKDIR /app
+COPY package.json package-lock.json* ./
+RUN npm ci --only=production
 
 # بناء التطبيق
 FROM base AS builder
@@ -41,24 +48,29 @@ RUN apk add --no-cache openssl
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# نسخ الملفات المطلوبة من وضع standalone
-COPY --from=builder /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+# نسخ التبعيات للإنتاج فقط
+COPY --from=deps-prod --chown=nextjs:nodejs /app/node_modules ./node_modules
 
-# نسخ Prisma schema و client
-COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+# نسخ Prisma Client المولد من مرحلة البناء
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules/@prisma ./node_modules/@prisma
+
+# نسخ الملفات المطلوبة
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
+COPY --from=builder --chown=nextjs:nodejs /app/package.json ./package.json
+
+# نسخ Prisma schema
+COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 
 USER nextjs
 
 # فتح المنفذ
-EXPOSE 3000
+EXPOSE 3020
 
-ENV PORT 3000
+ENV PORT 3020
 ENV HOSTNAME "0.0.0.0"
 
 # تشغيل التطبيق
-CMD ["node", "server.js"]
+CMD ["npx", "next", "start"]
 
