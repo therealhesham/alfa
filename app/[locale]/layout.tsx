@@ -19,10 +19,11 @@ const amiri = Amiri({
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = getTranslations(locale);
+  const validLocale = (locale === "ar" || locale === "en" ? locale : "ar") as Locale;
+  const t = getTranslations(validLocale);
 
   return {
     title: t.hero.title,
@@ -35,13 +36,14 @@ export default async function LocaleLayout({
   params,
 }: Readonly<{
   children: React.ReactNode;
-  params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: string }>;
 }>) {
   const { locale } = await params;
-  const isRTL = locale === "ar";
+  const validLocale = (locale === "ar" || locale === "en" ? locale : "ar") as Locale;
+  const isRTL = validLocale === "ar";
 
   return (
-    <div lang={locale} dir={isRTL ? "rtl" : "ltr"}>
+    <div lang={validLocale} dir={isRTL ? "rtl" : "ltr"}>
       {children}
     </div>
   );
