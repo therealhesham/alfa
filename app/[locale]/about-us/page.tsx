@@ -39,6 +39,15 @@ interface AboutUsContent {
   milestone4Year: string;
   milestone4Title: string;
   milestone4Desc: string;
+  foundersTitle: string;
+  founder1Name: string;
+  founder1Position: string;
+  founder1Image: string;
+  founder1Bio: string;
+  founder2Name: string;
+  founder2Position: string;
+  founder2Image: string;
+  founder2Bio: string;
 }
 
 export default function AboutUsPage() {
@@ -193,6 +202,139 @@ export default function AboutUsPage() {
             <p style={{ fontSize: '1.2rem', lineHeight: '1.8', textAlign: locale === 'ar' ? 'right' : 'left' }}>
               {content.storyContent}
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Founders Section */}
+      <section style={{ padding: '4rem 2rem', backgroundColor: '#f5f5f5' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <h2 style={{ fontSize: '2.5rem', marginBottom: '3rem', textAlign: 'center' }}>
+            {content.foundersTitle}
+          </h2>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+            gap: '3rem',
+            justifyContent: 'center'
+          }}>
+            {/* Founder 1 */}
+            <div style={{
+              backgroundColor: 'white',
+              borderRadius: '12px',
+              padding: '2rem',
+              textAlign: 'center',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+              transition: 'transform 0.3s',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-5px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
+            >
+              <div style={{
+                width: '200px',
+                height: '200px',
+                borderRadius: '50%',
+                margin: '0 auto 1.5rem',
+                overflow: 'hidden',
+                border: '4px solid #0070f3',
+                boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+              }}>
+                <Image
+                  src={content.founder1Image || '/capture.png'}
+                  alt={content.founder1Name}
+                  width={200}
+                  height={200}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                  }}
+                  unoptimized
+                />
+              </div>
+              <h3 style={{ fontSize: '1.8rem', marginBottom: '0.5rem', color: '#333' }}>
+                {content.founder1Name}
+              </h3>
+              <p style={{ 
+                fontSize: '1.1rem', 
+                color: '#0070f3', 
+                marginBottom: '1rem',
+                fontWeight: '600'
+              }}>
+                {content.founder1Position}
+              </p>
+              <p style={{ 
+                fontSize: '1rem', 
+                color: '#666', 
+                lineHeight: '1.6',
+                textAlign: locale === 'ar' ? 'right' : 'left'
+              }}>
+                {content.founder1Bio}
+              </p>
+            </div>
+
+            {/* Founder 2 */}
+            <div style={{
+              backgroundColor: 'white',
+              borderRadius: '12px',
+              padding: '2rem',
+              textAlign: 'center',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+              transition: 'transform 0.3s',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-5px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
+            >
+              <div style={{
+                width: '200px',
+                height: '200px',
+                borderRadius: '50%',
+                margin: '0 auto 1.5rem',
+                overflow: 'hidden',
+                border: '4px solid #0070f3',
+                boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+              }}>
+                <Image
+                  src={content.founder2Image || '/capture.png'}
+                  alt={content.founder2Name}
+                  width={200}
+                  height={200}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                  }}
+                  unoptimized
+                />
+              </div>
+              <h3 style={{ fontSize: '1.8rem', marginBottom: '0.5rem', color: '#333' }}>
+                {content.founder2Name}
+              </h3>
+              <p style={{ 
+                fontSize: '1.1rem', 
+                color: '#0070f3', 
+                marginBottom: '1rem',
+                fontWeight: '600'
+              }}>
+                {content.founder2Position}
+              </p>
+              <p style={{ 
+                fontSize: '1rem', 
+                color: '#666', 
+                lineHeight: '1.6',
+                textAlign: locale === 'ar' ? 'right' : 'left'
+              }}>
+                {content.founder2Bio}
+              </p>
+            </div>
           </div>
         </div>
       </section>

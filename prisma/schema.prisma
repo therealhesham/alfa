@@ -123,6 +123,24 @@ model AboutUs {
   milestone4Desc    String   @default("وصول عدد المشاريع إلى 250+ مشروع")
   milestone4DescEn  String   @default("Reaching 250+ projects")
   
+  foundersTitle     String   @default("المؤسسون")
+  foundersTitleEn   String   @default("Founders")
+  founder1Name      String   @default("أحمد محمد")
+  founder1NameEn    String   @default("Ahmed Mohammed")
+  founder1Position  String   @default("المؤسس والرئيس التنفيذي")
+  founder1PositionEn String  @default("Founder & CEO")
+  founder1Image     String   @default("/capture.png")
+  founder1Bio        String   @default("مهندس معماري بخبرة تزيد عن 20 عامًا في التصميم المعماري الفاخر")
+  founder1BioEn     String   @default("Architect with over 20 years of experience in luxury architectural design")
+  
+  founder2Name      String   @default("محمد أحمد")
+  founder2NameEn    String   @default("Mohammed Ahmed")
+  founder2Position  String   @default("المؤسس الشريك والمدير التنفيذي")
+  founder2PositionEn String  @default("Co-Founder & Executive Director")
+  founder2Image     String   @default("/capture.png")
+  founder2Bio        String   @default("خبير في الهندسة المعمارية والتصميم الداخلي")
+  founder2BioEn     String   @default("Expert in architecture and interior design")
+  
   updatedAt         DateTime @updatedAt
   createdAt         DateTime @default(now())
 }

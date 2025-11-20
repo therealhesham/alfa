@@ -49,6 +49,15 @@ export async function GET(request: Request) {
         milestone4Year: content.milestone4Year,
         milestone4Title: contentAny.milestone4TitleEn,
         milestone4Desc: contentAny.milestone4DescEn,
+        foundersTitle: contentAny.foundersTitleEn,
+        founder1Name: contentAny.founder1NameEn,
+        founder1Position: contentAny.founder1PositionEn,
+        founder1Image: content.founder1Image,
+        founder1Bio: contentAny.founder1BioEn,
+        founder2Name: contentAny.founder2NameEn,
+        founder2Position: contentAny.founder2PositionEn,
+        founder2Image: content.founder2Image,
+        founder2Bio: contentAny.founder2BioEn,
       };
       return NextResponse.json(englishContent);
     }
@@ -86,6 +95,15 @@ export async function GET(request: Request) {
       milestone4Year: content.milestone4Year,
       milestone4Title: content.milestone4Title,
       milestone4Desc: content.milestone4Desc,
+      foundersTitle: content.foundersTitle,
+      founder1Name: content.founder1Name,
+      founder1Position: content.founder1Position,
+      founder1Image: content.founder1Image,
+      founder1Bio: content.founder1Bio,
+      founder2Name: content.founder2Name,
+      founder2Position: content.founder2Position,
+      founder2Image: content.founder2Image,
+      founder2Bio: content.founder2Bio,
     };
     
     return NextResponse.json(arabicContent);
@@ -133,6 +151,13 @@ export async function PUT(request: Request) {
       if (contentData.milestone3Desc !== undefined) updateData.milestone3DescEn = contentData.milestone3Desc;
       if (contentData.milestone4Title !== undefined) updateData.milestone4TitleEn = contentData.milestone4Title;
       if (contentData.milestone4Desc !== undefined) updateData.milestone4DescEn = contentData.milestone4Desc;
+      if (contentData.foundersTitle !== undefined) updateData.foundersTitleEn = contentData.foundersTitle;
+      if (contentData.founder1Name !== undefined) updateData.founder1NameEn = contentData.founder1Name;
+      if (contentData.founder1Position !== undefined) updateData.founder1PositionEn = contentData.founder1Position;
+      if (contentData.founder1Bio !== undefined) updateData.founder1BioEn = contentData.founder1Bio;
+      if (contentData.founder2Name !== undefined) updateData.founder2NameEn = contentData.founder2Name;
+      if (contentData.founder2Position !== undefined) updateData.founder2PositionEn = contentData.founder2Position;
+      if (contentData.founder2Bio !== undefined) updateData.founder2BioEn = contentData.founder2Bio;
     } else {
       // Map Arabic fields (default)
       if (contentData.heroTitle !== undefined) updateData.heroTitle = contentData.heroTitle;
@@ -158,6 +183,13 @@ export async function PUT(request: Request) {
       if (contentData.milestone3Desc !== undefined) updateData.milestone3Desc = contentData.milestone3Desc;
       if (contentData.milestone4Title !== undefined) updateData.milestone4Title = contentData.milestone4Title;
       if (contentData.milestone4Desc !== undefined) updateData.milestone4Desc = contentData.milestone4Desc;
+      if (contentData.foundersTitle !== undefined) updateData.foundersTitle = contentData.foundersTitle;
+      if (contentData.founder1Name !== undefined) updateData.founder1Name = contentData.founder1Name;
+      if (contentData.founder1Position !== undefined) updateData.founder1Position = contentData.founder1Position;
+      if (contentData.founder1Bio !== undefined) updateData.founder1Bio = contentData.founder1Bio;
+      if (contentData.founder2Name !== undefined) updateData.founder2Name = contentData.founder2Name;
+      if (contentData.founder2Position !== undefined) updateData.founder2Position = contentData.founder2Position;
+      if (contentData.founder2Bio !== undefined) updateData.founder2Bio = contentData.founder2Bio;
     }
     
     // Common fields (not language-specific)
@@ -167,6 +199,8 @@ export async function PUT(request: Request) {
     if (contentData.milestone2Year !== undefined) updateData.milestone2Year = contentData.milestone2Year;
     if (contentData.milestone3Year !== undefined) updateData.milestone3Year = contentData.milestone3Year;
     if (contentData.milestone4Year !== undefined) updateData.milestone4Year = contentData.milestone4Year;
+    if (contentData.founder1Image !== undefined) updateData.founder1Image = contentData.founder1Image;
+    if (contentData.founder2Image !== undefined) updateData.founder2Image = contentData.founder2Image;
     
     if (!content) {
       content = await prisma.aboutUs.create({

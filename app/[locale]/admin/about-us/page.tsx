@@ -36,6 +36,15 @@ interface AboutUsContent {
   milestone4Year: string;
   milestone4Title: string;
   milestone4Desc: string;
+  foundersTitle: string;
+  founder1Name: string;
+  founder1Position: string;
+  founder1Image: string;
+  founder1Bio: string;
+  founder2Name: string;
+  founder2Position: string;
+  founder2Image: string;
+  founder2Bio: string;
 }
 
 interface EditableFieldProps {
@@ -168,6 +177,151 @@ function EditableField({
     >
       {value || placeholder}
     </Tag>
+  );
+}
+
+interface EditableImageProps {
+  src: string;
+  alt: string;
+  onChange: (newPath: string) => void;
+  width?: number;
+  height?: number;
+  style?: React.CSSProperties;
+}
+
+function EditableImage({ src, alt, onChange, width = 600, height = 400, style }: EditableImageProps) {
+  const [isHovered, setIsHovered] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImageClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert(currentLocale === "ar" ? "الرجاء اختيار ملف صورة" : "Please select an image file");
+      return;
+    }
+
+    setIsUploading(true);
+    
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('/api/upload-image', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+      
+      if (data.success) {
+        onChange(data.path);
+      } else {
+        alert(currentLocale === "ar" ? "فشل رفع الصورة" : "Failed to upload image");
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      alert(currentLocale === "ar" ? "حدث خطأ أثناء رفع الصورة" : "Error uploading image");
+    } finally {
+      setIsUploading(false);
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
+  return (
+    <div
+      style={{
+        position: 'relative',
+        display: 'inline-block',
+        cursor: 'pointer',
+        ...style
+      }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onClick={handleImageClick}
+    >
+      <Image
+        src={src || '/capture.png'}
+        alt={alt}
+        width={width}
+        height={height}
+        style={{ 
+          width: '100%', 
+          height: 'auto', 
+          borderRadius: '8px',
+          opacity: isUploading ? 0.6 : 1,
+          transition: 'opacity 0.2s'
+        }}
+        unoptimized
+      />
+      {isHovered && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            borderRadius: '50%',
+            width: '50px',
+            height: '50px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            pointerEvents: 'none',
+            transition: 'all 0.2s',
+          }}
+        >
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="white"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+          </svg>
+        </div>
+      )}
+      {isUploading && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            borderRadius: '8px',
+            padding: '1rem',
+            color: 'white',
+            pointerEvents: 'none',
+          }}
+        >
+          {currentLocale === "ar" ? "جاري الرفع..." : "Uploading..."}
+        </div>
+      )}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        style={{ display: 'none' }}
+        onChange={handleFileChange}
+      />
+    </div>
   );
 }
 
@@ -371,14 +525,39 @@ export default function AdminAboutUsPage() {
             rows={2}
             className="text-white"
           />
-          <div style={{ marginTop: "1rem", fontSize: "0.875rem", color: "#ccc" }}>
-            <EditableField
-              value={content.heroImage}
-              onChange={(value) => handleChange("heroImage", value)}
-              as="input"
-              placeholder="مسار الصورة"
-            />
+        </div>
+        <div style={{
+          position: 'absolute',
+          bottom: '1rem',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 2,
+          backgroundColor: 'rgba(0, 0, 0, 0.7)',
+          padding: '0.5rem',
+          borderRadius: '8px',
+        }}>
+          <div style={{ 
+            color: 'white', 
+            fontSize: '0.875rem', 
+            marginBottom: '0.5rem',
+            textAlign: 'center'
+          }}>
+            {currentLocaleState === "ar" ? "صورة الخلفية" : "Background Image"}
           </div>
+          <EditableImage
+            src={content.heroImage}
+            alt="Hero Background"
+            onChange={(newPath) => handleChange("heroImage", newPath)}
+            width={200}
+            height={150}
+            style={{ 
+              width: '150px', 
+              height: '100px',
+              borderRadius: '8px',
+              border: '2px solid white',
+              boxShadow: '0 4px 8px rgba(0,0,0,0.3)'
+            }}
+          />
         </div>
       </section>
 
@@ -391,22 +570,14 @@ export default function AdminAboutUsPage() {
         />
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem', alignItems: 'center' }}>
           <div>
-            <Image
+            <EditableImage
               src={content.storyImage}
               alt={content.storyTitle}
+              onChange={(newPath) => handleChange("storyImage", newPath)}
               width={600}
               height={400}
-              style={{ width: '100%', height: 'auto', borderRadius: '8px' }}
-              unoptimized
+              style={{ width: '100%' }}
             />
-            <div style={{ marginTop: "0.5rem", fontSize: "0.875rem", color: "#666" }}>
-              <EditableField
-                value={content.storyImage}
-                onChange={(value) => handleChange("storyImage", value)}
-                as="input"
-                placeholder="مسار الصورة"
-              />
-            </div>
           </div>
           <div>
             <EditableField
@@ -415,6 +586,119 @@ export default function AdminAboutUsPage() {
               as="textarea"
               rows={8}
             />
+          </div>
+        </div>
+      </section>
+
+      {/* Founders Section */}
+      <section style={{ padding: '4rem 2rem', backgroundColor: '#f5f5f5' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <EditableField
+            value={content.foundersTitle}
+            onChange={(value) => handleChange("foundersTitle", value)}
+            as="h2"
+          />
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+            gap: '3rem',
+            justifyContent: 'center'
+          }}>
+            {/* Founder 1 */}
+            <div style={{
+              backgroundColor: 'white',
+              borderRadius: '12px',
+              padding: '2rem',
+              textAlign: 'center',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+            }}>
+              <div style={{
+                width: '200px',
+                height: '200px',
+                borderRadius: '50%',
+                margin: '0 auto 1.5rem',
+                overflow: 'hidden',
+                border: '4px solid #0070f3',
+                boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+              }}>
+                <EditableImage
+                  src={content.founder1Image || '/capture.png'}
+                  alt={content.founder1Name}
+                  onChange={(newPath) => handleChange("founder1Image", newPath)}
+                  width={200}
+                  height={200}
+                  style={{ 
+                    width: '100%',
+                    height: '100%',
+                    borderRadius: '50%'
+                  }}
+                />
+              </div>
+              <EditableField
+                value={content.founder1Name}
+                onChange={(value) => handleChange("founder1Name", value)}
+                as="h3"
+              />
+              <EditableField
+                value={content.founder1Position}
+                onChange={(value) => handleChange("founder1Position", value)}
+                as="p"
+              />
+              <EditableField
+                value={content.founder1Bio}
+                onChange={(value) => handleChange("founder1Bio", value)}
+                as="textarea"
+                rows={4}
+              />
+            </div>
+
+            {/* Founder 2 */}
+            <div style={{
+              backgroundColor: 'white',
+              borderRadius: '12px',
+              padding: '2rem',
+              textAlign: 'center',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+            }}>
+              <div style={{
+                width: '200px',
+                height: '200px',
+                borderRadius: '50%',
+                margin: '0 auto 1.5rem',
+                overflow: 'hidden',
+                border: '4px solid #0070f3',
+                boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+              }}>
+                <EditableImage
+                  src={content.founder2Image || '/capture.png'}
+                  alt={content.founder2Name}
+                  onChange={(newPath) => handleChange("founder2Image", newPath)}
+                  width={200}
+                  height={200}
+                  style={{ 
+                    width: '100%',
+                    height: '100%',
+                    borderRadius: '50%'
+                  }}
+                />
+              </div>
+              <EditableField
+                value={content.founder2Name}
+                onChange={(value) => handleChange("founder2Name", value)}
+                as="h3"
+              />
+              <EditableField
+                value={content.founder2Position}
+                onChange={(value) => handleChange("founder2Position", value)}
+                as="p"
+              />
+              <EditableField
+                value={content.founder2Bio}
+                onChange={(value) => handleChange("founder2Bio", value)}
+                as="textarea"
+                rows={4}
+              />
+            </div>
           </div>
         </div>
       </section>
