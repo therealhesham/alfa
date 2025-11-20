@@ -59,3 +59,71 @@ model HomeContent {
   createdAt    DateTime @default(now())
 }
 
+model AboutUs {
+  id                String   @id @default(cuid())
+  heroTitle         String   @default("من نحن")
+  heroTitleEn       String   @default("About Us")
+  heroSubtitle      String   @default("نحن شركة رائدة في التصميم المعماري والهندسة الفاخرة")
+  heroSubtitleEn    String   @default("We are a leading company in architectural design and luxury engineering")
+  heroImage         String   @default("/capture.png")
+  
+  storyTitle        String   @default("قصتنا")
+  storyTitleEn      String   @default("Our Story")
+  storyContent      String   @default("تأسست شركتنا عام 2008 بهدف تقديم حلول معمارية فاخرة تجمع بين الأصالة العربية واللمسات العصرية.")
+  storyContentEn    String   @default("Our company was founded in 2008 with the aim of providing luxury architectural solutions.")
+  storyImage        String   @default("/capture.png")
+  
+  missionTitle      String   @default("رسالتنا")
+  missionTitleEn    String   @default("Our Mission")
+  missionContent    String   @default("تصميم مساحات تعبر عن طموح أصحابها بأعلى معايير الجودة والإبداع والاستدامة.")
+  missionContentEn  String   @default("Designing spaces that express their owners' ambitions with the highest standards of quality, creativity, and sustainability.")
+  
+  visionTitle       String   @default("رؤيتنا")
+  visionTitleEn     String   @default("Our Vision")
+  visionContent     String   @default("أن نكون الخيار الأول عالميًا في تقديم حلول معمارية فاخرة تحترم الهوية وتتخطى التوقعات.")
+  visionContentEn   String   @default("To be the first choice globally in providing luxury architectural solutions that respect identity and exceed expectations.")
+  
+  whyChooseTitle    String   @default("لماذا تختارنا")
+  whyChooseTitleEn  String   @default("Why Choose Us")
+  whyChoosePoint1   String   @default("خبرة أكثر من 15 عامًا في التصميم المعماري الفاخر")
+  whyChoosePoint1En String   @default("Over 15 years of experience in luxury architectural design")
+  whyChoosePoint2   String   @default("أكثر من 250 مشروعًا ناجحًا في 48 دولة")
+  whyChoosePoint2En String   @default("Over 250 successful projects in 48 countries")
+  whyChoosePoint3   String   @default("22 جائزة عالمية في التصميم المعماري")
+  whyChoosePoint3En String   @default("22 international awards in architectural design")
+  whyChoosePoint4   String   @default("فريق من أفضل المهندسين والمصممين المعماريين")
+  whyChoosePoint4En String   @default("A team of the best engineers and architects")
+  
+  valuesTitle       String   @default("قيمنا")
+  valuesTitleEn      String   @default("Our Values")
+  valuesContent      String   @default("التميّز • الأصالة • الالتزام • الابتكار • الثقة • الاستدامة")
+  valuesContentEn    String   @default("Excellence • Authenticity • Commitment • Innovation • Trust • Sustainability")
+  
+  milestone1Year    String   @default("2008")
+  milestone1Title   String   @default("التأسيس")
+  milestone1TitleEn String   @default("Foundation")
+  milestone1Desc    String   @default("تأسيس الشركة وبداية رحلة التميّز")
+  milestone1DescEn  String   @default("Company foundation and the beginning of the excellence journey")
+  
+  milestone2Year    String   @default("2015")
+  milestone2Title   String   @default("التوسع الدولي")
+  milestone2TitleEn String   @default("International Expansion")
+  milestone2Desc    String   @default("بداية العمل في 20 دولة حول العالم")
+  milestone2DescEn  String   @default("Beginning of operations in 20 countries worldwide")
+  
+  milestone3Year    String   @default("2020")
+  milestone3Title   String   @default("الجوائز العالمية")
+  milestone3TitleEn String   @default("International Awards")
+  milestone3Desc    String   @default("حصد أول 10 جوائز عالمية في التصميم")
+  milestone3DescEn  String   @default("Winning the first 10 international design awards")
+  
+  milestone4Year    String   @default("2025")
+  milestone4Title   String   @default("الريادة")
+  milestone4TitleEn String   @default("Leadership")
+  milestone4Desc    String   @default("وصول عدد المشاريع إلى 250+ مشروع")
+  milestone4DescEn  String   @default("Reaching 250+ projects")
+  
+  updatedAt         DateTime @updatedAt
+  createdAt         DateTime @default(now())
+}
+

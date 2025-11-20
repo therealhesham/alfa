@@ -145,7 +145,7 @@ export default function HomePage() {
           <Link href={`/${locale}/home`} onClick={() => setIsMenuOpen(false)}>
             {t.nav.home}
           </Link>
-          <Link href={`/${locale}/home`} onClick={() => setIsMenuOpen(false)}>
+          <Link href={`/${locale}/about-us`} onClick={() => setIsMenuOpen(false)}>
             {t.nav.about}
           </Link>
           <Link href={`/${locale}/home`} onClick={() => setIsMenuOpen(false)}>
