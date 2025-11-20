@@ -10,11 +10,11 @@
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "db:migrate-data": "tsx prisma/migrate-data.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.0.0",
-    "better-sqlite3": "^12.4.1",
     "next": "16.0.3",
     "prisma": "^6.0.0",
     "react": "19.2.0",
@@ -25,9 +25,11 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "better-sqlite3": "^12.4.1",
     "eslint": "^9",
     "eslint-config-next": "16.0.3",
     "tailwindcss": "^4",
+    "tsx": "^4.20.6",
     "typescript": "^5"
   }
 }
