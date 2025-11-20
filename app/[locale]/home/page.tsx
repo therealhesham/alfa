@@ -86,7 +86,7 @@ export default function HomePage() {
   const displayContent = content || {
     heroTitle: t.hero.title,
     heroSubtitle: t.hero.subtitle,
-    heroLogo: "/Capture.PNG",
+    heroLogo: "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png",
     aboutTitle: t.about.title,
     aboutP1: t.about.p1,
     aboutP2: t.about.p2,
@@ -107,15 +107,15 @@ export default function HomePage() {
     statsCountriesNum: "48",
     statsAwardsNum: "22",
     footerCopyright: t.footer.copyright,
-    footerLogo: "/Capture.PNG",
-    headerLogo: "/Capture.PNG",
+    footerLogo: "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png",
+    headerLogo: "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png",
   };
 
   return (
     <>
       <header className={isMenuOpen ? "menu-active" : ""}>
         <Image
-          src={displayContent.headerLogo || "/Capture.PNG"}
+          src={displayContent.headerLogo || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
           alt={t.common.logoAlt}
           width={75}
           height={75}
@@ -163,7 +163,7 @@ export default function HomePage() {
 
       <section className="hero">
         <Image
-          src={displayContent.heroLogo || "/Capture.PNG"}
+          src={displayContent.heroLogo || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
           alt={t.common.logoAlt}
           width={300}
           height={300}
@@ -222,7 +222,7 @@ export default function HomePage() {
 
       <footer>
         <Image
-          src={displayContent.footerLogo || "/Capture.PNG"}
+          src={displayContent.footerLogo || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
           alt={t.common.logoAlt}
           width={80}
           height={80}
