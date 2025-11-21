@@ -19,10 +19,21 @@ async function verifyTokenEdge(token: string): Promise<JWTPayload | null> {
 export async function checkAuth(
   request: NextRequest
 ): Promise<{ user: any; isAuthenticated: boolean }> {
+  // Debug: Log all cookies
+  const allCookies = request.cookies.getAll();
+  if (process.env.NODE_ENV === 'development') {
+    console.log('🍪 All cookies:', allCookies.map(c => c.name));
+    console.log('🍪 Request URL:', request.nextUrl.pathname);
+  }
+  
   const token = request.cookies.get('auth-token')?.value;
 
   if (!token) {
     console.warn('❌ No auth token found in cookies');
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🍪 Available cookies:', allCookies);
+      console.log('🍪 Cookie header:', request.headers.get('cookie'));
+    }
     return { user: null, isAuthenticated: false };
   }
 

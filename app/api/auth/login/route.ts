@@ -78,14 +78,26 @@ export async function POST(request: Request) {
     });
 
     // Set token in HTTP-only cookie
-    response.cookies.set('auth-token', token, {
+    const cookieOptions = {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      sameSite: 'lax' as const,
       maxAge: 60 * 60 * 24 * 7, // 7 days
-
       path: '/',
-    });
+    };
+    
+    response.cookies.set('auth-token', token, cookieOptions);
+
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🍪 Setting cookie with options:', {
+        ...cookieOptions,
+        tokenLength: token.length,
+        tokenPreview: token.substring(0, 20) + '...',
+      });
+      // Verify cookie was set
+      const setCookie = response.cookies.get('auth-token');
+      console.log('🍪 Cookie verification - set:', !!setCookie, 'value length:', setCookie?.value?.length);
+    }
 
     return response;
   } catch (error) {
