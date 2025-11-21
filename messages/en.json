@@ -37,6 +37,12 @@
   "common": {
     "logoAlt": "Company Logo",
     "menuLabel": "Navigation Menu"
+  },
+  "notFound": {
+    "title": "404",
+    "heading": "Page Not Found",
+    "message": "Sorry, the page you are looking for does not exist. It may have been moved or deleted.",
+    "backHome": "Back to Home"
   }
 }
 
