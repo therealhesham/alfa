@@ -78,13 +78,36 @@ export async function POST(request: Request) {
     });
 
     // Set token in HTTP-only cookie
+    // For VPS: Check if we're behind a proxy (HTTPS) or direct HTTP
+    const forwardedProto = request.headers.get('x-forwarded-proto');
+    const isHttps = forwardedProto === 'https' || request.url.startsWith('https://');
+    const isProduction = process.env.NODE_ENV === 'production';
+    
+    // Allow override via environment variable for VPS setups
+    const forceSecure = process.env.FORCE_SECURE_COOKIES === 'true';
+    const useSecure = forceSecure || (isProduction && isHttps);
+    
     const cookieOptions = {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      // Only use secure in production if we're actually using HTTPS
+      // Or if explicitly forced via FORCE_SECURE_COOKIES env var
+      secure: useSecure,
       sameSite: 'lax' as const,
       maxAge: 60 * 60 * 24 * 7, // 7 days
       path: '/',
+      // Don't set domain - let browser use current domain
+      // This works better with VPS and different access methods
     };
+    
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🍪 Cookie settings:', {
+        forwardedProto,
+        isHttps,
+        isProduction,
+        useSecure,
+        url: request.url.substring(0, 50),
+      });
+    }
     
     response.cookies.set('auth-token', token, cookieOptions);
 
