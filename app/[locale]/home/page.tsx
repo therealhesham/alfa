@@ -1,130 +1,27 @@
-"use client";
-
 import Image from "next/image";
-import Link from "next/link";
-import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { getHomeContent, getSiteSettings } from "@/lib/data";
 import { getTranslations } from "@/lib/i18n";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
+import Header from "@/components/Header";
+import FontsProvider from "@/components/FontsProvider";
 import type { Locale } from "@/i18n";
 
-interface HomeContent {
-  id: string;
-  heroTitle: string;
-  heroSubtitle: string;
-  heroLogo: string;
-  aboutTitle: string;
-  aboutP1: string;
-  aboutP2: string;
-  visionTitle: string;
-  visionVision: string;
-  visionVisionText: string;
-  visionMission: string;
-  visionMissionText: string;
-  visionValues: string;
-  visionValuesText: string;
-  statsTitle: string;
-  statsProjects: string;
-  statsYears: string;
-  statsCountries: string;
-  statsAwards: string;
-  statsProjectsNum: string;
-  statsYearsNum: string;
-  statsCountriesNum: string;
-  statsAwardsNum: string;
-  footerCopyright: string;
-  footerLogo: string;
-  headerLogo: string;
+// ISR: Revalidate every 60 seconds
+export const revalidate = 60;
+
+interface HomePageProps {
+  params: Promise<{ locale: string }>;
 }
 
-interface SiteSettings {
-  id: string;
-  primaryFont: string;
-  headingFont: string;
-  bodyFont: string;
-  showHome: boolean;
-  showAbout: boolean;
-  showServices: boolean;
-  showProjects: boolean;
-  showContact: boolean;
-  showLanguageSwitcher: boolean;
-}
+export default async function HomePage({ params }: HomePageProps) {
+  const { locale } = await params;
+  const validLocale = (locale === "ar" || locale === "en" ? locale : "ar") as Locale;
+  const t = getTranslations(validLocale);
 
-export default function HomePage() {
-  const params = useParams();
-  const locale = (params?.locale as Locale) || "ar";
-  const t = getTranslations(locale);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [content, setContent] = useState<HomeContent | null>(null);
-  const [settings, setSettings] = useState<SiteSettings | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchContent();
-    fetchSettings();
-    
-    // Re-fetch data when page becomes visible (e.g., after returning from admin)
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible') {
-        fetchContent();
-        fetchSettings();
-      }
-    };
-    
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (settings) {
-      applyFonts();
-    }
-  }, [settings]);
-
-  const fetchContent = async () => {
-    try {
-      const response = await fetch(`/api/home-content?locale=${locale}`);
-      const data = await response.json();
-      setContent(data);
-    } catch (error) {
-      console.error("Error fetching content:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchSettings = async () => {
-    try {
-      const response = await fetch("/api/site-settings");
-      const data = await response.json();
-      setSettings(data);
-    } catch (error) {
-      console.error("Error fetching settings:", error);
-    }
-  };
-
-  const applyFonts = () => {
-    if (!settings) return;
-    
-    const root = document.documentElement;
-    root.style.setProperty('--primary-font', settings.primaryFont);
-    root.style.setProperty('--heading-font', settings.headingFont);
-    root.style.setProperty('--body-font', settings.bodyFont);
-    
-    // Apply to body
-    document.body.style.fontFamily = settings.bodyFont;
-  };
-
-  if (loading) {
-    return (
-      <div style={{ padding: "2rem", textAlign: "center" }}>
-        <p>جاري التحميل...</p>
-      </div>
-    );
-  }
+  // Fetch data in parallel
+  const [content, settings] = await Promise.all([
+    getHomeContent(validLocale),
+    getSiteSettings(),
+  ]);
 
   // Fallback to translations if content is not available
   const displayContent = content || {
@@ -156,66 +53,12 @@ export default function HomePage() {
   };
 
   return (
-    <>
-      <header className={isMenuOpen ? "menu-active" : ""}>
-        <Image
-          src={displayContent.headerLogo || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
-          alt={t.common.logoAlt}
-          width={75}
-          height={75}
-          className="logo"
-          unoptimized
-        />
-        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-          <button
-            className="menu-toggle"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label={t.common.menuLabel}
-            aria-expanded={isMenuOpen}
-          >
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
-        </div>
-        {isMenuOpen && (
-          <div
-            className="menu-backdrop"
-            onClick={() => setIsMenuOpen(false)}
-            aria-hidden="true"
-          />
-        )}
-        <nav className={isMenuOpen ? "nav-open" : ""}>
-          {settings?.showHome !== false && (
-            <Link href={`/${locale}/home`} onClick={() => setIsMenuOpen(false)}>
-              {t.nav.home}
-            </Link>
-          )}
-          {settings?.showAbout !== false && (
-            <Link href={`/${locale}/about-us`} onClick={() => setIsMenuOpen(false)}>
-              {t.nav.about}
-            </Link>
-          )}
-          {settings?.showServices !== false && (
-            <Link href={`/${locale}/home`} onClick={() => setIsMenuOpen(false)}>
-              {t.nav.services}
-            </Link>
-          )}
-          {settings?.showProjects !== false && (
-            <Link href={`/${locale}/home`} onClick={() => setIsMenuOpen(false)}>
-              {t.nav.projects}
-            </Link>
-          )}
-          {settings?.showContact !== false && (
-            <Link href={`/${locale}/home`} onClick={() => setIsMenuOpen(false)}>
-              {t.nav.contact}
-            </Link>
-          )}
-          {settings?.showLanguageSwitcher !== false && (
-            <LanguageSwitcher currentLocale={locale} />
-          )}
-        </nav>
-      </header>
+    <FontsProvider settings={settings}>
+      <Header 
+        locale={validLocale} 
+        settings={settings} 
+        headerLogo={displayContent.headerLogo}
+      />
 
       <section className="hero" style={{ fontFamily: settings?.bodyFont }}>
         <Image
@@ -310,7 +153,6 @@ export default function HomePage() {
         />
         <p>{displayContent.footerCopyright}</p>
       </footer>
-    </>
+    </FontsProvider>
   );
 }
-

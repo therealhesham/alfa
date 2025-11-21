@@ -1,211 +1,42 @@
-"use client";
-
 import Image from "next/image";
-import Link from "next/link";
-import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { getAboutUsContent, getSiteSettings } from "@/lib/data";
 import { getTranslations } from "@/lib/i18n";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
+import Header from "@/components/Header";
+import FontsProvider from "@/components/FontsProvider";
 import type { Locale } from "@/i18n";
 
-interface AboutUsContent {
-  id: string;
-  heroTitle: string;
-  heroSubtitle: string;
-  heroImage: string;
-  storyTitle: string;
-  storyContent: string;
-  storyImage: string;
-  missionTitle: string;
-  missionContent: string;
-  visionTitle: string;
-  visionContent: string;
-  whyChooseTitle: string;
-  whyChoosePoint1: string;
-  whyChoosePoint2: string;
-  whyChoosePoint3: string;
-  whyChoosePoint4: string;
-  valuesTitle: string;
-  valuesContent: string;
-  milestone1Year: string;
-  milestone1Title: string;
-  milestone1Desc: string;
-  milestone2Year: string;
-  milestone2Title: string;
-  milestone2Desc: string;
-  milestone3Year: string;
-  milestone3Title: string;
-  milestone3Desc: string;
-  milestone4Year: string;
-  milestone4Title: string;
-  milestone4Desc: string;
-  foundersTitle: string;
-  founder1Name: string;
-  founder1Position: string;
-  founder1Image: string;
-  founder1Bio: string;
-  founder2Name: string;
-  founder2Position: string;
-  founder2Image: string;
-  founder2Bio: string;
+// ISR: Revalidate every 60 seconds
+export const revalidate = 60;
+
+interface AboutUsPageProps {
+  params: Promise<{ locale: string }>;
 }
 
-interface SiteSettings {
-  id: string;
-  primaryFont: string;
-  headingFont: string;
-  bodyFont: string;
-  showHome: boolean;
-  showAbout: boolean;
-  showServices: boolean;
-  showProjects: boolean;
-  showContact: boolean;
-  showLanguageSwitcher: boolean;
-}
+export default async function AboutUsPage({ params }: AboutUsPageProps) {
+  const { locale } = await params;
+  const validLocale = (locale === "ar" || locale === "en" ? locale : "ar") as Locale;
+  const t = getTranslations(validLocale);
 
-export default function AboutUsPage() {
-  const params = useParams();
-  const locale = (params?.locale as Locale) || "ar";
-  const t = getTranslations(locale);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [content, setContent] = useState<AboutUsContent | null>(null);
-  const [settings, setSettings] = useState<SiteSettings | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchContent();
-    fetchSettings();
-    
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible') {
-        fetchContent();
-        fetchSettings();
-      }
-    };
-    
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-    };
-  }, [locale]);
-
-  useEffect(() => {
-    if (settings) {
-      applyFonts();
-    }
-  }, [settings]);
-
-  const fetchContent = async () => {
-    try {
-      const response = await fetch(`/api/about-us?locale=${locale}`);
-      const data = await response.json();
-      setContent(data);
-    } catch (error) {
-      console.error("Error fetching content:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchSettings = async () => {
-    try {
-      const response = await fetch("/api/site-settings");
-      const data = await response.json();
-      setSettings(data);
-    } catch (error) {
-      console.error("Error fetching settings:", error);
-    }
-  };
-
-  const applyFonts = () => {
-    if (!settings) return;
-    
-    const root = document.documentElement;
-    root.style.setProperty('--primary-font', settings.primaryFont);
-    root.style.setProperty('--heading-font', settings.headingFont);
-    root.style.setProperty('--body-font', settings.bodyFont);
-    
-    document.body.style.fontFamily = settings.bodyFont;
-  };
-
-  if (loading) {
-    return (
-      <div style={{ padding: "2rem", textAlign: "center" }}>
-        <p>{locale === "ar" ? "جاري التحميل..." : "Loading..."}</p>
-      </div>
-    );
-  }
+  // Fetch data in parallel
+  const [content, settings] = await Promise.all([
+    getAboutUsContent(validLocale),
+    getSiteSettings(),
+  ]);
 
   if (!content) {
     return (
-      <div style={{ padding: "2rem", textAlign: "center" }}>
-        <p>{locale === "ar" ? "حدث خطأ في تحميل المحتوى" : "Error loading content"}</p>
-      </div>
+      <FontsProvider settings={settings}>
+        <Header locale={validLocale} settings={settings} />
+        <div style={{ padding: "2rem", textAlign: "center" }}>
+          <p>{validLocale === "ar" ? "حدث خطأ في تحميل المحتوى" : "Error loading content"}</p>
+        </div>
+      </FontsProvider>
     );
   }
 
   return (
-    <>
-      <header className={isMenuOpen ? "menu-active" : ""}>
-        <Image
-          src="https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"
-          alt={t.common.logoAlt}
-          width={75}
-          height={75}
-          className="logo"
-          unoptimized
-        />
-        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-          <button
-            className="menu-toggle"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label={t.common.menuLabel}
-            aria-expanded={isMenuOpen}
-          >
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
-        </div>
-        {isMenuOpen && (
-          <div
-            className="menu-backdrop"
-            onClick={() => setIsMenuOpen(false)}
-            aria-hidden="true"
-          />
-        )}
-        <nav className={isMenuOpen ? "nav-open" : ""}>
-          {settings?.showHome !== false && (
-            <Link href={`/${locale}/home`} onClick={() => setIsMenuOpen(false)}>
-              {t.nav.home}
-            </Link>
-          )}
-          {settings?.showAbout !== false && (
-            <Link href={`/${locale}/about-us`} onClick={() => setIsMenuOpen(false)}>
-              {t.nav.about}
-            </Link>
-          )}
-          {settings?.showServices !== false && (
-            <Link href={`/${locale}/home`} onClick={() => setIsMenuOpen(false)}>
-              {t.nav.services}
-            </Link>
-          )}
-          {settings?.showProjects !== false && (
-            <Link href={`/${locale}/home`} onClick={() => setIsMenuOpen(false)}>
-              {t.nav.projects}
-            </Link>
-          )}
-          {settings?.showContact !== false && (
-            <Link href={`/${locale}/home`} onClick={() => setIsMenuOpen(false)}>
-              {t.nav.contact}
-            </Link>
-          )}
-          {settings?.showLanguageSwitcher !== false && (
-            <LanguageSwitcher currentLocale={locale} />
-          )}
-        </nav>
-      </header>
+    <FontsProvider settings={settings}>
+      <Header locale={validLocale} settings={settings} />
 
       {/* Hero Section */}
       <section className="hero" style={{ 
@@ -254,7 +85,7 @@ export default function AboutUsPage() {
             />
           </div>
           <div>
-            <p style={{ fontSize: '1.2rem', lineHeight: '1.8', textAlign: locale === 'ar' ? 'right' : 'left' }}>
+            <p style={{ fontSize: '1.2rem', lineHeight: '1.8', textAlign: validLocale === 'ar' ? 'right' : 'left' }}>
               {content.storyContent}
             </p>
           </div>
@@ -280,15 +111,7 @@ export default function AboutUsPage() {
               padding: '2rem',
               textAlign: 'center',
               boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-              transition: 'transform 0.3s',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-5px)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-            }}
-            >
+            }}>
               <div style={{
                 width: '200px',
                 height: '200px',
@@ -326,7 +149,7 @@ export default function AboutUsPage() {
                 fontSize: '1rem', 
                 color: '#666', 
                 lineHeight: '1.6',
-                textAlign: locale === 'ar' ? 'right' : 'left'
+                textAlign: validLocale === 'ar' ? 'right' : 'left'
               }}>
                 {content.founder1Bio}
               </p>
@@ -339,15 +162,7 @@ export default function AboutUsPage() {
               padding: '2rem',
               textAlign: 'center',
               boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-              transition: 'transform 0.3s',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-5px)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-            }}
-            >
+            }}>
               <div style={{
                 width: '200px',
                 height: '200px',
@@ -385,7 +200,7 @@ export default function AboutUsPage() {
                 fontSize: '1rem', 
                 color: '#666', 
                 lineHeight: '1.6',
-                textAlign: locale === 'ar' ? 'right' : 'left'
+                textAlign: validLocale === 'ar' ? 'right' : 'left'
               }}>
                 {content.founder2Bio}
               </p>
@@ -490,20 +305,20 @@ export default function AboutUsPage() {
       {/* Timeline/Milestones Section */}
       <section style={{ padding: '4rem 2rem', maxWidth: '1200px', margin: '0 auto' }}>
         <h2 style={{ fontSize: '2.5rem', marginBottom: '3rem', textAlign: 'center' }}>
-          {locale === 'ar' ? 'محطاتنا المهمة' : 'Our Milestones'}
+          {validLocale === 'ar' ? 'محطاتنا المهمة' : 'Our Milestones'}
         </h2>
         <div style={{ 
           display: 'flex', 
           flexDirection: 'column', 
           gap: '2rem',
           position: 'relative',
-          paddingLeft: locale === 'ar' ? '0' : '2rem',
-          paddingRight: locale === 'ar' ? '2rem' : '0'
+          paddingLeft: validLocale === 'ar' ? '0' : '2rem',
+          paddingRight: validLocale === 'ar' ? '2rem' : '0'
         }}>
           {/* Timeline line */}
           <div style={{
             position: 'absolute',
-            [locale === 'ar' ? 'right' : 'left']: '0',
+            ...(validLocale === 'ar' ? { right: '0' } : { left: '0' }),
             top: '0',
             bottom: '0',
             width: '3px',
@@ -513,12 +328,12 @@ export default function AboutUsPage() {
           {/* Milestone 1 */}
           <div style={{ 
             position: 'relative',
-            paddingLeft: locale === 'ar' ? '0' : '3rem',
-            paddingRight: locale === 'ar' ? '3rem' : '0',
+            paddingLeft: validLocale === 'ar' ? '0' : '3rem',
+            paddingRight: validLocale === 'ar' ? '3rem' : '0',
           }}>
             <div style={{
               position: 'absolute',
-              [locale === 'ar' ? 'right' : 'left']: '-8px',
+              ...(validLocale === 'ar' ? { right: '-8px' } : { left: '-8px' }),
               top: '0',
               width: '16px',
               height: '16px',
@@ -546,12 +361,12 @@ export default function AboutUsPage() {
           {/* Milestone 2 */}
           <div style={{ 
             position: 'relative',
-            paddingLeft: locale === 'ar' ? '0' : '3rem',
-            paddingRight: locale === 'ar' ? '3rem' : '0',
+            paddingLeft: validLocale === 'ar' ? '0' : '3rem',
+            paddingRight: validLocale === 'ar' ? '3rem' : '0',
           }}>
             <div style={{
               position: 'absolute',
-              [locale === 'ar' ? 'right' : 'left']: '-8px',
+              ...(validLocale === 'ar' ? { right: '-8px' } : { left: '-8px' }),
               top: '0',
               width: '16px',
               height: '16px',
@@ -579,12 +394,12 @@ export default function AboutUsPage() {
           {/* Milestone 3 */}
           <div style={{ 
             position: 'relative',
-            paddingLeft: locale === 'ar' ? '0' : '3rem',
-            paddingRight: locale === 'ar' ? '3rem' : '0',
+            paddingLeft: validLocale === 'ar' ? '0' : '3rem',
+            paddingRight: validLocale === 'ar' ? '3rem' : '0',
           }}>
             <div style={{
               position: 'absolute',
-              [locale === 'ar' ? 'right' : 'left']: '-8px',
+              ...(validLocale === 'ar' ? { right: '-8px' } : { left: '-8px' }),
               top: '0',
               width: '16px',
               height: '16px',
@@ -612,12 +427,12 @@ export default function AboutUsPage() {
           {/* Milestone 4 */}
           <div style={{ 
             position: 'relative',
-            paddingLeft: locale === 'ar' ? '0' : '3rem',
-            paddingRight: locale === 'ar' ? '3rem' : '0',
+            paddingLeft: validLocale === 'ar' ? '0' : '3rem',
+            paddingRight: validLocale === 'ar' ? '3rem' : '0',
           }}>
             <div style={{
               position: 'absolute',
-              [locale === 'ar' ? 'right' : 'left']: '-8px',
+              ...(validLocale === 'ar' ? { right: '-8px' } : { left: '-8px' }),
               top: '0',
               width: '16px',
               height: '16px',
@@ -652,9 +467,8 @@ export default function AboutUsPage() {
           height={80}
           unoptimized
         />
-        <p>{locale === "ar" ? "© 2025 اسم الشركة – جميع الحقوق محفوظة" : "© 2025 Company Name – All Rights Reserved"}</p>
+        <p>{validLocale === "ar" ? "© 2025 اسم الشركة – جميع الحقوق محفوظة" : "© 2025 Company Name – All Rights Reserved"}</p>
       </footer>
-    </>
+    </FontsProvider>
   );
 }
-
