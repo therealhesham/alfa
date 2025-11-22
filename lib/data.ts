@@ -368,6 +368,58 @@ export async function getContactUsContent(locale: Locale): Promise<ContactUsCont
   }
 }
 
+export interface FooterContent {
+  id: string;
+  footerLogo: string;
+  companyName: string;
+  footerCopyright: string;
+  addressLabel: string;
+  addressValue: string;
+  phoneLabelInfo: string;
+  phoneValue: string;
+}
+
+export async function getFooterContent(locale: Locale): Promise<FooterContent | null> {
+  try {
+    let content = await prisma.footer.findFirst();
+    
+    if (!content) {
+      content = await prisma.footer.create({
+        data: {},
+      });
+    }
+    
+    if (locale === 'en') {
+      const contentAny = content as any;
+      return {
+        id: content.id,
+        footerLogo: content.footerLogo || '',
+        companyName: contentAny.companyNameEn || '',
+        footerCopyright: contentAny.footerCopyrightEn || '',
+        addressLabel: contentAny.addressLabelEn || '',
+        addressValue: contentAny.addressValueEn || '',
+        phoneLabelInfo: contentAny.phoneLabelInfoEn || '',
+        phoneValue: content.phoneValue || '',
+      };
+    }
+    
+    const contentAny = content as any;
+    return {
+      id: content.id,
+      footerLogo: content.footerLogo || '',
+      companyName: content.companyName || '',
+      footerCopyright: content.footerCopyright || '',
+      addressLabel: content.addressLabel || '',
+      addressValue: content.addressValue || '',
+      phoneLabelInfo: content.phoneLabelInfo || '',
+      phoneValue: content.phoneValue || '',
+    };
+  } catch (error) {
+    console.error('Error fetching footer content:', error);
+    return null;
+  }
+}
+
 export async function getSiteSettings(): Promise<SiteSettings | null> {
   try {
     let settings = await prisma.siteSettings.findFirst();

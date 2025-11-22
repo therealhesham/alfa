@@ -32,6 +32,13 @@ const adminRoutes: AdminRoute[] = [
     },
   },
   {
+    slug: "footer",
+    labels: {
+      ar: "الـ Footer",
+      en: "Footer",
+    },
+  },
+  {
     slug: "settings",
     labels: {
       ar: "الإعدادات",

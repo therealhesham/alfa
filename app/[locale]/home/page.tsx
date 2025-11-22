@@ -1,7 +1,8 @@
 import Image from "next/image";
-import { getHomeContent, getSiteSettings } from "@/lib/data";
+import { getHomeContent, getSiteSettings, getFooterContent } from "@/lib/data";
 import { getTranslations } from "@/lib/i18n";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import FontsProvider from "@/components/FontsProvider";
 import type { Locale } from "@/i18n";
 
@@ -18,9 +19,10 @@ export default async function HomePage({ params }: HomePageProps) {
   const t = getTranslations(validLocale);
 
   // Fetch data in parallel
-  const [content, settings] = await Promise.all([
+  const [content, settings, footerContent] = await Promise.all([
     getHomeContent(validLocale),
     getSiteSettings(),
+    getFooterContent(validLocale),
   ]);
 
   // Fallback to translations if content is not available
@@ -132,16 +134,17 @@ export default async function HomePage({ params }: HomePageProps) {
         </div>
       </section>
 
-      <footer>
-        <Image
-          src={displayContent.footerLogo || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
-          alt={t.common.logoAlt}
-          width={80}
-          height={80}
-          unoptimized
-        />
-        <p>{displayContent.footerCopyright}</p>
-      </footer>
+      <Footer
+        locale={validLocale}
+        settings={settings}
+        footerLogo={footerContent?.footerLogo || displayContent.footerLogo}
+        footerCopyright={footerContent?.footerCopyright || displayContent.footerCopyright}
+        companyName={footerContent?.companyName}
+        addressLabel={footerContent?.addressLabel}
+        addressValue={footerContent?.addressValue}
+        phoneLabelInfo={footerContent?.phoneLabelInfo}
+        phoneValue={footerContent?.phoneValue}
+      />
     </FontsProvider>
   );
 }

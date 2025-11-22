@@ -1,7 +1,8 @@
 import Image from "next/image";
-import { getAboutUsContent, getSiteSettings } from "@/lib/data";
+import { getAboutUsContent, getSiteSettings, getFooterContent } from "@/lib/data";
 import { getTranslations } from "@/lib/i18n";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import FontsProvider from "@/components/FontsProvider";
 import type { Locale } from "@/i18n";
 
@@ -18,9 +19,10 @@ export default async function AboutUsPage({ params }: AboutUsPageProps) {
   const t = getTranslations(validLocale);
 
   // Fetch data in parallel
-  const [content, settings] = await Promise.all([
+  const [content, settings, footerContent] = await Promise.all([
     getAboutUsContent(validLocale),
     getSiteSettings(),
+    getFooterContent(validLocale),
   ]);
 
   if (!content) {
@@ -159,16 +161,17 @@ export default async function AboutUsPage({ params }: AboutUsPageProps) {
         </div>
       </section>
 
-      <footer>
-        <Image
-          src="https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"
-          alt={t.common.logoAlt}
-          width={80}
-          height={80}
-          unoptimized
-        />
-        <p>{validLocale === "ar" ? "© 2025 اسم الشركة – جميع الحقوق محفوظة" : "© 2025 Company Name – All Rights Reserved"}</p>
-      </footer>
+      <Footer
+        locale={validLocale}
+        settings={settings}
+        footerLogo={footerContent?.footerLogo || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
+        footerCopyright={footerContent?.footerCopyright || (validLocale === "ar" ? "© 2025 اسم الشركة – جميع الحقوق محفوظة" : "© 2025 Company Name – All Rights Reserved")}
+        companyName={footerContent?.companyName}
+        addressLabel={footerContent?.addressLabel}
+        addressValue={footerContent?.addressValue}
+        phoneLabelInfo={footerContent?.phoneLabelInfo}
+        phoneValue={footerContent?.phoneValue}
+      />
     </FontsProvider>
   );
 }
