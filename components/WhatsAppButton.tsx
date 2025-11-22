@@ -55,20 +55,20 @@ export default function WhatsAppButton({ settings }: WhatsAppButtonProps) {
           left: 2rem;
           width: 64px;
           height: 64px;
-          background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+          background: linear-gradient(135deg, #0F1C2A 0%, #D4C19D 100%);
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
-          box-shadow: 0 8px 24px rgba(37, 211, 102, 0.4),
-                      0 4px 12px rgba(37, 211, 102, 0.3);
+          box-shadow: 0 8px 24px rgba(15, 28, 42, 0.4),
+                      0 4px 12px rgba(212, 193, 157, 0.3);
           z-index: 9999;
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           opacity: 0;
           transform: scale(0.8) translateY(20px);
           cursor: pointer;
           text-decoration: none;
-          border: 3px solid rgba(255, 255, 255, 0.2);
+          border: 3px solid rgba(212, 193, 157, 0.3);
           backdrop-filter: blur(10px);
         }
 
@@ -79,9 +79,10 @@ export default function WhatsAppButton({ settings }: WhatsAppButtonProps) {
 
         .whatsapp-button:hover {
           transform: scale(1.1) translateY(-2px);
-          box-shadow: 0 12px 32px rgba(37, 211, 102, 0.5),
-                      0 6px 16px rgba(37, 211, 102, 0.4);
-          border-color: rgba(255, 255, 255, 0.3);
+          background: linear-gradient(135deg, #D4C19D 0%, #0F1C2A 100%);
+          box-shadow: 0 12px 32px rgba(212, 193, 157, 0.5),
+                      0 6px 16px rgba(15, 28, 42, 0.4);
+          border-color: rgba(212, 193, 157, 0.5);
         }
 
         .whatsapp-button:active {
@@ -140,16 +141,16 @@ export default function WhatsAppButton({ settings }: WhatsAppButtonProps) {
         /* Pulse animation */
         @keyframes pulse {
           0% {
-            box-shadow: 0 8px 24px rgba(37, 211, 102, 0.4),
-                        0 4px 12px rgba(37, 211, 102, 0.3);
+            box-shadow: 0 8px 24px rgba(15, 28, 42, 0.4),
+                        0 4px 12px rgba(212, 193, 157, 0.3);
           }
           50% {
-            box-shadow: 0 12px 32px rgba(37, 211, 102, 0.6),
-                        0 6px 16px rgba(37, 211, 102, 0.5);
+            box-shadow: 0 12px 32px rgba(212, 193, 157, 0.6),
+                        0 6px 16px rgba(15, 28, 42, 0.5);
           }
           100% {
-            box-shadow: 0 8px 24px rgba(37, 211, 102, 0.4),
-                        0 4px 12px rgba(37, 211, 102, 0.3);
+            box-shadow: 0 8px 24px rgba(15, 28, 42, 0.4),
+                        0 4px 12px rgba(212, 193, 157, 0.3);
           }
         }
 
@@ -175,7 +176,7 @@ export default function WhatsAppButton({ settings }: WhatsAppButtonProps) {
           width: 100%;
           height: 100%;
           border-radius: 50%;
-          background: rgba(255, 255, 255, 0.3);
+          background: rgba(212, 193, 157, 0.3);
           opacity: 0;
           transition: opacity 0.3s;
         }

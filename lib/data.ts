@@ -25,6 +25,28 @@ export interface HomeContent {
   statsYearsNum: string;
   statsCountriesNum: string;
   statsAwardsNum: string;
+  servicesTitle: string;
+  servicesSubtitle: string;
+  service1Title: string;
+  service1Desc: string;
+  service2Title: string;
+  service2Desc: string;
+  service3Title: string;
+  service3Desc: string;
+  service4Title: string;
+  service4Desc: string;
+  projectsTitle: string;
+  projectsSubtitle: string;
+  projectsViewMore: string;
+  project1Title: string;
+  project1Desc: string;
+  project1Image: string;
+  project2Title: string;
+  project2Desc: string;
+  project2Image: string;
+  project3Title: string;
+  project3Desc: string;
+  project3Image: string;
   footerCopyright: string;
   footerLogo: string;
   headerLogo: string;
@@ -150,12 +172,35 @@ export async function getHomeContent(locale: Locale): Promise<HomeContent | null
         statsYearsNum: content.statsYearsNum || '',
         statsCountriesNum: content.statsCountriesNum || '',
         statsAwardsNum: content.statsAwardsNum || '',
+        servicesTitle: contentAny.servicesTitleEn || '',
+        servicesSubtitle: contentAny.servicesSubtitleEn || '',
+        service1Title: contentAny.service1TitleEn || '',
+        service1Desc: contentAny.service1DescEn || '',
+        service2Title: contentAny.service2TitleEn || '',
+        service2Desc: contentAny.service2DescEn || '',
+        service3Title: contentAny.service3TitleEn || '',
+        service3Desc: contentAny.service3DescEn || '',
+        service4Title: contentAny.service4TitleEn || '',
+        service4Desc: contentAny.service4DescEn || '',
+        projectsTitle: contentAny.projectsTitleEn || '',
+        projectsSubtitle: contentAny.projectsSubtitleEn || '',
+        projectsViewMore: contentAny.projectsViewMoreEn || '',
+        project1Title: contentAny.project1TitleEn || '',
+        project1Desc: contentAny.project1DescEn || '',
+        project1Image: content.project1Image || '',
+        project2Title: contentAny.project2TitleEn || '',
+        project2Desc: contentAny.project2DescEn || '',
+        project2Image: content.project2Image || '',
+        project3Title: contentAny.project3TitleEn || '',
+        project3Desc: contentAny.project3DescEn || '',
+        project3Image: content.project3Image || '',
         footerCopyright: contentAny.footerCopyrightEn || '',
         footerLogo: content.footerLogo || '',
         headerLogo: content.headerLogo || '',
       };
     }
     
+    const contentAny = content as any;
     return {
       id: content.id,
       heroTitle: content.heroTitle || '',
@@ -180,6 +225,28 @@ export async function getHomeContent(locale: Locale): Promise<HomeContent | null
       statsYearsNum: content.statsYearsNum || '',
       statsCountriesNum: content.statsCountriesNum || '',
       statsAwardsNum: content.statsAwardsNum || '',
+      servicesTitle: contentAny.servicesTitle || '',
+      servicesSubtitle: contentAny.servicesSubtitle || '',
+      service1Title: contentAny.service1Title || '',
+      service1Desc: contentAny.service1Desc || '',
+      service2Title: contentAny.service2Title || '',
+      service2Desc: contentAny.service2Desc || '',
+      service3Title: contentAny.service3Title || '',
+      service3Desc: contentAny.service3Desc || '',
+      service4Title: contentAny.service4Title || '',
+      service4Desc: contentAny.service4Desc || '',
+      projectsTitle: contentAny.projectsTitle || '',
+      projectsSubtitle: contentAny.projectsSubtitle || '',
+      projectsViewMore: contentAny.projectsViewMore || '',
+      project1Title: contentAny.project1Title || '',
+      project1Desc: contentAny.project1Desc || '',
+      project1Image: contentAny.project1Image || '',
+      project2Title: contentAny.project2Title || '',
+      project2Desc: contentAny.project2Desc || '',
+      project2Image: contentAny.project2Image || '',
+      project3Title: contentAny.project3Title || '',
+      project3Desc: contentAny.project3Desc || '',
+      project3Image: contentAny.project3Image || '',
       footerCopyright: content.footerCopyright || '',
       footerLogo: content.footerLogo || '',
       headerLogo: content.headerLogo || '',

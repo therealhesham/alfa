@@ -52,6 +52,59 @@ model HomeContent {
   statsYearsNum String   @default("15+")
   statsCountriesNum String @default("48")
   statsAwardsNum String   @default("22")
+  
+  // Services Section
+  servicesTitle String @default("خدماتنا")
+  servicesTitleEn String @default("Our Services")
+  servicesSubtitle String @default("نقدم مجموعة متكاملة من الخدمات المعمارية والهندسية")
+  servicesSubtitleEn String @default("We offer a comprehensive range of architectural and engineering services")
+  
+  service1Title String @default("التصميم المعماري")
+  service1TitleEn String @default("Architectural Design")
+  service1Desc String @default("تصاميم معمارية فاخرة تجمع بين الأصالة والحداثة")
+  service1DescEn String @default("Luxury architectural designs combining authenticity and modernity")
+  
+  service2Title String @default("التصميم الداخلي")
+  service2TitleEn String @default("Interior Design")
+  service2Desc String @default("مساحات داخلية تعكس الذوق الرفيع والفخامة")
+  service2DescEn String @default("Interior spaces reflecting refined taste and luxury")
+  
+  service3Title String @default("الإشراف الهندسي")
+  service3TitleEn String @default("Engineering Supervision")
+  service3Desc String @default("متابعة دقيقة لضمان أعلى معايير الجودة")
+  service3DescEn String @default("Precise monitoring to ensure the highest quality standards")
+  
+  service4Title String @default("الاستشارات الهندسية")
+  service4TitleEn String @default("Engineering Consultancy")
+  service4Desc String @default("حلول هندسية مبتكرة لكل التحديات")
+  service4DescEn String @default("Innovative engineering solutions for all challenges")
+  
+  // Projects Section
+  projectsTitle String @default("مشاريعنا")
+  projectsTitleEn String @default("Our Projects")
+  projectsSubtitle String @default("نفخر بتقديم مشاريع استثنائية حول العالم")
+  projectsSubtitleEn String @default("We are proud to present exceptional projects around the world")
+  projectsViewMore String @default("المزيد من المشاريع")
+  projectsViewMoreEn String @default("View More Projects")
+  
+  project1Title String @default("فيلا فاخرة - دبي")
+  project1TitleEn String @default("Luxury Villa - Dubai")
+  project1Desc String @default("تصميم معماري فاخر يجمع بين الأصالة العربية والحداثة")
+  project1DescEn String @default("Luxury architectural design combining Arabic authenticity and modernity")
+  project1Image String @default("https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png")
+  
+  project2Title String @default("مجمع سكني - الرياض")
+  project2TitleEn String @default("Residential Complex - Riyadh")
+  project2Desc String @default("مشروع سكني متكامل بأعلى معايير الجودة والفخامة")
+  project2DescEn String @default("Integrated residential project with the highest standards of quality and luxury")
+  project2Image String @default("https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png")
+  
+  project3Title String @default("مركز تجاري - جدة")
+  project3TitleEn String @default("Shopping Center - Jeddah")
+  project3Desc String @default("مركز تجاري عصري بتصميم مبتكر وفريد")
+  project3DescEn String @default("Modern shopping center with innovative and unique design")
+  project3Image String @default("https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png")
+  
   footerCopyright String @default("© 2025 اسم الشركة – جميع الحقوق محفوظة")
   footerCopyrightEn String @default("© 2025 Company Name – All Rights Reserved")
   footerLogo     String   @default("/capture.png")

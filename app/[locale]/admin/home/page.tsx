@@ -32,6 +32,28 @@ interface HomeContent {
   statsYearsNum: string;
   statsCountriesNum: string;
   statsAwardsNum: string;
+  servicesTitle: string;
+  servicesSubtitle: string;
+  service1Title: string;
+  service1Desc: string;
+  service2Title: string;
+  service2Desc: string;
+  service3Title: string;
+  service3Desc: string;
+  service4Title: string;
+  service4Desc: string;
+  projectsTitle: string;
+  projectsSubtitle: string;
+  projectsViewMore: string;
+  project1Title: string;
+  project1Desc: string;
+  project1Image: string;
+  project2Title: string;
+  project2Desc: string;
+  project2Image: string;
+  project3Title: string;
+  project3Desc: string;
+  project3Image: string;
   footerCopyright: string;
   footerLogo: string;
   headerLogo: string;
@@ -168,6 +190,158 @@ function EditableField({
     >
       {value || placeholder}
     </Tag>
+  );
+}
+
+interface EditableImageProps {
+  src: string;
+  alt: string;
+  onChange: (newPath: string) => void;
+  width?: number;
+  height?: number;
+  style?: React.CSSProperties;
+  currentLocale: Locale;
+}
+
+function EditableImage({ src, alt, onChange, width = 600, height = 400, style, currentLocale }: EditableImageProps) {
+  const [isHovered, setIsHovered] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImageClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert(currentLocale === "ar" ? "الرجاء اختيار ملف صورة" : "Please select an image file");
+      return;
+    }
+
+    setIsUploading(true);
+    
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('/api/upload-image', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+      
+      if (data.success) {
+        onChange(data.path);
+      } else {
+        alert(currentLocale === "ar" ? "فشل رفع الصورة" : "Failed to upload image");
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      alert(currentLocale === "ar" ? "حدث خطأ أثناء رفع الصورة" : "Error uploading image");
+    } finally {
+      setIsUploading(false);
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
+  const containerStyle: React.CSSProperties = {
+    position: 'relative',
+    display: 'inline-block',
+    cursor: 'pointer',
+    ...style
+  };
+
+  const imageStyle: React.CSSProperties = {
+    width: style?.width || width,
+    height: style?.height || 'auto',
+    maxWidth: style?.maxWidth || width,
+    borderRadius: style?.borderRadius || '8px',
+    opacity: isUploading ? 0.6 : 1,
+    transition: 'opacity 0.2s',
+    objectFit: 'contain'
+  };
+
+  return (
+    <div
+      style={containerStyle}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onClick={handleImageClick}
+    >
+      <Image
+        src={src || '/capture.png'}
+        alt={alt}
+        width={width}
+        height={height}
+        style={imageStyle}
+        unoptimized
+      />
+      {isHovered && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            borderRadius: '50%',
+            width: '50px',
+            height: '50px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            pointerEvents: 'none',
+            transition: 'all 0.2s',
+          }}
+        >
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="white"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+          </svg>
+        </div>
+      )}
+      {isUploading && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            borderRadius: '8px',
+            padding: '1rem',
+            color: 'white',
+            pointerEvents: 'none',
+          }}
+        >
+          {currentLocale === "ar" ? "جاري الرفع..." : "Uploading..."}
+        </div>
+      )}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        style={{ display: 'none' }}
+        onChange={handleFileChange}
+      />
+    </div>
   );
 }
 
@@ -360,13 +534,14 @@ export default function AdminHomePage() {
       </div>
 
       <header className={isMenuOpen ? "menu-active" : ""}>
-        <Image
+        <EditableImage
           src={content.headerLogo}
           alt="شعار الشركة"
+          onChange={(newPath) => handleChange("headerLogo", newPath)}
           width={75}
           height={75}
-          className="logo"
-          unoptimized
+          currentLocale={currentLocale}
+          style={{ borderRadius: "0", width: "75px", height: "75px" }}
         />
         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
           <button
@@ -407,13 +582,14 @@ export default function AdminHomePage() {
       </header>
 
       <section className="hero">
-        <Image
+        <EditableImage
           src={content.heroLogo}
           alt="شعار"
+          onChange={(newPath) => handleChange("heroLogo", newPath)}
           width={300}
           height={300}
-          className="hero-logo"
-          unoptimized
+          currentLocale={currentLocale}
+          style={{ width: "200px", height: "auto", maxWidth: "300px" }}
         />
         <EditableField
           value={content.heroTitle}
@@ -426,14 +602,6 @@ export default function AdminHomePage() {
           as="textarea"
           rows={3}
         />
-        <div style={{ marginTop: "1rem", fontSize: "0.875rem", color: "#666" }}>
-          <EditableField
-            value={content.heroLogo}
-            onChange={(value) => handleChange("heroLogo", value)}
-            as="input"
-            placeholder="مسار الشعار"
-          />
-        </div>
       </section>
 
       <section className="about">
@@ -505,7 +673,178 @@ export default function AdminHomePage() {
         </div>
       </section>
 
-      <section className="stats">
+      <section id="services" className="services">
+        <EditableField
+          value={content.servicesTitle}
+          onChange={(value) => handleChange("servicesTitle", value)}
+          as="h2"
+        />
+        <EditableField
+          value={content.servicesSubtitle}
+          onChange={(value) => handleChange("servicesSubtitle", value)}
+          as="p"
+          className="section-subtitle"
+        />
+        <div className="services-grid">
+          <div className="service-card">
+            <div className="service-icon" style={{ fontSize: "3rem", marginBottom: "1rem" }}>🏠</div>
+            <EditableField
+              value={content.service1Title}
+              onChange={(value) => handleChange("service1Title", value)}
+              as="h3"
+            />
+            <EditableField
+              value={content.service1Desc}
+              onChange={(value) => handleChange("service1Desc", value)}
+              as="textarea"
+              rows={3}
+            />
+          </div>
+          <div className="service-card">
+            <div className="service-icon" style={{ fontSize: "3rem", marginBottom: "1rem" }}>📐</div>
+            <EditableField
+              value={content.service2Title}
+              onChange={(value) => handleChange("service2Title", value)}
+              as="h3"
+            />
+            <EditableField
+              value={content.service2Desc}
+              onChange={(value) => handleChange("service2Desc", value)}
+              as="textarea"
+              rows={3}
+            />
+          </div>
+          <div className="service-card">
+            <div className="service-icon" style={{ fontSize: "3rem", marginBottom: "1rem" }}>📊</div>
+            <EditableField
+              value={content.service3Title}
+              onChange={(value) => handleChange("service3Title", value)}
+              as="h3"
+            />
+            <EditableField
+              value={content.service3Desc}
+              onChange={(value) => handleChange("service3Desc", value)}
+              as="textarea"
+              rows={3}
+            />
+          </div>
+          <div className="service-card">
+            <div className="service-icon" style={{ fontSize: "3rem", marginBottom: "1rem" }}>💡</div>
+            <EditableField
+              value={content.service4Title}
+              onChange={(value) => handleChange("service4Title", value)}
+              as="h3"
+            />
+            <EditableField
+              value={content.service4Desc}
+              onChange={(value) => handleChange("service4Desc", value)}
+              as="textarea"
+              rows={3}
+            />
+          </div>
+        </div>
+      </section>
+
+      <section id="projects" className="projects">
+        <EditableField
+          value={content.projectsTitle}
+          onChange={(value) => handleChange("projectsTitle", value)}
+          as="h2"
+        />
+        <EditableField
+          value={content.projectsSubtitle}
+          onChange={(value) => handleChange("projectsSubtitle", value)}
+          as="p"
+          className="section-subtitle"
+        />
+        <div className="projects-grid">
+          <div className="project-card">
+            <div className="project-image">
+              <EditableImage
+                src={content.project1Image}
+                alt={content.project1Title}
+                onChange={(newPath) => handleChange("project1Image", newPath)}
+                width={400}
+                height={300}
+                currentLocale={currentLocale}
+              />
+            </div>
+            <div className="project-content">
+              <EditableField
+                value={content.project1Title}
+                onChange={(value) => handleChange("project1Title", value)}
+                as="h3"
+              />
+              <EditableField
+                value={content.project1Desc}
+                onChange={(value) => handleChange("project1Desc", value)}
+                as="textarea"
+                rows={3}
+              />
+            </div>
+          </div>
+          <div className="project-card">
+            <div className="project-image">
+              <EditableImage
+                src={content.project2Image}
+                alt={content.project2Title}
+                onChange={(newPath) => handleChange("project2Image", newPath)}
+                width={400}
+                height={300}
+                currentLocale={currentLocale}
+              />
+            </div>
+            <div className="project-content">
+              <EditableField
+                value={content.project2Title}
+                onChange={(value) => handleChange("project2Title", value)}
+                as="h3"
+              />
+              <EditableField
+                value={content.project2Desc}
+                onChange={(value) => handleChange("project2Desc", value)}
+                as="textarea"
+                rows={3}
+              />
+            </div>
+          </div>
+          <div className="project-card">
+            <div className="project-image">
+              <EditableImage
+                src={content.project3Image}
+                alt={content.project3Title}
+                onChange={(newPath) => handleChange("project3Image", newPath)}
+                width={400}
+                height={300}
+                currentLocale={currentLocale}
+              />
+            </div>
+            <div className="project-content">
+              <EditableField
+                value={content.project3Title}
+                onChange={(value) => handleChange("project3Title", value)}
+                as="h3"
+              />
+              <EditableField
+                value={content.project3Desc}
+                onChange={(value) => handleChange("project3Desc", value)}
+                as="textarea"
+                rows={3}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="view-more-container">
+          <EditableField
+            value={content.projectsViewMore}
+            onChange={(value) => handleChange("projectsViewMore", value)}
+            as="input"
+            placeholder="نص زر المزيد"
+          />
+        </div>
+      </section>
+
+      <section id="stats" className="stats">
         <EditableField
           value={content.statsTitle}
           onChange={(value) => handleChange("statsTitle", value)}
@@ -564,34 +903,20 @@ export default function AdminHomePage() {
       </section>
 
       <footer>
-        <Image
+        <EditableImage
           src={content.footerLogo}
           alt="شعار"
+          onChange={(newPath) => handleChange("footerLogo", newPath)}
           width={80}
           height={80}
-          unoptimized
+          currentLocale={currentLocale}
+          style={{ width: "80px", height: "auto", maxWidth: "120px" }}
         />
         <EditableField
           value={content.footerCopyright}
           onChange={(value) => handleChange("footerCopyright", value)}
           as="p"
         />
-        <div style={{ marginTop: "0.5rem", fontSize: "0.875rem", color: "#666" }}>
-          <EditableField
-            value={content.footerLogo}
-            onChange={(value) => handleChange("footerLogo", value)}
-            as="input"
-            placeholder="مسار شعار التذييل"
-          />
-        </div>
-        <div style={{ marginTop: "0.5rem", fontSize: "0.875rem", color: "#666" }}>
-          <EditableField
-            value={content.headerLogo}
-            onChange={(value) => handleChange("headerLogo", value)}
-            as="input"
-            placeholder="مسار شعار الهيدر"
-          />
-        </div>
       </footer>
     </>
   );

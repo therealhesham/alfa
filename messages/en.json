@@ -31,6 +31,29 @@
     "countries": "Countries Worldwide",
     "awards": "International Awards"
   },
+  "services": {
+    "title": "Our Services",
+    "subtitle": "We offer a comprehensive range of architectural and engineering services",
+    "service1": "Architectural Design",
+    "service1Desc": "Luxury architectural designs combining authenticity and modernity",
+    "service2": "Interior Design",
+    "service2Desc": "Interior spaces reflecting refined taste and luxury",
+    "service3": "Engineering Supervision",
+    "service3Desc": "Precise monitoring to ensure the highest quality standards",
+    "service4": "Engineering Consultancy",
+    "service4Desc": "Innovative engineering solutions for all challenges"
+  },
+  "projectsSection": {
+    "title": "Our Projects",
+    "subtitle": "We are proud to present exceptional projects around the world",
+    "viewMore": "View More Projects",
+    "project1": "Luxury Villa - Dubai",
+    "project1Desc": "Luxury architectural design combining Arabic authenticity and modernity",
+    "project2": "Residential Complex - Riyadh",
+    "project2Desc": "Integrated residential project with the highest standards of quality and luxury",
+    "project3": "Shopping Center - Jeddah",
+    "project3Desc": "Modern shopping center with innovative and unique design"
+  },
   "footer": {
     "copyright": "© 2025 Company Name – All Rights Reserved"
   },

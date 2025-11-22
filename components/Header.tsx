@@ -12,22 +12,36 @@ interface HeaderProps {
   locale: Locale;
   settings: SiteSettings | null;
   headerLogo?: string;
+  isHomePage?: boolean;
 }
 
-export default function Header({ locale, settings, headerLogo }: HeaderProps) {
+export default function Header({ locale, settings, headerLogo, isHomePage = false }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const t = getTranslations(locale);
 
+  const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
+    if (isHomePage) {
+      e.preventDefault();
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setIsMenuOpen(false);
+      }
+    }
+  };
+
   return (
     <header className={isMenuOpen ? "menu-active" : ""}>
-      <Image
-        src={headerLogo || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
-        alt={t.common.logoAlt}
-        width={75}
-        height={75}
-        className="logo"
-        unoptimized
-      />
+      <Link href={`/${locale}/home`}>
+        <Image
+          src={headerLogo || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
+          alt={t.common.logoAlt}
+          width={75}
+          height={75}
+          className="logo"
+          unoptimized
+        />
+      </Link>
       <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
         <button
           className="menu-toggle"
@@ -54,19 +68,37 @@ export default function Header({ locale, settings, headerLogo }: HeaderProps) {
           </Link>
         )}
         {settings?.showAbout !== false && (
-          <Link href={`/${locale}/about-us`} onClick={() => setIsMenuOpen(false)}>
-            {t.nav.about}
-          </Link>
+          isHomePage ? (
+            <a href="#about" onClick={(e) => handleSmoothScroll(e, 'about')}>
+              {t.nav.about}
+            </a>
+          ) : (
+            <Link href={`/${locale}/about-us`} onClick={() => setIsMenuOpen(false)}>
+              {t.nav.about}
+            </Link>
+          )
         )}
         {settings?.showServices !== false && (
-          <Link href={`/${locale}/home`} onClick={() => setIsMenuOpen(false)}>
-            {t.nav.services}
-          </Link>
+          isHomePage ? (
+            <a href="#services" onClick={(e) => handleSmoothScroll(e, 'services')}>
+              {t.nav.services}
+            </a>
+          ) : (
+            <Link href={`/${locale}/home#services`} onClick={() => setIsMenuOpen(false)}>
+              {t.nav.services}
+            </Link>
+          )
         )}
         {settings?.showProjects !== false && (
-          <Link href={`/${locale}/home`} onClick={() => setIsMenuOpen(false)}>
-            {t.nav.projects}
-          </Link>
+          isHomePage ? (
+            <a href="#projects" onClick={(e) => handleSmoothScroll(e, 'projects')}>
+              {t.nav.projects}
+            </a>
+          ) : (
+            <Link href={`/${locale}/home#projects`} onClick={() => setIsMenuOpen(false)}>
+              {t.nav.projects}
+            </Link>
+          )
         )}
         {settings?.showContact !== false && (
           <Link href={`/${locale}/contact-us`} onClick={() => setIsMenuOpen(false)}>

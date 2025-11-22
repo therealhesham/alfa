@@ -43,6 +43,28 @@ export async function GET(request: Request) {
         statsYearsNum: content.statsYearsNum,
         statsCountriesNum: content.statsCountriesNum,
         statsAwardsNum: content.statsAwardsNum,
+        servicesTitle: contentAny.servicesTitleEn,
+        servicesSubtitle: contentAny.servicesSubtitleEn,
+        service1Title: contentAny.service1TitleEn,
+        service1Desc: contentAny.service1DescEn,
+        service2Title: contentAny.service2TitleEn,
+        service2Desc: contentAny.service2DescEn,
+        service3Title: contentAny.service3TitleEn,
+        service3Desc: contentAny.service3DescEn,
+        service4Title: contentAny.service4TitleEn,
+        service4Desc: contentAny.service4DescEn,
+        projectsTitle: contentAny.projectsTitleEn,
+        projectsSubtitle: contentAny.projectsSubtitleEn,
+        projectsViewMore: contentAny.projectsViewMoreEn,
+        project1Title: contentAny.project1TitleEn,
+        project1Desc: contentAny.project1DescEn,
+        project1Image: contentAny.project1Image,
+        project2Title: contentAny.project2TitleEn,
+        project2Desc: contentAny.project2DescEn,
+        project2Image: contentAny.project2Image,
+        project3Title: contentAny.project3TitleEn,
+        project3Desc: contentAny.project3DescEn,
+        project3Image: contentAny.project3Image,
         footerCopyright: contentAny.footerCopyrightEn,
         footerLogo: content.footerLogo,
         headerLogo: content.headerLogo,
@@ -51,6 +73,7 @@ export async function GET(request: Request) {
     }
     
     // Arabic content (default)
+    const contentAny = content as any;
     const arabicContent = {
       id: content.id,
       heroTitle: content.heroTitle,
@@ -75,6 +98,28 @@ export async function GET(request: Request) {
       statsYearsNum: content.statsYearsNum,
       statsCountriesNum: content.statsCountriesNum,
       statsAwardsNum: content.statsAwardsNum,
+      servicesTitle: contentAny.servicesTitle,
+      servicesSubtitle: contentAny.servicesSubtitle,
+      service1Title: contentAny.service1Title,
+      service1Desc: contentAny.service1Desc,
+      service2Title: contentAny.service2Title,
+      service2Desc: contentAny.service2Desc,
+      service3Title: contentAny.service3Title,
+      service3Desc: contentAny.service3Desc,
+      service4Title: contentAny.service4Title,
+      service4Desc: contentAny.service4Desc,
+      projectsTitle: contentAny.projectsTitle,
+      projectsSubtitle: contentAny.projectsSubtitle,
+      projectsViewMore: contentAny.projectsViewMore,
+      project1Title: contentAny.project1Title,
+      project1Desc: contentAny.project1Desc,
+      project1Image: contentAny.project1Image,
+      project2Title: contentAny.project2Title,
+      project2Desc: contentAny.project2Desc,
+      project2Image: contentAny.project2Image,
+      project3Title: contentAny.project3Title,
+      project3Desc: contentAny.project3Desc,
+      project3Image: contentAny.project3Image,
       footerCopyright: content.footerCopyright,
       footerLogo: content.footerLogo,
       headerLogo: content.headerLogo,
@@ -145,6 +190,25 @@ export async function PUT(request: Request) {
       if (contentData.statsYears !== undefined) updateData.statsYearsEn = contentData.statsYears;
       if (contentData.statsCountries !== undefined) updateData.statsCountriesEn = contentData.statsCountries;
       if (contentData.statsAwards !== undefined) updateData.statsAwardsEn = contentData.statsAwards;
+      if (contentData.servicesTitle !== undefined) updateData.servicesTitleEn = contentData.servicesTitle;
+      if (contentData.servicesSubtitle !== undefined) updateData.servicesSubtitleEn = contentData.servicesSubtitle;
+      if (contentData.service1Title !== undefined) updateData.service1TitleEn = contentData.service1Title;
+      if (contentData.service1Desc !== undefined) updateData.service1DescEn = contentData.service1Desc;
+      if (contentData.service2Title !== undefined) updateData.service2TitleEn = contentData.service2Title;
+      if (contentData.service2Desc !== undefined) updateData.service2DescEn = contentData.service2Desc;
+      if (contentData.service3Title !== undefined) updateData.service3TitleEn = contentData.service3Title;
+      if (contentData.service3Desc !== undefined) updateData.service3DescEn = contentData.service3Desc;
+      if (contentData.service4Title !== undefined) updateData.service4TitleEn = contentData.service4Title;
+      if (contentData.service4Desc !== undefined) updateData.service4DescEn = contentData.service4Desc;
+      if (contentData.projectsTitle !== undefined) updateData.projectsTitleEn = contentData.projectsTitle;
+      if (contentData.projectsSubtitle !== undefined) updateData.projectsSubtitleEn = contentData.projectsSubtitle;
+      if (contentData.projectsViewMore !== undefined) updateData.projectsViewMoreEn = contentData.projectsViewMore;
+      if (contentData.project1Title !== undefined) updateData.project1TitleEn = contentData.project1Title;
+      if (contentData.project1Desc !== undefined) updateData.project1DescEn = contentData.project1Desc;
+      if (contentData.project2Title !== undefined) updateData.project2TitleEn = contentData.project2Title;
+      if (contentData.project2Desc !== undefined) updateData.project2DescEn = contentData.project2Desc;
+      if (contentData.project3Title !== undefined) updateData.project3TitleEn = contentData.project3Title;
+      if (contentData.project3Desc !== undefined) updateData.project3DescEn = contentData.project3Desc;
       if (contentData.footerCopyright !== undefined) updateData.footerCopyrightEn = contentData.footerCopyright;
     } else {
       // Map Arabic fields (default)
@@ -165,6 +229,25 @@ export async function PUT(request: Request) {
       if (contentData.statsYears !== undefined) updateData.statsYears = contentData.statsYears;
       if (contentData.statsCountries !== undefined) updateData.statsCountries = contentData.statsCountries;
       if (contentData.statsAwards !== undefined) updateData.statsAwards = contentData.statsAwards;
+      if (contentData.servicesTitle !== undefined) updateData.servicesTitle = contentData.servicesTitle;
+      if (contentData.servicesSubtitle !== undefined) updateData.servicesSubtitle = contentData.servicesSubtitle;
+      if (contentData.service1Title !== undefined) updateData.service1Title = contentData.service1Title;
+      if (contentData.service1Desc !== undefined) updateData.service1Desc = contentData.service1Desc;
+      if (contentData.service2Title !== undefined) updateData.service2Title = contentData.service2Title;
+      if (contentData.service2Desc !== undefined) updateData.service2Desc = contentData.service2Desc;
+      if (contentData.service3Title !== undefined) updateData.service3Title = contentData.service3Title;
+      if (contentData.service3Desc !== undefined) updateData.service3Desc = contentData.service3Desc;
+      if (contentData.service4Title !== undefined) updateData.service4Title = contentData.service4Title;
+      if (contentData.service4Desc !== undefined) updateData.service4Desc = contentData.service4Desc;
+      if (contentData.projectsTitle !== undefined) updateData.projectsTitle = contentData.projectsTitle;
+      if (contentData.projectsSubtitle !== undefined) updateData.projectsSubtitle = contentData.projectsSubtitle;
+      if (contentData.projectsViewMore !== undefined) updateData.projectsViewMore = contentData.projectsViewMore;
+      if (contentData.project1Title !== undefined) updateData.project1Title = contentData.project1Title;
+      if (contentData.project1Desc !== undefined) updateData.project1Desc = contentData.project1Desc;
+      if (contentData.project2Title !== undefined) updateData.project2Title = contentData.project2Title;
+      if (contentData.project2Desc !== undefined) updateData.project2Desc = contentData.project2Desc;
+      if (contentData.project3Title !== undefined) updateData.project3Title = contentData.project3Title;
+      if (contentData.project3Desc !== undefined) updateData.project3Desc = contentData.project3Desc;
       if (contentData.footerCopyright !== undefined) updateData.footerCopyright = contentData.footerCopyright;
     }
     
@@ -176,6 +259,9 @@ export async function PUT(request: Request) {
     if (contentData.statsYearsNum !== undefined) updateData.statsYearsNum = contentData.statsYearsNum;
     if (contentData.statsCountriesNum !== undefined) updateData.statsCountriesNum = contentData.statsCountriesNum;
     if (contentData.statsAwardsNum !== undefined) updateData.statsAwardsNum = contentData.statsAwardsNum;
+    if (contentData.project1Image !== undefined) updateData.project1Image = contentData.project1Image;
+    if (contentData.project2Image !== undefined) updateData.project2Image = contentData.project2Image;
+    if (contentData.project3Image !== undefined) updateData.project3Image = contentData.project3Image;
     
     if (!content) {
       content = await prisma.homeContent.create({
