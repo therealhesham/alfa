@@ -52,6 +52,13 @@ const adminRoutes: AdminRoute[] = [
       en: "Settings",
     },
   },
+  {
+    slug: "users",
+    labels: {
+      ar: "المستخدمين",
+      en: "Users",
+    },
+  },
 ];
 
 export default function AdminNav({ locale }: { locale: Locale }) {

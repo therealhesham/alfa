@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
+import { Home, BarChart, Lightbulb, Ruler } from "lucide-react";
 import type { Locale } from "@/i18n";
 import LogoutButton from "@/components/LogoutButton";
 import AdminNav from "@/components/AdminNav";
@@ -687,7 +688,9 @@ export default function AdminHomePage() {
         />
         <div className="services-grid">
           <div className="service-card">
-            <div className="service-icon" style={{ fontSize: "3rem", marginBottom: "1rem" }}>🏠</div>
+            <div className="service-icon" style={{ marginBottom: "1rem", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Home size={48} color="var(--gold)" />
+            </div>
             <EditableField
               value={content.service1Title}
               onChange={(value) => handleChange("service1Title", value)}
@@ -701,7 +704,9 @@ export default function AdminHomePage() {
             />
           </div>
           <div className="service-card">
-            <div className="service-icon" style={{ fontSize: "3rem", marginBottom: "1rem" }}>📐</div>
+            <div className="service-icon" style={{ marginBottom: "1rem", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Ruler size={48} color="var(--gold)" />
+            </div>
             <EditableField
               value={content.service2Title}
               onChange={(value) => handleChange("service2Title", value)}
@@ -715,7 +720,9 @@ export default function AdminHomePage() {
             />
           </div>
           <div className="service-card">
-            <div className="service-icon" style={{ fontSize: "3rem", marginBottom: "1rem" }}>📊</div>
+            <div className="service-icon" style={{ marginBottom: "1rem", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <BarChart size={48} color="var(--gold)" />
+            </div>
             <EditableField
               value={content.service3Title}
               onChange={(value) => handleChange("service3Title", value)}
@@ -729,7 +736,9 @@ export default function AdminHomePage() {
             />
           </div>
           <div className="service-card">
-            <div className="service-icon" style={{ fontSize: "3rem", marginBottom: "1rem" }}>💡</div>
+            <div className="service-icon" style={{ marginBottom: "1rem", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Lightbulb size={48} color="var(--gold)" />
+            </div>
             <EditableField
               value={content.service4Title}
               onChange={(value) => handleChange("service4Title", value)}

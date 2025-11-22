@@ -1,10 +1,11 @@
 import Image from "next/image";
+import Link from "next/link";
 import { getHomeContent, getSiteSettings, getFooterContent } from "@/lib/data";
 import { getTranslations } from "@/lib/i18n";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import FontsProvider from "@/components/FontsProvider";
-import { Home, Layers, Activity, HelpCircle } from "lucide-react";
+import { Home, Layers, Activity, HelpCircle, Calendar, MapPin } from "lucide-react";
 import type { Locale } from "@/i18n";
 
 // ISR: Revalidate every 60 seconds
@@ -151,32 +152,37 @@ export default async function HomePage({ params }: HomePageProps) {
         <h2 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
           {displayContent.aboutTitle}
         </h2>
-        <p>{displayContent.aboutP1}</p>
-        <p>{displayContent.aboutP2}</p>
+        <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.aboutP1}</p>
+        <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.aboutP2}</p>
+        <div className="about-read-more-container" style={{ fontFamily: settings?.bodyFont }}>
+          <Link href={`/${validLocale}/about-us`} className="about-read-more-btn" style={{ fontFamily: settings?.bodyFont }}>
+            {t.about.readMore}
+          </Link>
+        </div>
       </section>
 
       <section id="vision" className="vision" style={{ fontFamily: settings?.bodyFont }}>
         <h2 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
           {displayContent.visionTitle}
         </h2>
-        <div className="cards">
-          <div className="card">
+        <div className="cards" style={{ fontFamily: settings?.bodyFont }}>
+          <div className="card" style={{ fontFamily: settings?.bodyFont }}>
             <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
               {displayContent.visionVision}
             </h3>
-            <p>{displayContent.visionVisionText}</p>
+            <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.visionVisionText}</p>
           </div>
-          <div className="card">
+          <div className="card" style={{ fontFamily: settings?.bodyFont }}>
             <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
               {displayContent.visionMission}
             </h3>
-            <p>{displayContent.visionMissionText}</p>
+            <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.visionMissionText}</p>
           </div>
-          <div className="card">
+          <div className="card" style={{ fontFamily: settings?.bodyFont }}>
             <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
               {displayContent.visionValues}
             </h3>
-            <p>{displayContent.visionValuesText}</p>
+            <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.visionValuesText}</p>
           </div>
         </div>
       </section>
@@ -185,43 +191,43 @@ export default async function HomePage({ params }: HomePageProps) {
         <h2 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
           {displayContent.servicesTitle || t.services.title}
         </h2>
-        <p className="section-subtitle">{displayContent.servicesSubtitle || t.services.subtitle}</p>
-        <div className="services-grid">
-          <div className="service-card">
+        <p className="section-subtitle" style={{ fontFamily: settings?.bodyFont }}>{displayContent.servicesSubtitle || t.services.subtitle}</p>
+        <div className="services-grid" style={{ fontFamily: settings?.bodyFont }}>
+          <div className="service-card" style={{ fontFamily: settings?.bodyFont }}>
             <div className="service-icon">
               <Home size={48} strokeWidth={1.5} />
             </div>
             <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
               {displayContent.service1Title || t.services.service1}
             </h3>
-            <p>{displayContent.service1Desc || t.services.service1Desc}</p>
+            <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.service1Desc || t.services.service1Desc}</p>
           </div>
-          <div className="service-card">
+          <div className="service-card" style={{ fontFamily: settings?.bodyFont }}>
             <div className="service-icon">
               <Layers size={48} strokeWidth={1.5} />
             </div>
             <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
               {displayContent.service2Title || t.services.service2}
             </h3>
-            <p>{displayContent.service2Desc || t.services.service2Desc}</p>
+            <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.service2Desc || t.services.service2Desc}</p>
           </div>
-          <div className="service-card">
+          <div className="service-card" style={{ fontFamily: settings?.bodyFont }}>
             <div className="service-icon">
               <Activity size={48} strokeWidth={1.5} />
             </div>
             <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
               {displayContent.service3Title || t.services.service3}
             </h3>
-            <p>{displayContent.service3Desc || t.services.service3Desc}</p>
+            <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.service3Desc || t.services.service3Desc}</p>
           </div>
-          <div className="service-card">
+          <div className="service-card" style={{ fontFamily: settings?.bodyFont }}>
             <div className="service-icon">
               <HelpCircle size={48} strokeWidth={1.5} />
             </div>
             <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
               {displayContent.service4Title || t.services.service4}
             </h3>
-            <p>{displayContent.service4Desc || t.services.service4Desc}</p>
+            <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.service4Desc || t.services.service4Desc}</p>
           </div>
         </div>
       </section>
@@ -230,11 +236,11 @@ export default async function HomePage({ params }: HomePageProps) {
         <h2 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
           {displayContent.projectsTitle || t.projectsSection.title}
         </h2>
-        <p className="section-subtitle">{displayContent.projectsSubtitle || t.projectsSection.subtitle}</p>
-        <div className="projects-grid">
+        <p className="section-subtitle" style={{ fontFamily: settings?.bodyFont }}>{displayContent.projectsSubtitle || t.projectsSection.subtitle}</p>
+        <div className="projects-grid" style={{ fontFamily: settings?.bodyFont }}>
           {projects.length > 0 ? (
             projects.map((project) => (
-              <div key={project.id} className="project-card">
+              <div key={project.id} className="project-card" style={{ fontFamily: settings?.bodyFont }}>
                 <div className="project-image">
                   <Image
                     src={project.image || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
@@ -244,7 +250,7 @@ export default async function HomePage({ params }: HomePageProps) {
                     unoptimized
                   />
                 </div>
-                <div className="project-content">
+                <div className="project-content" style={{ fontFamily: settings?.bodyFont }}>
                   {project.category && (
                     <div style={{
                       fontSize: '0.9rem',
@@ -252,7 +258,8 @@ export default async function HomePage({ params }: HomePageProps) {
                       fontWeight: '600',
                       marginBottom: '0.5rem',
                       textTransform: 'uppercase',
-                      letterSpacing: '1px'
+                      letterSpacing: '1px',
+                      fontFamily: settings?.bodyFont
                     }}>
                       {project.category}
                     </div>
@@ -260,7 +267,7 @@ export default async function HomePage({ params }: HomePageProps) {
                   <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
                     {project.title}
                   </h3>
-                  <p>{project.description}</p>
+                  <p style={{ fontFamily: settings?.bodyFont }}>{project.description}</p>
                   {(project.location || project.year) && (
                     <div style={{
                       display: 'flex',
@@ -268,10 +275,16 @@ export default async function HomePage({ params }: HomePageProps) {
                       flexWrap: 'wrap',
                       fontSize: '0.9rem',
                       color: '#999',
-                      marginTop: '0.5rem'
+                      marginTop: '0.5rem',
+                      fontFamily: settings?.bodyFont
                     }}>
-                      {project.location && <span>📍 {project.location}</span>}
-                      {project.year && <span>📅 {project.year}</span>}
+                      {project.location && (
+                        <span style={{ fontFamily: settings?.bodyFont, display: "flex", alignItems: "center", gap: "0.25rem" }}>
+                          <MapPin size={16} />
+                          {project.location}
+                        </span>
+                      )}
+                      {project.year && <span style={{ fontFamily: settings?.bodyFont }}><Calendar/>{project.year}</span>}
                     </div>
                   )}
                 </div>
@@ -280,7 +293,7 @@ export default async function HomePage({ params }: HomePageProps) {
           ) : (
             // Fallback to default projects if no projects in database
             <>
-              <div className="project-card">
+              <div className="project-card" style={{ fontFamily: settings?.bodyFont }}>
                 <div className="project-image">
                   <Image
                     src={displayContent.project1Image || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
@@ -290,14 +303,14 @@ export default async function HomePage({ params }: HomePageProps) {
                     unoptimized
                   />
                 </div>
-                <div className="project-content">
+                <div className="project-content" style={{ fontFamily: settings?.bodyFont }}>
                   <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
                     {displayContent.project1Title || t.projectsSection.project1}
                   </h3>
-                  <p>{displayContent.project1Desc || t.projectsSection.project1Desc}</p>
+                  <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.project1Desc || t.projectsSection.project1Desc}</p>
                 </div>
               </div>
-              <div className="project-card">
+              <div className="project-card" style={{ fontFamily: settings?.bodyFont }}>
                 <div className="project-image">
                   <Image
                     src={displayContent.project2Image || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
@@ -307,14 +320,14 @@ export default async function HomePage({ params }: HomePageProps) {
                     unoptimized
                   />
                 </div>
-                <div className="project-content">
+                <div className="project-content" style={{ fontFamily: settings?.bodyFont }}>
                   <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
                     {displayContent.project2Title || t.projectsSection.project2}
                   </h3>
-                  <p>{displayContent.project2Desc || t.projectsSection.project2Desc}</p>
+                  <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.project2Desc || t.projectsSection.project2Desc}</p>
                 </div>
               </div>
-              <div className="project-card">
+              <div className="project-card" style={{ fontFamily: settings?.bodyFont }}>
                 <div className="project-image">
                   <Image
                     src={displayContent.project3Image || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
@@ -324,17 +337,17 @@ export default async function HomePage({ params }: HomePageProps) {
                     unoptimized
                   />
                 </div>
-                <div className="project-content">
+                <div className="project-content" style={{ fontFamily: settings?.bodyFont }}>
                   <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
                     {displayContent.project3Title || t.projectsSection.project3}
                   </h3>
-                  <p>{displayContent.project3Desc || t.projectsSection.project3Desc}</p>
+                  <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.project3Desc || t.projectsSection.project3Desc}</p>
                 </div>
               </div>
             </>
           )}
         </div>
-        <div className="view-more-container">
+        <div className="view-more-container" style={{ fontFamily: settings?.bodyFont }}>
           <a href={`/${validLocale}/our-projects`} className="view-more-btn" style={{ fontFamily: settings?.bodyFont }}>
             {displayContent.projectsViewMore || t.projectsSection.viewMore} →
           </a>
@@ -345,30 +358,30 @@ export default async function HomePage({ params }: HomePageProps) {
         <h2 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
           {displayContent.statsTitle}
         </h2>
-        <div className="stats-grid">
-          <div className="stat">
+        <div className="stats-grid" style={{ fontFamily: settings?.bodyFont }}>
+          <div className="stat" style={{ fontFamily: settings?.bodyFont }}>
             <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
               {displayContent.statsProjectsNum}
             </h3>
-            <p>{displayContent.statsProjects}</p>
+            <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.statsProjects}</p>
           </div>
-          <div className="stat">
+          <div className="stat" style={{ fontFamily: settings?.bodyFont }}>
             <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
               {displayContent.statsYearsNum}
             </h3>
-            <p>{displayContent.statsYears}</p>
+            <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.statsYears}</p>
           </div>
-          <div className="stat">
+          <div className="stat" style={{ fontFamily: settings?.bodyFont }}>
             <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
               {displayContent.statsCountriesNum}
             </h3>
-            <p>{displayContent.statsCountries}</p>
+            <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.statsCountries}</p>
           </div>
-          <div className="stat">
+          <div className="stat" style={{ fontFamily: settings?.bodyFont }}>
             <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
               {displayContent.statsAwardsNum}
             </h3>
-            <p>{displayContent.statsAwards}</p>
+            <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.statsAwards}</p>
           </div>
         </div>
       </section>

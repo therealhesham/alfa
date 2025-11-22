@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
-import { PinIcon, CalendarIcon } from "lucide-react";
+import { PinIcon, CalendarIcon, Tag, Pause, Check } from "lucide-react";
 import type { Locale } from "@/i18n";
 import LogoutButton from "@/components/LogoutButton";
 import AdminNav from "@/components/AdminNav";
@@ -615,15 +615,29 @@ export default function AdminProjectsPage() {
                   }}>
                     {project.location && <span><PinIcon /> {currentLocale === "ar" ? project.location : project.locationEn || project.location}</span>}
                     {project.year && <span><CalendarIcon /> {project.year}</span>}
-                    {project.category && <span>🏷️ {currentLocale === "ar" ? project.category : project.categoryEn || project.category}</span>}
-                    <span style={{ color: project.isPublished ? "green" : "orange" }}>
-                      {project.isPublished
-                        ? currentLocale === "ar"
-                          ? " منشور"
-                          : " Published"
-                        : currentLocale === "ar"
-                        ? "⏸ غير منشور"
-                        : "⏸ Unpublished"}
+                    {project.category && (
+                      <span style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
+                        <Tag size={16} />
+                        {currentLocale === "ar" ? project.category : project.categoryEn || project.category}
+                      </span>
+                    )}
+                    <span style={{ 
+                      color: project.isPublished ? "green" : "orange",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "0.25rem"
+                    }}>
+                      {project.isPublished ? (
+                        <>
+                          <Check size={16} />
+                          {currentLocale === "ar" ? "منشور" : "Published"}
+                        </>
+                      ) : (
+                        <>
+                          <Pause size={16} />
+                          {currentLocale === "ar" ? "غير منشور" : "Unpublished"}
+                        </>
+                      )}
                     </span>
                   </div>
                 </div>

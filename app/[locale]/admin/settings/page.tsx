@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
+import { Check } from "lucide-react";
 import type { Locale } from "@/i18n";
 import LogoutButton from "@/components/LogoutButton";
 import AdminNav from "@/components/AdminNav";
@@ -171,12 +172,16 @@ export default function AdminSettingsPage() {
             transition: "all 0.2s",
           }}
         >
-          {saving 
-            ? (locale === "ar" ? "جاري الحفظ..." : "Saving...")
-            : saved 
-            ? (locale === "ar" ? "✓ تم الحفظ" : "✓ Saved")
-            : (locale === "ar" ? "حفظ التغييرات" : "Save Changes")
-          }
+          {saving ? (
+            locale === "ar" ? "جاري الحفظ..." : "Saving..."
+          ) : saved ? (
+            <span style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <Check size={16} />
+              {locale === "ar" ? "تم الحفظ" : "Saved"}
+            </span>
+          ) : (
+            locale === "ar" ? "حفظ التغييرات" : "Save Changes"
+          )}
         </button>
         </div>
       </div>

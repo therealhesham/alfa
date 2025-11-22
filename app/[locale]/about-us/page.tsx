@@ -4,6 +4,7 @@ import { getTranslations } from "@/lib/i18n";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import FontsProvider from "@/components/FontsProvider";
+import { Check } from "lucide-react";
 import type { Locale } from "@/i18n";
 
 // ISR: Revalidate every 60 seconds
@@ -53,6 +54,7 @@ export default async function AboutUsPage({ params }: AboutUsPageProps) {
         textAlign: 'center',
         color: 'white',
         position: 'relative',
+        fontFamily: settings?.bodyFont 
       }}>
         <div style={{
           position: 'absolute',
@@ -63,16 +65,34 @@ export default async function AboutUsPage({ params }: AboutUsPageProps) {
           backgroundColor: 'rgba(0, 0, 0, 0.5)',
         }}></div>
         <div style={{ position: 'relative', zIndex: 1, maxWidth: '800px', padding: '2rem' }}>
-          <h1 style={{ fontSize: '3rem', marginBottom: '1rem', fontWeight: 'bold' }}>
+          <h1 style={{ 
+            fontSize: '3rem', 
+            marginBottom: '1rem', 
+            fontWeight: 'bold',
+            fontFamily: settings?.headingFont || settings?.primaryFont 
+          }}>
             {content.heroTitle}
           </h1>
-          <p style={{ fontSize: '1.5rem' }}>{content.heroSubtitle}</p>
+          <p style={{ 
+            fontSize: '1.5rem',
+            fontFamily: settings?.bodyFont 
+          }}>{content.heroSubtitle}</p>
         </div>
       </section>
 
       {/* Our Story Section */}
-      <section className="about" style={{ padding: '4rem 2rem', maxWidth: '1200px', margin: '0 auto' }}>
-        <h2 style={{ fontSize: '2.5rem', marginBottom: '2rem', textAlign: 'center' }}>
+      <section className="about" style={{ 
+        padding: '4rem 2rem', 
+        maxWidth: '1200px', 
+        margin: '0 auto',
+        fontFamily: settings?.bodyFont 
+      }}>
+        <h2 style={{ 
+          fontSize: '2.5rem', 
+          marginBottom: '2rem', 
+          textAlign: 'center',
+          fontFamily: settings?.headingFont || settings?.primaryFont 
+        }}>
           {content.storyTitle}
         </h2>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem', alignItems: 'center' }}>
@@ -87,7 +107,12 @@ export default async function AboutUsPage({ params }: AboutUsPageProps) {
             />
           </div>
           <div>
-            <p style={{ fontSize: '1.2rem', lineHeight: '1.8', textAlign: validLocale === 'ar' ? 'right' : 'left' }}>
+            <p style={{ 
+              fontSize: '1.2rem', 
+              lineHeight: '1.8', 
+              textAlign: validLocale === 'ar' ? 'right' : 'left',
+              fontFamily: settings?.bodyFont 
+            }}>
               {content.storyContent}
             </p>
           </div>
@@ -95,7 +120,10 @@ export default async function AboutUsPage({ params }: AboutUsPageProps) {
       </section>
 
       {/* Mission & Vision Section */}
-      <section className="vision" style={{ padding: '4rem 2rem' }}>
+      <section className="vision" style={{ 
+        padding: '4rem 2rem',
+        fontFamily: settings?.bodyFont 
+      }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem' }}>
           <div className="card" style={{ 
             padding: '2rem', 
@@ -103,10 +131,20 @@ export default async function AboutUsPage({ params }: AboutUsPageProps) {
             borderRadius: '20px',
             boxShadow: '0 20px 50px rgba(15, 28, 42, 0.1)'
           }}>
-            <h3 style={{ fontSize: '2rem', marginBottom: '1rem', color: 'var(--gold)' }}>
+            <h3 style={{ 
+              fontSize: '2rem', 
+              marginBottom: '1rem', 
+              color: 'var(--gold)',
+              fontFamily: settings?.headingFont || settings?.primaryFont 
+            }}>
               {content.missionTitle}
             </h3>
-            <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: '#333' }}>
+            <p style={{ 
+              fontSize: '1.1rem', 
+              lineHeight: '1.8', 
+              color: '#333',
+              fontFamily: settings?.bodyFont 
+            }}>
               {content.missionContent}
             </p>
           </div>
@@ -116,10 +154,20 @@ export default async function AboutUsPage({ params }: AboutUsPageProps) {
             borderRadius: '20px',
             boxShadow: '0 20px 50px rgba(15, 28, 42, 0.1)'
           }}>
-            <h3 style={{ fontSize: '2rem', marginBottom: '1rem', color: 'var(--gold)' }}>
+            <h3 style={{ 
+              fontSize: '2rem', 
+              marginBottom: '1rem', 
+              color: 'var(--gold)',
+              fontFamily: settings?.headingFont || settings?.primaryFont 
+            }}>
               {content.visionTitle}
             </h3>
-            <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: '#333' }}>
+            <p style={{ 
+              fontSize: '1.1rem', 
+              lineHeight: '1.8', 
+              color: '#333',
+              fontFamily: settings?.bodyFont 
+            }}>
               {content.visionContent}
             </p>
           </div>
@@ -127,8 +175,18 @@ export default async function AboutUsPage({ params }: AboutUsPageProps) {
       </section>
 
       {/* Why Choose Us Section */}
-      <section style={{ padding: '4rem 2rem', maxWidth: '1200px', margin: '0 auto' }}>
-        <h2 style={{ fontSize: '2.5rem', marginBottom: '3rem', textAlign: 'center' }}>
+      <section style={{ 
+        padding: '4rem 2rem', 
+        maxWidth: '1200px', 
+        margin: '0 auto',
+        fontFamily: settings?.bodyFont 
+      }}>
+        <h2 style={{ 
+          fontSize: '2.5rem', 
+          marginBottom: '3rem', 
+          textAlign: 'center',
+          fontFamily: settings?.headingFont || settings?.primaryFont 
+        }}>
           {content.whyChooseTitle}
         </h2>
         <div style={{ 
@@ -142,20 +200,46 @@ export default async function AboutUsPage({ params }: AboutUsPageProps) {
             borderRadius: '8px',
             borderLeft: '4px solid var(--gold)'
           }}>
-            <h4 style={{ fontSize: '1.3rem', marginBottom: '0.5rem' }}>✓</h4>
-            <p style={{ fontSize: '1.1rem' }}>{content.whyChoosePoint1}</p>
+            <h4 style={{ 
+              fontSize: '1.3rem', 
+              marginBottom: '0.5rem',
+              fontFamily: settings?.headingFont || settings?.primaryFont,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <Check size={24} color="var(--gold)" />
+            </h4>
+            <p style={{ 
+              fontSize: '1.1rem',
+              fontFamily: settings?.bodyFont 
+            }}>{content.whyChoosePoint1}</p>
           </div>
         
         </div>
       </section>
 
       {/* Values Section */}
-      <section style={{ padding: '4rem 2rem', backgroundColor: 'var(--beige)' }}>
+      <section style={{ 
+        padding: '4rem 2rem', 
+        backgroundColor: 'var(--beige)',
+        fontFamily: settings?.bodyFont 
+      }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '2.5rem', marginBottom: '2rem', color: 'var(--dark)' }}>
+          <h2 style={{ 
+            fontSize: '2.5rem', 
+            marginBottom: '2rem', 
+            color: 'var(--dark)',
+            fontFamily: settings?.headingFont || settings?.primaryFont 
+          }}>
             {content.valuesTitle}
           </h2>
-          <p style={{ fontSize: '1.5rem', lineHeight: '2', color: '#333' }}>
+          <p style={{ 
+            fontSize: '1.5rem', 
+            lineHeight: '2', 
+            color: '#333',
+            fontFamily: settings?.bodyFont 
+          }}>
             {content.valuesContent}
           </p>
         </div>
