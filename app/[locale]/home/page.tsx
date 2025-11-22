@@ -10,6 +10,49 @@ import type { Locale } from "@/i18n";
 // ISR: Revalidate every 60 seconds
 export const revalidate = 60;
 
+async function getProjects(locale: Locale, limit: number = 3) {
+  try {
+    const { prisma } = await import('@/lib/prisma');
+    const projects = await prisma.project.findMany({
+      where: {
+        isPublished: true,
+      },
+      orderBy: {
+        order: 'asc',
+      },
+      take: limit,
+    });
+    
+    // Map projects based on locale
+    return projects.map((project) => {
+      if (locale === 'en') {
+        return {
+          id: project.id,
+          title: project.titleEn || project.title,
+          description: project.descriptionEn || project.description,
+          image: project.image,
+          location: project.locationEn || project.location,
+          category: project.categoryEn || project.category,
+          year: project.year,
+        };
+      }
+      
+      return {
+        id: project.id,
+        title: project.title,
+        description: project.description,
+        image: project.image,
+        location: project.location,
+        category: project.category,
+        year: project.year,
+      };
+    });
+  } catch (error) {
+    console.error('Error fetching projects:', error);
+    return [];
+  }
+}
+
 interface HomePageProps {
   params: Promise<{ locale: string }>;
 }
@@ -20,10 +63,11 @@ export default async function HomePage({ params }: HomePageProps) {
   const t = getTranslations(validLocale);
 
   // Fetch data in parallel
-  const [content, settings, footerContent] = await Promise.all([
+  const [content, settings, footerContent, projects] = await Promise.all([
     getHomeContent(validLocale),
     getSiteSettings(),
     getFooterContent(validLocale),
+    getProjects(validLocale, 3),
   ]);
 
   // Fallback to translations if content is not available
@@ -188,60 +232,110 @@ export default async function HomePage({ params }: HomePageProps) {
         </h2>
         <p className="section-subtitle">{displayContent.projectsSubtitle || t.projectsSection.subtitle}</p>
         <div className="projects-grid">
-          <div className="project-card">
-            <div className="project-image">
-              <Image
-                src={displayContent.project1Image || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
-                alt={displayContent.project1Title || t.projectsSection.project1}
-                width={400}
-                height={300}
-                unoptimized
-              />
-            </div>
-            <div className="project-content">
-              <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
-                {displayContent.project1Title || t.projectsSection.project1}
-              </h3>
-              <p>{displayContent.project1Desc || t.projectsSection.project1Desc}</p>
-            </div>
-          </div>
-          <div className="project-card">
-            <div className="project-image">
-              <Image
-                src={displayContent.project2Image || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
-                alt={displayContent.project2Title || t.projectsSection.project2}
-                width={400}
-                height={300}
-                unoptimized
-              />
-            </div>
-            <div className="project-content">
-              <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
-                {displayContent.project2Title || t.projectsSection.project2}
-              </h3>
-              <p>{displayContent.project2Desc || t.projectsSection.project2Desc}</p>
-            </div>
-          </div>
-          <div className="project-card">
-            <div className="project-image">
-              <Image
-                src={displayContent.project3Image || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
-                alt={displayContent.project3Title || t.projectsSection.project3}
-                width={400}
-                height={300}
-                unoptimized
-              />
-            </div>
-            <div className="project-content">
-              <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
-                {displayContent.project3Title || t.projectsSection.project3}
-              </h3>
-              <p>{displayContent.project3Desc || t.projectsSection.project3Desc}</p>
-            </div>
-          </div>
+          {projects.length > 0 ? (
+            projects.map((project) => (
+              <div key={project.id} className="project-card">
+                <div className="project-image">
+                  <Image
+                    src={project.image || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
+                    alt={project.title}
+                    width={400}
+                    height={300}
+                    unoptimized
+                  />
+                </div>
+                <div className="project-content">
+                  {project.category && (
+                    <div style={{
+                      fontSize: '0.9rem',
+                      color: 'var(--gold)',
+                      fontWeight: '600',
+                      marginBottom: '0.5rem',
+                      textTransform: 'uppercase',
+                      letterSpacing: '1px'
+                    }}>
+                      {project.category}
+                    </div>
+                  )}
+                  <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
+                    {project.title}
+                  </h3>
+                  <p>{project.description}</p>
+                  {(project.location || project.year) && (
+                    <div style={{
+                      display: 'flex',
+                      gap: '1rem',
+                      flexWrap: 'wrap',
+                      fontSize: '0.9rem',
+                      color: '#999',
+                      marginTop: '0.5rem'
+                    }}>
+                      {project.location && <span>📍 {project.location}</span>}
+                      {project.year && <span>📅 {project.year}</span>}
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))
+          ) : (
+            // Fallback to default projects if no projects in database
+            <>
+              <div className="project-card">
+                <div className="project-image">
+                  <Image
+                    src={displayContent.project1Image || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
+                    alt={displayContent.project1Title || t.projectsSection.project1}
+                    width={400}
+                    height={300}
+                    unoptimized
+                  />
+                </div>
+                <div className="project-content">
+                  <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
+                    {displayContent.project1Title || t.projectsSection.project1}
+                  </h3>
+                  <p>{displayContent.project1Desc || t.projectsSection.project1Desc}</p>
+                </div>
+              </div>
+              <div className="project-card">
+                <div className="project-image">
+                  <Image
+                    src={displayContent.project2Image || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
+                    alt={displayContent.project2Title || t.projectsSection.project2}
+                    width={400}
+                    height={300}
+                    unoptimized
+                  />
+                </div>
+                <div className="project-content">
+                  <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
+                    {displayContent.project2Title || t.projectsSection.project2}
+                  </h3>
+                  <p>{displayContent.project2Desc || t.projectsSection.project2Desc}</p>
+                </div>
+              </div>
+              <div className="project-card">
+                <div className="project-image">
+                  <Image
+                    src={displayContent.project3Image || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
+                    alt={displayContent.project3Title || t.projectsSection.project3}
+                    width={400}
+                    height={300}
+                    unoptimized
+                  />
+                </div>
+                <div className="project-content">
+                  <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
+                    {displayContent.project3Title || t.projectsSection.project3}
+                  </h3>
+                  <p>{displayContent.project3Desc || t.projectsSection.project3Desc}</p>
+                </div>
+              </div>
+            </>
+          )}
         </div>
         <div className="view-more-container">
-          <a href="#projects" className="view-more-btn" style={{ fontFamily: settings?.bodyFont }}>
+          <a href={`/${validLocale}/our-projects`} className="view-more-btn" style={{ fontFamily: settings?.bodyFont }}>
             {displayContent.projectsViewMore || t.projectsSection.viewMore} →
           </a>
         </div>

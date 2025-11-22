@@ -248,7 +248,7 @@ nav a:hover::after {
 
 /* Hero Section */
 .hero {
-  min-height: 100vh;
+  min-height: 90vh;
   padding: 140px 5% 80px;
   background: linear-gradient(rgba(250, 247, 242, 0.85), rgba(232, 217, 192, 0.95)),
     url('/BG.jpg') center/cover no-repeat;
@@ -503,11 +503,12 @@ section {
 
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 400px));
   gap: clamp(30px, 5vw, 40px);
   max-width: 1200px;
   margin: 0 auto clamp(40px, 6vw, 60px);
   padding: 0 1rem;
+  justify-content: center;
 }
 
 .project-card {
@@ -649,13 +650,13 @@ footer .footer-logo-section img {
 }
 
 footer .footer-company-name {
-  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  font-size: clamp(.8rem, 1vw, 1.4rem);
   font-weight: 700;
   color: var(--beige);
   line-height: 1.6;
   margin: 0;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  max-width: 500px;
+  max-width: 700px;
 }
 
 footer .footer-right {
@@ -1038,4 +1039,29 @@ footer p {
 [dir="ltr"] .about p,
 [dir="ltr"] .hero p {
   text-align: center;
+}
+
+/* Admin Projects Page Responsive */
+.admin-project-item {
+  display: grid;
+  grid-template-columns: minmax(150px, 200px) 1fr auto;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.admin-project-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  .admin-project-item {
+    grid-template-columns: 1fr;
+  }
+  
+  .admin-project-actions {
+    flex-direction: row;
+    width: 100%;
+  }
 }
