@@ -253,8 +253,8 @@ export default function AdminFooterPage() {
   return (
     <>
       <AdminNav locale={locale} />
-      <LogoutButton locale={locale} />
-      
+      <LogoutButton />
+
       <div style={{
         position: "fixed",
         top: "80px",
