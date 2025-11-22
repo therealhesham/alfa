@@ -69,7 +69,7 @@ export default function Header({ locale, settings, headerLogo }: HeaderProps) {
           </Link>
         )}
         {settings?.showContact !== false && (
-          <Link href={`/${locale}/home`} onClick={() => setIsMenuOpen(false)}>
+          <Link href={`/${locale}/contact-us`} onClick={() => setIsMenuOpen(false)}>
             {t.nav.contact}
           </Link>
         )}

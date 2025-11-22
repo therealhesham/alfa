@@ -18,6 +18,7 @@ interface SiteSettings {
   showProjects: boolean;
   showContact: boolean;
   showLanguageSwitcher: boolean;
+  whatsappNumber: string | null;
 }
 
 export default function AdminSettingsPage() {
@@ -83,7 +84,7 @@ export default function AdminSettingsPage() {
     root.style.setProperty('--body-font', settings.bodyFont);
   };
 
-  const handleChange = (field: keyof SiteSettings, value: string | boolean) => {
+  const handleChange = (field: keyof SiteSettings, value: string | boolean | null) => {
     if (!settings) return;
     setSettings({ ...settings, [field]: value });
   };
@@ -336,6 +337,68 @@ export default function AdminSettingsPage() {
               </span>
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* WhatsApp Settings */}
+      <section style={{
+        backgroundColor: 'white',
+        padding: '2rem',
+        borderRadius: '12px',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+        marginBottom: '2rem'
+      }}>
+        <h2 style={{ 
+          fontSize: '2rem', 
+          fontFamily: settings.headingFont,
+          marginBottom: '1.5rem',
+          color: '#333'
+        }}>
+          {locale === "ar" ? "إعدادات WhatsApp" : "WhatsApp Settings"}
+        </h2>
+        <p style={{ 
+          color: '#666', 
+          marginBottom: '1.5rem',
+          fontFamily: settings.bodyFont
+        }}>
+          {locale === "ar" 
+            ? "أدخل رقم WhatsApp الخاص بك لعرض أيقونة عائمة للتواصل" 
+            : "Enter your WhatsApp number to display a floating contact button"}
+        </p>
+        <div>
+          <label style={{
+            display: 'block',
+            marginBottom: '0.5rem',
+            fontWeight: '600',
+            color: '#555',
+            fontFamily: settings.bodyFont
+          }}>
+            {locale === "ar" ? "رقم WhatsApp" : "WhatsApp Number"}
+          </label>
+          <input
+            type="text"
+            value={settings.whatsappNumber || ''}
+            onChange={(e) => handleChange("whatsappNumber", e.target.value)}
+            placeholder={locale === "ar" ? "مثال: +201234567890" : "Example: +201234567890"}
+            style={{
+              width: '100%',
+              padding: '0.75rem',
+              borderRadius: '8px',
+              border: '2px solid #e0e0e0',
+              fontSize: '1rem',
+              fontFamily: settings.bodyFont
+            }}
+          />
+          <p style={{
+            marginTop: '0.5rem',
+            fontSize: '0.875rem',
+            color: '#666',
+            fontFamily: settings.bodyFont
+          }}>
+            {locale === "ar" 
+              ? "تأكد من إضافة رمز الدولة (مثال: +20 لمصر)" 
+              : "Make sure to include country code (e.g., +20 for Egypt)"}
+          </p>
         </div>
       </section>
 

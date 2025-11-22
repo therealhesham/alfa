@@ -25,6 +25,13 @@ const adminRoutes: AdminRoute[] = [
     },
   },
   {
+    slug: "contact-us",
+    labels: {
+      ar: "تواصلوا معنا",
+      en: "Contact Us",
+    },
+  },
+  {
     slug: "settings",
     labels: {
       ar: "الإعدادات",

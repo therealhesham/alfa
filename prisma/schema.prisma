@@ -162,6 +162,72 @@ model SiteSettings {
   showContact       Boolean  @default(true)
   showLanguageSwitcher Boolean @default(true)
   
+  // WhatsApp Settings
+  whatsappNumber    String?  @default("5")
+  
+  updatedAt         DateTime @updatedAt
+  createdAt         DateTime @default(now())
+}
+
+model ContactUs {
+  id                String   @id @default(cuid())
+  
+  // Hero Section
+  heroTitle         String   @default("تواصلوا معنا")
+  heroTitleEn       String   @default("Contact Us")
+  heroSubtitle      String   @default("نحب أن نسمع منكم. تواصلوا معنا وابدؤوا محادثة.")
+  heroSubtitleEn    String   @default("We'd love to hear from you. Get in touch with us and let's start a conversation.")
+  
+  // Form Labels
+  formTitle         String   @default("تواصلوا معنا")
+  formTitleEn       String   @default("Contact Us")
+  nameLabel         String   @default("الاسم الكامل")
+  nameLabelEn       String   @default("Full Name")
+  emailLabel        String   @default("البريد الإلكتروني")
+  emailLabelEn      String   @default("Email Address")
+  phoneLabel        String   @default("رقم الهاتف")
+  phoneLabelEn      String   @default("Phone Number")
+  subjectLabel      String   @default("الموضوع")
+  subjectLabelEn    String   @default("Subject")
+  messageLabel      String   @default("الرسالة")
+  messageLabelEn    String   @default("Message")
+  sendButton        String   @default("إرسال الرسالة")
+  sendButtonEn      String   @default("Send Message")
+  sendingButton     String   @default("جاري الإرسال...")
+  sendingButtonEn   String   @default("Sending...")
+  
+  // Info Section
+  infoTitle         String   @default("تواصلوا معنا")
+  infoTitleEn       String   @default("Get in Touch")
+  infoDescription   String   @default("سواء كان لديك سؤال حول خدماتنا، أو تحتاج إلى استشارة معمارية، أو تريد مناقشة مشروعك القادم، نحن هنا للمساعدة.")
+  infoDescriptionEn String   @default("Whether you have a question about our services, need architectural consultation, or want to discuss your next project, we're here to help.")
+  
+  // Contact Info
+  addressLabel      String   @default("العنوان")
+  addressLabelEn    String   @default("Address")
+  addressValue      String   @default("عنوان شركتك")
+  addressValueEn    String   @default("Your Company Address")
+  phoneLabelInfo    String   @default("الهاتف")
+  phoneLabelInfoEn  String   @default("Phone")
+  phoneValue        String   @default("+1 234 567 8900")
+  emailLabelInfo    String   @default("البريد الإلكتروني")
+  emailLabelInfoEn  String   @default("Email")
+  emailValue        String   @default("info@company.com")
+  hoursLabel        String   @default("ساعات العمل")
+  hoursLabelEn      String   @default("Working Hours")
+  hoursValue        String   @default("الأحد - الخميس: 9:00 صباحاً - 6:00 مساءً")
+  hoursValueEn      String   @default("Sunday - Thursday: 9:00 AM - 6:00 PM")
+  
+  // Messages
+  successMessage    String   @default("شكراً لك! تم إرسال رسالتك بنجاح. سنتواصل معك قريباً.")
+  successMessageEn  String   @default("Thank you! Your message has been sent successfully. We'll get back to you soon.")
+  errorMessage      String   @default("حدث خطأ ما. يرجى المحاولة مرة أخرى لاحقاً.")
+  errorMessageEn    String   @default("Something went wrong. Please try again later.")
+  requiredField     String   @default("هذا الحقل مطلوب")
+  requiredFieldEn   String   @default("This field is required")
+  invalidEmail      String   @default("يرجى إدخال عنوان بريد إلكتروني صحيح")
+  invalidEmailEn    String   @default("Please enter a valid email address")
+  
   updatedAt         DateTime @updatedAt
   createdAt         DateTime @default(now())
 }

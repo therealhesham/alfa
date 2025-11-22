@@ -3,6 +3,7 @@ import { Tajawal } from "next/font/google";
 import "../globals.css";
 import { Locale } from "@/i18n";
 import { getTranslations } from "@/lib/i18n";
+import WhatsAppButtonWrapper from "@/components/WhatsAppButtonWrapper";
 
 const tajawal = Tajawal({
   weight: ["300", "400", "700", "900"],
@@ -39,6 +40,7 @@ export default async function LocaleLayout({
   return (
     <div lang={validLocale} dir={isRTL ? "rtl" : "ltr"} className={tajawal.variable}>
       {children}
+      <WhatsAppButtonWrapper />
     </div>
   );
 }

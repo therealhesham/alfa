@@ -43,6 +43,33 @@
     "heading": "Page Not Found",
     "message": "Sorry, the page you are looking for does not exist. It may have been moved or deleted.",
     "backHome": "Back to Home"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "We'd love to hear from you. Get in touch with us and let's start a conversation.",
+    "name": "Full Name",
+    "email": "Email Address",
+    "phone": "Phone Number",
+    "subject": "Subject",
+    "message": "Message",
+    "send": "Send Message",
+    "sending": "Sending...",
+    "success": "Thank you! Your message has been sent successfully. We'll get back to you soon.",
+    "error": "Something went wrong. Please try again later.",
+    "required": "This field is required",
+    "invalidEmail": "Please enter a valid email address",
+    "info": {
+      "title": "Get in Touch",
+      "description": "Whether you have a question about our services, need architectural consultation, or want to discuss your next project, we're here to help.",
+      "address": "Address",
+      "addressValue": "Your Company Address",
+      "phone": "Phone",
+      "phoneValue": "+1 234 567 8900",
+      "email": "Email",
+      "emailValue": "info@company.com",
+      "hours": "Working Hours",
+      "hoursValue": "Sunday - Thursday: 9:00 AM - 6:00 PM"
+    }
   }
 }
 

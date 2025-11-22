@@ -72,6 +72,34 @@ export interface AboutUsContent {
   founder2Bio: string;
 }
 
+export interface ContactUsContent {
+  id: string;
+  heroTitle: string;
+  heroSubtitle: string;
+  formTitle: string;
+  nameLabel: string;
+  emailLabel: string;
+  phoneLabel: string;
+  subjectLabel: string;
+  messageLabel: string;
+  sendButton: string;
+  sendingButton: string;
+  infoTitle: string;
+  infoDescription: string;
+  addressLabel: string;
+  addressValue: string;
+  phoneLabelInfo: string;
+  phoneValue: string;
+  emailLabelInfo: string;
+  emailValue: string;
+  hoursLabel: string;
+  hoursValue: string;
+  successMessage: string;
+  errorMessage: string;
+  requiredField: string;
+  invalidEmail: string;
+}
+
 export interface SiteSettings {
   id: string;
   primaryFont: string;
@@ -83,6 +111,7 @@ export interface SiteSettings {
   showProjects: boolean;
   showContact: boolean;
   showLanguageSwitcher: boolean;
+  whatsappNumber: string | null;
 }
 
 export async function getHomeContent(locale: Locale): Promise<HomeContent | null> {
@@ -264,6 +293,81 @@ export async function getAboutUsContent(locale: Locale): Promise<AboutUsContent 
   }
 }
 
+export async function getContactUsContent(locale: Locale): Promise<ContactUsContent | null> {
+  try {
+    let content = await prisma.contactUs.findFirst();
+    
+    if (!content) {
+      content = await prisma.contactUs.create({
+        data: {},
+      });
+    }
+    
+    if (locale === 'en') {
+      const contentAny = content as any;
+      return {
+        id: content.id,
+        heroTitle: contentAny.heroTitleEn || '',
+        heroSubtitle: contentAny.heroSubtitleEn || '',
+        formTitle: contentAny.formTitleEn || '',
+        nameLabel: contentAny.nameLabelEn || '',
+        emailLabel: contentAny.emailLabelEn || '',
+        phoneLabel: contentAny.phoneLabelEn || '',
+        subjectLabel: contentAny.subjectLabelEn || '',
+        messageLabel: contentAny.messageLabelEn || '',
+        sendButton: contentAny.sendButtonEn || '',
+        sendingButton: contentAny.sendingButtonEn || '',
+        infoTitle: contentAny.infoTitleEn || '',
+        infoDescription: contentAny.infoDescriptionEn || '',
+        addressLabel: contentAny.addressLabelEn || '',
+        addressValue: contentAny.addressValueEn || '',
+        phoneLabelInfo: contentAny.phoneLabelInfoEn || '',
+        phoneValue: content.phoneValue || '',
+        emailLabelInfo: contentAny.emailLabelInfoEn || '',
+        emailValue: content.emailValue || '',
+        hoursLabel: contentAny.hoursLabelEn || '',
+        hoursValue: contentAny.hoursValueEn || '',
+        successMessage: contentAny.successMessageEn || '',
+        errorMessage: contentAny.errorMessageEn || '',
+        requiredField: contentAny.requiredFieldEn || '',
+        invalidEmail: contentAny.invalidEmailEn || '',
+      };
+    }
+    
+    const contentAny = content as any;
+    return {
+      id: content.id,
+      heroTitle: content.heroTitle || '',
+      heroSubtitle: content.heroSubtitle || '',
+      formTitle: content.formTitle || '',
+      nameLabel: content.nameLabel || '',
+      emailLabel: content.emailLabel || '',
+      phoneLabel: content.phoneLabel || '',
+      subjectLabel: content.subjectLabel || '',
+      messageLabel: content.messageLabel || '',
+      sendButton: content.sendButton || '',
+      sendingButton: content.sendingButton || '',
+      infoTitle: content.infoTitle || '',
+      infoDescription: content.infoDescription || '',
+      addressLabel: content.addressLabel || '',
+      addressValue: content.addressValue || '',
+      phoneLabelInfo: content.phoneLabelInfo || '',
+      phoneValue: content.phoneValue || '',
+      emailLabelInfo: content.emailLabelInfo || '',
+      emailValue: content.emailValue || '',
+      hoursLabel: content.hoursLabel || '',
+      hoursValue: content.hoursValue || '',
+      successMessage: content.successMessage || '',
+      errorMessage: content.errorMessage || '',
+      requiredField: content.requiredField || '',
+      invalidEmail: content.invalidEmail || '',
+    };
+  } catch (error) {
+    console.error('Error fetching contact us content:', error);
+    return null;
+  }
+}
+
 export async function getSiteSettings(): Promise<SiteSettings | null> {
   try {
     let settings = await prisma.siteSettings.findFirst();
@@ -285,6 +389,7 @@ export async function getSiteSettings(): Promise<SiteSettings | null> {
       showProjects: settings.showProjects ?? true,
       showContact: settings.showContact ?? true,
       showLanguageSwitcher: settings.showLanguageSwitcher ?? true,
+      whatsappNumber: settings.whatsappNumber || null,
     };
   } catch (error) {
     console.error('Error fetching site settings:', error);
