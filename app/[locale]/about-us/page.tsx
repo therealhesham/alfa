@@ -1,6 +1,8 @@
 import Image from "next/image";
+import type { Metadata } from "next";
 import { getAboutUsContent, getSiteSettings, getFooterContent } from "@/lib/data";
 import { getTranslations } from "@/lib/i18n";
+import { generateSEOMetadata } from "@/lib/seo";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import FontsProvider from "@/components/FontsProvider";
@@ -9,6 +11,33 @@ import type { Locale } from "@/i18n";
 
 // ISR: Revalidate every 60 seconds
 export const revalidate = 60;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const validLocale = (locale === "ar" || locale === "en" ? locale : "ar") as Locale;
+
+  const title = validLocale === "ar"
+    ? "من نحن - ظلال المدينة | عن الشركة"
+    : "About Us - City Shadows | About the Company";
+
+  const description = validLocale === "ar"
+    ? "شركة رائدة في التصميم المعماري والهندسة الفاخرة، نجمع بين الأصالة العربية واللمسات العصرية العالمية. منذ تأسيسنا عام 2008 نفذنا أكثر من 250 مشروعًا في 48 دولة."
+    : "A leading company in architectural design and luxury engineering, combining Arabic authenticity with modern global touches. Since our establishment in 2008, we have completed over 250 projects in 48 countries.";
+
+  return generateSEOMetadata({
+    title,
+    description,
+    locale: validLocale,
+    path: "/about-us",
+    keywords: validLocale === "ar"
+      ? ["من نحن", "عن الشركة", "ظلال المدينة", "تصميم معماري", "هندسة معمارية"]
+      : ["About Us", "Company", "City Shadows", "Architectural Design", "Engineering"],
+  });
+}
 
 interface AboutUsPageProps {
   params: Promise<{ locale: string }>;

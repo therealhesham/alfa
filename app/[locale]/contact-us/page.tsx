@@ -1,9 +1,38 @@
+import type { Metadata } from "next";
 import { getTranslations } from "@/lib/i18n";
+import { generateSEOMetadata } from "@/lib/seo";
 import Header from "@/components/Header";
 import FontsProvider from "@/components/FontsProvider";
 import { getSiteSettings, getContactUsContent, type ContactUsContent } from "@/lib/data";
 import ContactForm from "./ContactForm";
 import type { Locale } from "@/i18n";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const validLocale = (locale === "ar" || locale === "en" ? locale : "ar") as Locale;
+
+  const title = validLocale === "ar"
+    ? "تواصلوا معنا - ظلال المدينة | اتصل بنا"
+    : "Contact Us - City Shadows | Get in Touch";
+
+  const description = validLocale === "ar"
+    ? "تواصلوا معنا لمعرفة المزيد عن خدماتنا في التصميم المعماري والهندسة الفاخرة. نحن هنا لمساعدتك في تحقيق رؤيتك المعمارية."
+    : "Contact us to learn more about our architectural design and luxury engineering services. We're here to help you realize your architectural vision.";
+
+  return generateSEOMetadata({
+    title,
+    description,
+    locale: validLocale,
+    path: "/contact-us",
+    keywords: validLocale === "ar"
+      ? ["تواصل معنا", "اتصل بنا", "ظلال المدينة", "خدمات معمارية"]
+      : ["Contact Us", "Get in Touch", "City Shadows", "Architectural Services"],
+  });
+}
 
 interface ContactUsPageProps {
   params: Promise<{ locale: string }>;

@@ -1,7 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
 import { getHomeContent, getSiteSettings, getFooterContent } from "@/lib/data";
 import { getTranslations } from "@/lib/i18n";
+import { generateSEOMetadata } from "@/lib/seo";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import FontsProvider from "@/components/FontsProvider";
@@ -10,6 +12,34 @@ import type { Locale } from "@/i18n";
 
 // ISR: Revalidate every 60 seconds
 export const revalidate = 60;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const validLocale = (locale === "ar" || locale === "en" ? locale : "ar") as Locale;
+  const t = getTranslations(validLocale);
+
+  const title = validLocale === "ar"
+    ? "الرئيسية - ظلال المدينة | التصميم المعماري الفاخر"
+    : "Home - City Shadows | Luxury Architectural Design";
+
+  const description = validLocale === "ar"
+    ? `${t.hero.subtitle} شركة رائدة في التصميم المعماري والهندسة الفاخرة. أكثر من 250 مشروع في 48 دولة و 22 جائزة عالمية.`
+    : `${t.hero.subtitle} A leading company in architectural design and luxury engineering. Over 250 projects in 48 countries and 22 international awards.`;
+
+  return generateSEOMetadata({
+    title,
+    description,
+    locale: validLocale,
+    path: "/home",
+    keywords: validLocale === "ar"
+      ? ["تصميم معماري", "هندسة معمارية", "تصميم داخلي", "مشاريع معمارية", "فخامة", "تميز", "ظلال المدينة"]
+      : ["Architectural Design", "Interior Design", "Luxury Architecture", "Engineering", "Projects", "City Shadows"],
+  });
+}
 
 async function getProjects(locale: Locale, limit: number = 3) {
   try {

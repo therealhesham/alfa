@@ -1,6 +1,8 @@
 import Image from "next/image";
+import type { Metadata } from "next";
 import { getSiteSettings, getFooterContent } from "@/lib/data";
 import { getTranslations } from "@/lib/i18n";
+import { generateSEOMetadata } from "@/lib/seo";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import FontsProvider from "@/components/FontsProvider";
@@ -9,6 +11,34 @@ import { Calendar, PinIcon } from "lucide-react";
 
 // ISR: Revalidate every 60 seconds
 export const revalidate = 60;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const validLocale = (locale === "ar" || locale === "en" ? locale : "ar") as Locale;
+
+  const title = validLocale === "ar"
+    ? "مشاريعنا - ظلال المدينة | معرض المشاريع المعمارية"
+    : "Our Projects - City Shadows | Architectural Projects Portfolio";
+
+  const description = validLocale === "ar"
+    ? "استعرض مجموعة من مشاريعنا الاستثنائية في التصميم المعماري والهندسة الفاخرة حول العالم. أكثر من 250 مشروع في 48 دولة."
+    : "Browse our exceptional portfolio of architectural design and luxury engineering projects around the world. Over 250 projects in 48 countries.";
+
+  return generateSEOMetadata({
+    title,
+    description,
+    locale: validLocale,
+    path: "/our-projects",
+    keywords: validLocale === "ar"
+      ? ["مشاريع معمارية", "معرض المشاريع", "تصميم معماري", "مشاريع فاخرة", "ظلال المدينة"]
+      : ["Architectural Projects", "Projects Portfolio", "Architectural Design", "Luxury Projects", "City Shadows"],
+    type: "website",
+  });
+}
 
 interface OurProjectsPageProps {
   params: Promise<{ locale: string }>;
