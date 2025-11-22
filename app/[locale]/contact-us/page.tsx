@@ -1,7 +1,7 @@
 import { getTranslations } from "@/lib/i18n";
 import Header from "@/components/Header";
 import FontsProvider from "@/components/FontsProvider";
-import { getSiteSettings, getContactUsContent } from "@/lib/data";
+import { getSiteSettings, getContactUsContent, type ContactUsContent } from "@/lib/data";
 import ContactForm from "./ContactForm";
 import type { Locale } from "@/i18n";
 
@@ -21,7 +21,8 @@ export default async function ContactUsPage({ params }: ContactUsPageProps) {
   const defaultHeaderLogo = "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png";
 
   // Fallback to translations if content is not available
-  const displayContent = content || {
+  const displayContent: ContactUsContent = content || {
+    id: "",
     heroTitle: t.contact.title,
     heroSubtitle: t.contact.subtitle,
     formTitle: t.contact.title,
