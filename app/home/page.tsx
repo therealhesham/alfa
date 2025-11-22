@@ -130,8 +130,8 @@ export default function HomePage() {
         <Image
           src={content.heroLogo}
           alt="شعار"
-          width={300}
-          height={300}
+          width={200}
+          height={200}
           className="hero-logo"
           unoptimized
         />

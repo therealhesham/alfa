@@ -277,7 +277,7 @@ nav a:hover::after {
 
 .hero img,
 .hero-logo {
-  width: 300px;
+  width: 200px;
   height: auto;
   margin-bottom: 30px;
   filter: drop-shadow(0 10px 30px rgba(15, 28, 42, 0.15));
@@ -545,7 +545,7 @@ footer p {
   }
 
   .hero-logo {
-    width: clamp(180px, 50vw, 250px);
+    width: clamp(120px, 35vw, 180px);
     margin-bottom: 25px;
   }
 
@@ -599,7 +599,7 @@ footer p {
   }
 
   .hero-logo {
-    width: clamp(150px, 45vw, 200px);
+    width: clamp(100px, 30vw, 150px);
     margin-bottom: 20px;
   }
 

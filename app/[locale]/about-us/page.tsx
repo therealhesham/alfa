@@ -92,149 +92,32 @@ export default async function AboutUsPage({ params }: AboutUsPageProps) {
         </div>
       </section>
 
-      {/* Founders Section */}
-      <section style={{ padding: '4rem 2rem', backgroundColor: '#f5f5f5' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <h2 style={{ fontSize: '2.5rem', marginBottom: '3rem', textAlign: 'center' }}>
-            {content.foundersTitle}
-          </h2>
-          <div style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
-            gap: '3rem',
-            justifyContent: 'center'
-          }}>
-            {/* Founder 1 */}
-            <div style={{
-              backgroundColor: 'white',
-              borderRadius: '12px',
-              padding: '2rem',
-              textAlign: 'center',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-            }}>
-              <div style={{
-                width: '200px',
-                height: '200px',
-                borderRadius: '50%',
-                margin: '0 auto 1.5rem',
-                overflow: 'hidden',
-                border: '4px solid #0070f3',
-                boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-              }}>
-                <Image
-                  src={content.founder1Image || '/capture.png'}
-                  alt={content.founder1Name}
-                  width={200}
-                  height={200}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                  }}
-                  unoptimized
-                />
-              </div>
-              <h3 style={{ fontSize: '1.8rem', marginBottom: '0.5rem', color: '#333' }}>
-                {content.founder1Name}
-              </h3>
-              <p style={{ 
-                fontSize: '1.1rem', 
-                color: '#0070f3', 
-                marginBottom: '1rem',
-                fontWeight: '600'
-              }}>
-                {content.founder1Position}
-              </p>
-              <p style={{ 
-                fontSize: '1rem', 
-                color: '#666', 
-                lineHeight: '1.6',
-                textAlign: validLocale === 'ar' ? 'right' : 'left'
-              }}>
-                {content.founder1Bio}
-              </p>
-            </div>
-
-            {/* Founder 2 */}
-            <div style={{
-              backgroundColor: 'white',
-              borderRadius: '12px',
-              padding: '2rem',
-              textAlign: 'center',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-            }}>
-              <div style={{
-                width: '200px',
-                height: '200px',
-                borderRadius: '50%',
-                margin: '0 auto 1.5rem',
-                overflow: 'hidden',
-                border: '4px solid #0070f3',
-                boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
-              }}>
-                <Image
-                  src={content.founder2Image || '/capture.png'}
-                  alt={content.founder2Name}
-                  width={200}
-                  height={200}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                  }}
-                  unoptimized
-                />
-              </div>
-              <h3 style={{ fontSize: '1.8rem', marginBottom: '0.5rem', color: '#333' }}>
-                {content.founder2Name}
-              </h3>
-              <p style={{ 
-                fontSize: '1.1rem', 
-                color: '#0070f3', 
-                marginBottom: '1rem',
-                fontWeight: '600'
-              }}>
-                {content.founder2Position}
-              </p>
-              <p style={{ 
-                fontSize: '1rem', 
-                color: '#666', 
-                lineHeight: '1.6',
-                textAlign: validLocale === 'ar' ? 'right' : 'left'
-              }}>
-                {content.founder2Bio}
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Mission & Vision Section */}
-      <section className="vision" style={{ padding: '4rem 2rem', backgroundColor: '#f5f5f5' }}>
+      <section className="vision" style={{ padding: '4rem 2rem' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem' }}>
           <div className="card" style={{ 
             padding: '2rem', 
             backgroundColor: 'white', 
-            borderRadius: '8px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+            borderRadius: '20px',
+            boxShadow: '0 20px 50px rgba(15, 28, 42, 0.1)'
           }}>
-            <h3 style={{ fontSize: '2rem', marginBottom: '1rem', color: '#0070f3' }}>
+            <h3 style={{ fontSize: '2rem', marginBottom: '1rem', color: 'var(--gold)' }}>
               {content.missionTitle}
             </h3>
-            <p style={{ fontSize: '1.1rem', lineHeight: '1.8' }}>
+            <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: '#333' }}>
               {content.missionContent}
             </p>
           </div>
           <div className="card" style={{ 
             padding: '2rem', 
             backgroundColor: 'white', 
-            borderRadius: '8px',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+            borderRadius: '20px',
+            boxShadow: '0 20px 50px rgba(15, 28, 42, 0.1)'
           }}>
-            <h3 style={{ fontSize: '2rem', marginBottom: '1rem', color: '#0070f3' }}>
+            <h3 style={{ fontSize: '2rem', marginBottom: '1rem', color: 'var(--gold)' }}>
               {content.visionTitle}
             </h3>
-            <p style={{ fontSize: '1.1rem', lineHeight: '1.8' }}>
+            <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: '#333' }}>
               {content.visionContent}
             </p>
           </div>
@@ -248,214 +131,31 @@ export default async function AboutUsPage({ params }: AboutUsPageProps) {
         </h2>
         <div style={{ 
           display: 'grid', 
-          gridTemplateColumns: 'repeat(2, 1fr)', 
+          gridTemplateColumns: 'repeat(1, 1fr)', 
           gap: '2rem' 
         }}>
           <div style={{ 
             padding: '1.5rem', 
             backgroundColor: '#f9f9f9', 
             borderRadius: '8px',
-            borderLeft: '4px solid #0070f3'
+            borderLeft: '4px solid var(--gold)'
           }}>
             <h4 style={{ fontSize: '1.3rem', marginBottom: '0.5rem' }}>✓</h4>
             <p style={{ fontSize: '1.1rem' }}>{content.whyChoosePoint1}</p>
           </div>
-          <div style={{ 
-            padding: '1.5rem', 
-            backgroundColor: '#f9f9f9', 
-            borderRadius: '8px',
-            borderLeft: '4px solid #0070f3'
-          }}>
-            <h4 style={{ fontSize: '1.3rem', marginBottom: '0.5rem' }}>✓</h4>
-            <p style={{ fontSize: '1.1rem' }}>{content.whyChoosePoint2}</p>
-          </div>
-          <div style={{ 
-            padding: '1.5rem', 
-            backgroundColor: '#f9f9f9', 
-            borderRadius: '8px',
-            borderLeft: '4px solid #0070f3'
-          }}>
-            <h4 style={{ fontSize: '1.3rem', marginBottom: '0.5rem' }}>✓</h4>
-            <p style={{ fontSize: '1.1rem' }}>{content.whyChoosePoint3}</p>
-          </div>
-          <div style={{ 
-            padding: '1.5rem', 
-            backgroundColor: '#f9f9f9', 
-            borderRadius: '8px',
-            borderLeft: '4px solid #0070f3'
-          }}>
-            <h4 style={{ fontSize: '1.3rem', marginBottom: '0.5rem' }}>✓</h4>
-            <p style={{ fontSize: '1.1rem' }}>{content.whyChoosePoint4}</p>
-          </div>
+        
         </div>
       </section>
 
       {/* Values Section */}
-      <section style={{ padding: '4rem 2rem', backgroundColor: '#f5f5f5' }}>
+      <section style={{ padding: '4rem 2rem', backgroundColor: 'var(--beige)' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
-          <h2 style={{ fontSize: '2.5rem', marginBottom: '2rem' }}>
+          <h2 style={{ fontSize: '2.5rem', marginBottom: '2rem', color: 'var(--dark)' }}>
             {content.valuesTitle}
           </h2>
-          <p style={{ fontSize: '1.5rem', lineHeight: '2', color: '#666' }}>
+          <p style={{ fontSize: '1.5rem', lineHeight: '2', color: '#333' }}>
             {content.valuesContent}
           </p>
-        </div>
-      </section>
-
-      {/* Timeline/Milestones Section */}
-      <section style={{ padding: '4rem 2rem', maxWidth: '1200px', margin: '0 auto' }}>
-        <h2 style={{ fontSize: '2.5rem', marginBottom: '3rem', textAlign: 'center' }}>
-          {validLocale === 'ar' ? 'محطاتنا المهمة' : 'Our Milestones'}
-        </h2>
-        <div style={{ 
-          display: 'flex', 
-          flexDirection: 'column', 
-          gap: '2rem',
-          position: 'relative',
-          paddingLeft: validLocale === 'ar' ? '0' : '2rem',
-          paddingRight: validLocale === 'ar' ? '2rem' : '0'
-        }}>
-          {/* Timeline line */}
-          <div style={{
-            position: 'absolute',
-            ...(validLocale === 'ar' ? { right: '0' } : { left: '0' }),
-            top: '0',
-            bottom: '0',
-            width: '3px',
-            backgroundColor: '#0070f3',
-          }}></div>
-          
-          {/* Milestone 1 */}
-          <div style={{ 
-            position: 'relative',
-            paddingLeft: validLocale === 'ar' ? '0' : '3rem',
-            paddingRight: validLocale === 'ar' ? '3rem' : '0',
-          }}>
-            <div style={{
-              position: 'absolute',
-              ...(validLocale === 'ar' ? { right: '-8px' } : { left: '-8px' }),
-              top: '0',
-              width: '16px',
-              height: '16px',
-              borderRadius: '50%',
-              backgroundColor: '#0070f3',
-              border: '3px solid white',
-              boxShadow: '0 0 0 3px #0070f3',
-            }}></div>
-            <div style={{ 
-              backgroundColor: 'white', 
-              padding: '1.5rem', 
-              borderRadius: '8px',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-            }}>
-              <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#0070f3', marginBottom: '0.5rem' }}>
-                {content.milestone1Year}
-              </div>
-              <h3 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>
-                {content.milestone1Title}
-              </h3>
-              <p style={{ color: '#666' }}>{content.milestone1Desc}</p>
-            </div>
-          </div>
-
-          {/* Milestone 2 */}
-          <div style={{ 
-            position: 'relative',
-            paddingLeft: validLocale === 'ar' ? '0' : '3rem',
-            paddingRight: validLocale === 'ar' ? '3rem' : '0',
-          }}>
-            <div style={{
-              position: 'absolute',
-              ...(validLocale === 'ar' ? { right: '-8px' } : { left: '-8px' }),
-              top: '0',
-              width: '16px',
-              height: '16px',
-              borderRadius: '50%',
-              backgroundColor: '#0070f3',
-              border: '3px solid white',
-              boxShadow: '0 0 0 3px #0070f3',
-            }}></div>
-            <div style={{ 
-              backgroundColor: 'white', 
-              padding: '1.5rem', 
-              borderRadius: '8px',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-            }}>
-              <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#0070f3', marginBottom: '0.5rem' }}>
-                {content.milestone2Year}
-              </div>
-              <h3 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>
-                {content.milestone2Title}
-              </h3>
-              <p style={{ color: '#666' }}>{content.milestone2Desc}</p>
-            </div>
-          </div>
-
-          {/* Milestone 3 */}
-          <div style={{ 
-            position: 'relative',
-            paddingLeft: validLocale === 'ar' ? '0' : '3rem',
-            paddingRight: validLocale === 'ar' ? '3rem' : '0',
-          }}>
-            <div style={{
-              position: 'absolute',
-              ...(validLocale === 'ar' ? { right: '-8px' } : { left: '-8px' }),
-              top: '0',
-              width: '16px',
-              height: '16px',
-              borderRadius: '50%',
-              backgroundColor: '#0070f3',
-              border: '3px solid white',
-              boxShadow: '0 0 0 3px #0070f3',
-            }}></div>
-            <div style={{ 
-              backgroundColor: 'white', 
-              padding: '1.5rem', 
-              borderRadius: '8px',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-            }}>
-              <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#0070f3', marginBottom: '0.5rem' }}>
-                {content.milestone3Year}
-              </div>
-              <h3 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>
-                {content.milestone3Title}
-              </h3>
-              <p style={{ color: '#666' }}>{content.milestone3Desc}</p>
-            </div>
-          </div>
-
-          {/* Milestone 4 */}
-          <div style={{ 
-            position: 'relative',
-            paddingLeft: validLocale === 'ar' ? '0' : '3rem',
-            paddingRight: validLocale === 'ar' ? '3rem' : '0',
-          }}>
-            <div style={{
-              position: 'absolute',
-              ...(validLocale === 'ar' ? { right: '-8px' } : { left: '-8px' }),
-              top: '0',
-              width: '16px',
-              height: '16px',
-              borderRadius: '50%',
-              backgroundColor: '#0070f3',
-              border: '3px solid white',
-              boxShadow: '0 0 0 3px #0070f3',
-            }}></div>
-            <div style={{ 
-              backgroundColor: 'white', 
-              padding: '1.5rem', 
-              borderRadius: '8px',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-            }}>
-              <div style={{ fontSize: '2rem', fontWeight: 'bold', color: '#0070f3', marginBottom: '0.5rem' }}>
-                {content.milestone4Year}
-              </div>
-              <h3 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>
-                {content.milestone4Title}
-              </h3>
-              <p style={{ color: '#666' }}>{content.milestone4Desc}</p>
-            </div>
-          </div>
         </div>
       </section>
 
