@@ -1,12 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { getHomeContent, getSiteSettings, getFooterContent } from "@/lib/data";
+import { getHomeContent, getSiteSettings, getFooterContent, getContactUsContent } from "@/lib/data";
 import { getTranslations } from "@/lib/i18n";
 import { generateSEOMetadata } from "@/lib/seo";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import FontsProvider from "@/components/FontsProvider";
+import HomeContactForm from "@/components/HomeContactForm";
 import { Home, Layers, Activity, HelpCircle, Calendar, MapPin } from "lucide-react";
 import type { Locale } from "@/i18n";
 
@@ -94,11 +95,12 @@ export default async function HomePage({ params }: HomePageProps) {
   const t = getTranslations(validLocale);
 
   // Fetch data in parallel
-  const [content, settings, footerContent, projects] = await Promise.all([
+  const [content, settings, footerContent, projects, contactContent] = await Promise.all([
     getHomeContent(validLocale),
     getSiteSettings(),
     getFooterContent(validLocale),
     getProjects(validLocale, 3),
+    getContactUsContent(validLocale),
   ]);
 
   // Fallback to translations if content is not available
@@ -150,6 +152,35 @@ export default async function HomePage({ params }: HomePageProps) {
     footerCopyright: t.footer.copyright,
     footerLogo: "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png",
     headerLogo: "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png",
+  };
+
+  // Fallback to translations if contact content is not available
+  const displayContactContent = contactContent || {
+    id: "",
+    heroTitle: t.contact.title,
+    heroSubtitle: t.contact.subtitle,
+    formTitle: t.contact.title,
+    nameLabel: t.contact.name,
+    emailLabel: t.contact.email,
+    phoneLabel: t.contact.phone,
+    subjectLabel: t.contact.subject,
+    messageLabel: t.contact.message,
+    sendButton: t.contact.send,
+    sendingButton: t.contact.sending,
+    infoTitle: t.contact.info.title,
+    infoDescription: t.contact.info.description,
+    addressLabel: t.contact.info.address,
+    addressValue: t.contact.info.addressValue,
+    phoneLabelInfo: t.contact.info.phone,
+    phoneValue: t.contact.info.phoneValue,
+    emailLabelInfo: t.contact.info.email,
+    emailValue: t.contact.info.emailValue,
+    hoursLabel: t.contact.info.hours,
+    hoursValue: t.contact.info.hoursValue,
+    successMessage: t.contact.success,
+    errorMessage: t.contact.error,
+    requiredField: t.contact.required,
+    invalidEmail: t.contact.invalidEmail,
   };
 
   return (
@@ -415,6 +446,12 @@ export default async function HomePage({ params }: HomePageProps) {
           </div> */}
         </div>
       </section>
+
+      <HomeContactForm
+        locale={validLocale}
+        settings={settings}
+        content={displayContactContent}
+      />
 
       <Footer
         locale={validLocale}

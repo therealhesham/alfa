@@ -60,6 +60,34 @@ interface HomeContent {
   headerLogo: string;
 }
 
+interface ContactUsContent {
+  id: string;
+  heroTitle: string;
+  heroSubtitle: string;
+  formTitle: string;
+  nameLabel: string;
+  emailLabel: string;
+  phoneLabel: string;
+  subjectLabel: string;
+  messageLabel: string;
+  sendButton: string;
+  sendingButton: string;
+  infoTitle: string;
+  infoDescription: string;
+  addressLabel: string;
+  addressValue: string;
+  phoneLabelInfo: string;
+  phoneValue: string;
+  emailLabelInfo: string;
+  emailValue: string;
+  hoursLabel: string;
+  hoursValue: string;
+  successMessage: string;
+  errorMessage: string;
+  requiredField: string;
+  invalidEmail: string;
+}
+
 interface EditableFieldProps {
   value: string;
   onChange: (value: string) => void;
@@ -364,12 +392,14 @@ export default function AdminHomePage() {
   const [currentLocale, setCurrentLocale] = useState<Locale>(locale);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [content, setContent] = useState<HomeContent | null>(null);
+  const [contactContent, setContactContent] = useState<ContactUsContent | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     fetchContent();
+    fetchContactContent();
   }, [currentLocale]);
 
   const fetchContent = async () => {
@@ -385,6 +415,16 @@ export default function AdminHomePage() {
     }
   };
 
+  const fetchContactContent = async () => {
+    try {
+      const response = await fetch(`/api/contact-us?locale=${currentLocale}`);
+      const data = await response.json();
+      setContactContent(data);
+    } catch (error) {
+      console.error("Error fetching contact content:", error);
+    }
+  };
+
   const handleSave = async () => {
     if (!content) return;
     
@@ -392,7 +432,8 @@ export default function AdminHomePage() {
     setSaved(false);
     
     try {
-      const response = await fetch("/api/home-content", {
+      // Save home content
+      const homeResponse = await fetch("/api/home-content", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -403,11 +444,26 @@ export default function AdminHomePage() {
         }),
       });
       
-      if (response.ok) {
+      // Save contact content if it exists
+      if (contactContent) {
+        await fetch("/api/contact-us", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...contactContent,
+            locale: currentLocale,
+          }),
+        });
+      }
+      
+      if (homeResponse.ok) {
         setSaved(true);
         setTimeout(() => setSaved(false), 3000);
         // Refresh content after save
         fetchContent();
+        fetchContactContent();
       }
     } catch (error) {
       console.error("Error saving content:", error);
@@ -420,6 +476,11 @@ export default function AdminHomePage() {
   const handleChange = (field: keyof HomeContent, value: string) => {
     if (!content) return;
     setContent({ ...content, [field]: value });
+  };
+
+  const handleContactChange = (field: keyof ContactUsContent, value: string) => {
+    if (!contactContent) return;
+    setContactContent({ ...contactContent, [field]: value });
   };
 
   // Show loading while checking authentication
@@ -921,6 +982,391 @@ export default function AdminHomePage() {
           </div> */}
         </div>
       </section>
+
+      {contactContent && (
+        <section id="contact" className="home-contact-section" style={{ fontFamily: "var(--body-font)" }}>
+          <div className="home-contact-container">
+            <div className="home-contact-header">
+              <EditableField
+                value={contactContent.formTitle || contactContent.heroTitle}
+                onChange={(value) => {
+                  handleContactChange("formTitle", value);
+                  handleContactChange("heroTitle", value);
+                }}
+                as="h2"
+              />
+              <EditableField
+                value={contactContent.heroSubtitle}
+                onChange={(value) => handleContactChange("heroSubtitle", value)}
+                as="p"
+              />
+            </div>
+
+            <div className="home-contact-grid">
+              <div className="home-contact-form-wrapper">
+                <EditableField
+                  value={contactContent.formTitle}
+                  onChange={(value) => handleContactChange("formTitle", value)}
+                  as="h3"
+                  className="form-section-title"
+                />
+                
+                <div className="home-form-preview">
+                  <div className="home-form-group">
+                    <label>
+                      <EditableField
+                        value={contactContent.nameLabel}
+                        onChange={(value) => handleContactChange("nameLabel", value)}
+                        as="input"
+                        placeholder="اسم الحقل"
+                      /> <span className="required">*</span>
+                    </label>
+                  </div>
+                  <div className="home-form-group">
+                    <label>
+                      <EditableField
+                        value={contactContent.emailLabel}
+                        onChange={(value) => handleContactChange("emailLabel", value)}
+                        as="input"
+                        placeholder="اسم الحقل"
+                      /> <span className="required">*</span>
+                    </label>
+                  </div>
+                  <div className="home-form-group">
+                    <label>
+                      <EditableField
+                        value={contactContent.phoneLabel}
+                        onChange={(value) => handleContactChange("phoneLabel", value)}
+                        as="input"
+                        placeholder="اسم الحقل"
+                      />
+                    </label>
+                  </div>
+                  <div className="home-form-group">
+                    <label>
+                      <EditableField
+                        value={contactContent.subjectLabel}
+                        onChange={(value) => handleContactChange("subjectLabel", value)}
+                        as="input"
+                        placeholder="اسم الحقل"
+                      /> <span className="required">*</span>
+                    </label>
+                  </div>
+                  <div className="home-form-group">
+                    <label>
+                      <EditableField
+                        value={contactContent.messageLabel}
+                        onChange={(value) => handleContactChange("messageLabel", value)}
+                        as="input"
+                        placeholder="اسم الحقل"
+                      /> <span className="required">*</span>
+                    </label>
+                  </div>
+                  <div className="home-form-group">
+                    <EditableField
+                      value={contactContent.sendButton}
+                      onChange={(value) => handleContactChange("sendButton", value)}
+                      as="input"
+                      placeholder="نص الزر"
+                      className="button-preview"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="home-contact-info">
+                <EditableField
+                  value={contactContent.infoTitle}
+                  onChange={(value) => handleContactChange("infoTitle", value)}
+                  as="h3"
+                />
+                <EditableField
+                  value={contactContent.infoDescription}
+                  onChange={(value) => handleContactChange("infoDescription", value)}
+                  as="textarea"
+                  rows={3}
+                />
+
+                <div className="home-info-items">
+                  <div className="home-info-item">
+                    <div className="home-info-icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                      </svg>
+                    </div>
+                    <div className="home-info-content">
+                      <h4>
+                        <EditableField
+                          value={contactContent.addressLabel}
+                          onChange={(value) => handleContactChange("addressLabel", value)}
+                          as="input"
+                          placeholder="التسمية"
+                        />
+                      </h4>
+                      <p>
+                        <EditableField
+                          value={contactContent.addressValue}
+                          onChange={(value) => handleContactChange("addressValue", value)}
+                          as="input"
+                          placeholder="القيمة"
+                        />
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="home-info-item">
+                    <div className="home-info-icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                      </svg>
+                    </div>
+                    <div className="home-info-content">
+                      <h4>
+                        <EditableField
+                          value={contactContent.phoneLabelInfo}
+                          onChange={(value) => handleContactChange("phoneLabelInfo", value)}
+                          as="input"
+                          placeholder="التسمية"
+                        />
+                      </h4>
+                      <p>
+                        <EditableField
+                          value={contactContent.phoneValue}
+                          onChange={(value) => handleContactChange("phoneValue", value)}
+                          as="input"
+                          placeholder="القيمة"
+                        />
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="home-info-item">
+                    <div className="home-info-icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                      </svg>
+                    </div>
+                    <div className="home-info-content">
+                      <h4>
+                        <EditableField
+                          value={contactContent.emailLabelInfo}
+                          onChange={(value) => handleContactChange("emailLabelInfo", value)}
+                          as="input"
+                          placeholder="التسمية"
+                        />
+                      </h4>
+                      <p>
+                        <EditableField
+                          value={contactContent.emailValue}
+                          onChange={(value) => handleContactChange("emailValue", value)}
+                          as="input"
+                          placeholder="القيمة"
+                        />
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="home-info-item">
+                    <div className="home-info-icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                      </svg>
+                    </div>
+                    <div className="home-info-content">
+                      <h4>
+                        <EditableField
+                          value={contactContent.hoursLabel}
+                          onChange={(value) => handleContactChange("hoursLabel", value)}
+                          as="input"
+                          placeholder="التسمية"
+                        />
+                      </h4>
+                      <p>
+                        <EditableField
+                          value={contactContent.hoursValue}
+                          onChange={(value) => handleContactChange("hoursValue", value)}
+                          as="input"
+                          placeholder="القيمة"
+                        />
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <style jsx>{`
+            .home-contact-section {
+              padding: clamp(60px, 10vw, 130px) clamp(1.5rem, 5vw, 8%);
+              background: linear-gradient(135deg, rgba(250, 247, 242, 0.95) 0%, rgba(232, 217, 192, 0.9) 100%);
+              position: relative;
+            }
+
+            .home-contact-container {
+              max-width: 1200px;
+              margin: 0 auto;
+            }
+
+            .home-contact-header {
+              text-align: center;
+              margin-bottom: clamp(40px, 6vw, 70px);
+            }
+
+            .home-contact-header h2 {
+              font-size: clamp(2.2rem, 7vw, 4rem);
+              color: var(--dark);
+              margin-bottom: 1.5rem;
+              font-weight: 800;
+              line-height: 1.2;
+            }
+
+            .home-contact-header p {
+              font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+              color: var(--dark);
+              opacity: 0.85;
+              line-height: 1.8;
+              max-width: 700px;
+              margin: 0 auto;
+            }
+
+            .home-contact-grid {
+              display: grid;
+              grid-template-columns: 1.6fr 1fr;
+              gap: 60px;
+              align-items: start;
+            }
+
+            .home-contact-form-wrapper,
+            .home-contact-info {
+              background: rgba(255, 255, 255, 0.98);
+              padding: clamp(30px, 5vw, 50px);
+              border-radius: 24px;
+              box-shadow: 
+                0 20px 60px rgba(15, 28, 42, 0.12),
+                0 8px 25px rgba(15, 28, 42, 0.08);
+            }
+
+            .form-section-title {
+              font-size: 1.75rem;
+              color: var(--dark);
+              margin-bottom: 1.5rem;
+              font-weight: 700;
+            }
+
+            .home-form-preview {
+              display: flex;
+              flex-direction: column;
+              gap: 1.5rem;
+            }
+
+            .home-form-group {
+              display: flex;
+              flex-direction: column;
+            }
+
+            .home-form-group label {
+              color: var(--dark);
+              font-weight: 600;
+              margin-bottom: 0.5rem;
+              font-size: 1rem;
+            }
+
+            .required {
+              color: #d32f2f;
+            }
+
+            .button-preview {
+              padding: 0.75rem 1.5rem;
+              background: var(--dark);
+              color: white;
+              border: none;
+              border-radius: 8px;
+              font-size: 1rem;
+              font-weight: 600;
+              cursor: pointer;
+            }
+
+            .home-contact-info h3 {
+              font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+              color: var(--dark);
+              margin-bottom: 1rem;
+              font-weight: 800;
+            }
+
+            .home-contact-info > p,
+            .home-contact-info > textarea {
+              color: var(--dark);
+              opacity: 0.85;
+              line-height: 1.8;
+              margin-bottom: 2rem;
+              font-size: 1.1rem;
+            }
+
+            .home-info-items {
+              display: flex;
+              flex-direction: column;
+              gap: 2rem;
+            }
+
+            .home-info-item {
+              display: flex;
+              gap: 1.5rem;
+              align-items: flex-start;
+            }
+
+            .home-info-icon {
+              width: 50px;
+              height: 50px;
+              min-width: 50px;
+              background: var(--gold);
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: var(--dark);
+            }
+
+            .home-info-icon svg {
+              width: 24px;
+              height: 24px;
+            }
+
+            .home-info-content h4 {
+              font-size: 1.25rem;
+              color: var(--dark);
+              margin-bottom: 0.5rem;
+              font-weight: 600;
+            }
+
+            .home-info-content p {
+              color: var(--dark);
+              opacity: 0.85;
+              line-height: 1.6;
+              margin: 0;
+            }
+
+            @media (max-width: 968px) {
+              .home-contact-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+              }
+
+              .home-contact-form-wrapper,
+              .home-contact-info {
+                padding: 30px;
+              }
+            }
+
+            [dir="rtl"] .home-info-item {
+              flex-direction: row-reverse;
+            }
+          `}</style>
+        </section>
+      )}
 
       <footer>
         <EditableImage

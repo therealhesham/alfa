@@ -20,20 +20,20 @@ model HomeContent {
   heroLogo      String   @default("/capture.png")
   aboutTitle    String   @default("من نحن")
   aboutTitleEn  String   @default("About Us")
-  aboutP1       String   @default("شركة رائدة في التصميم المعماري والهندسة الفاخرة، نجمع بين الأصالة العربية واللمسات العصرية العالمية لنقدم مشاريع تحمل بصمة لا تُنسى.")
-  aboutP1En     String   @default("A leading company in architectural design and luxury engineering, combining Arabic authenticity with modern global touches to deliver projects with an unforgettable signature.")
-  aboutP2       String   @default("منذ تأسيسنا عام ٢٠٠٨ نفذنا أكثر من ٢٥٠ مشروعًا في ٤٨ دولة وحصدنا ٢٢ جائزة عالمية.")
-  aboutP2En     String   @default("Since our establishment in 2008, we have completed over 250 projects in 48 countries and won 22 international awards.")
+  aboutP1       String   @db.Text
+  aboutP1En     String   @db.Text
+  aboutP2       String   @db.Text
+  aboutP2En     String   @db.Text
   visionTitle   String   @default("رؤيتنا · رسالتنا · قيمنا")
   visionTitleEn String   @default("Our Vision · Mission · Values")
   visionVision  String   @default("الرؤية")
   visionVisionEn String  @default("Vision")
-  visionVisionText String @default("أن نكون الخيار الأول عالميًا في تقديم حلول معمارية فاخرة تحترم الهوية وتتخطى التوقعات.")
-  visionVisionTextEn String @default("To be the first choice globally in providing luxury architectural solutions that respect identity and exceed expectations.")
+  visionVisionText String @db.Text
+  visionVisionTextEn String @db.Text
   visionMission String   @default("الرسالة")
   visionMissionEn String @default("Mission")
-  visionMissionText String @default("تصميم مساحات تعبر عن طموح أصحابها بأعلى معايير الجودة والإبداع والاستدامة.")
-  visionMissionTextEn String @default("Designing spaces that express their owners' ambitions with the highest standards of quality, creativity, and sustainability.")
+  visionMissionText String @db.Text
+  visionMissionTextEn String @db.Text
   visionValues  String   @default("القيم")
   visionValuesEn String  @default("Values")
   visionValuesText String @default("التميّز • الأصالة • الالتزام • الابتكار • الثقة")
@@ -61,23 +61,23 @@ model HomeContent {
   
   service1Title String @default("التصميم المعماري")
   service1TitleEn String @default("Architectural Design")
-  service1Desc String @default("تصاميم معمارية فاخرة تجمع بين الأصالة والحداثة")
-  service1DescEn String @default("Luxury architectural designs combining authenticity and modernity")
+  service1Desc String @db.Text
+  service1DescEn String @db.Text
   
   service2Title String @default("التصميم الداخلي")
   service2TitleEn String @default("Interior Design")
-  service2Desc String @default("مساحات داخلية تعكس الذوق الرفيع والفخامة")
-  service2DescEn String @default("Interior spaces reflecting refined taste and luxury")
+  service2Desc String @db.Text
+  service2DescEn String @db.Text
   
   service3Title String @default("الإشراف الهندسي")
   service3TitleEn String @default("Engineering Supervision")
-  service3Desc String @default("متابعة دقيقة لضمان أعلى معايير الجودة")
-  service3DescEn String @default("Precise monitoring to ensure the highest quality standards")
+  service3Desc String @db.Text
+  service3DescEn String @db.Text
   
   service4Title String @default("الاستشارات الهندسية")
   service4TitleEn String @default("Engineering Consultancy")
-  service4Desc String @default("حلول هندسية مبتكرة لكل التحديات")
-  service4DescEn String @default("Innovative engineering solutions for all challenges")
+  service4Desc String @db.Text
+  service4DescEn String @db.Text
   
   // Projects Section
   projectsTitle String @default("مشاريعنا")
@@ -89,20 +89,20 @@ model HomeContent {
   
   project1Title String @default("فيلا فاخرة - دبي")
   project1TitleEn String @default("Luxury Villa - Dubai")
-  project1Desc String @default("تصميم معماري فاخر يجمع بين الأصالة العربية والحداثة")
-  project1DescEn String @default("Luxury architectural design combining Arabic authenticity and modernity")
+  project1Desc String @db.Text
+  project1DescEn String @db.Text
   project1Image String @default("https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png")
   
   project2Title String @default("مجمع سكني - الرياض")
   project2TitleEn String @default("Residential Complex - Riyadh")
-  project2Desc String @default("مشروع سكني متكامل بأعلى معايير الجودة والفخامة")
-  project2DescEn String @default("Integrated residential project with the highest standards of quality and luxury")
+  project2Desc String @db.Text
+  project2DescEn String @db.Text
   project2Image String @default("https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png")
   
   project3Title String @default("مركز تجاري - جدة")
   project3TitleEn String @default("Shopping Center - Jeddah")
-  project3Desc String @default("مركز تجاري عصري بتصميم مبتكر وفريد")
-  project3DescEn String @default("Modern shopping center with innovative and unique design")
+  project3Desc String @db.Text
+  project3DescEn String @db.Text
   project3Image String @default("https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png")
   
   footerCopyright String @default("© 2025 اسم الشركة – جميع الحقوق محفوظة")
@@ -117,25 +117,25 @@ model AboutUs {
   id                String   @id @default(cuid())
   heroTitle         String   @default("من نحن")
   heroTitleEn       String   @default("About Us")
-  heroSubtitle      String   @default("نحن شركة رائدة في التصميم المعماري والهندسة الفاخرة")
-  heroSubtitleEn    String   @default("We are a leading company in architectural design and luxury engineering")
+  heroSubtitle      String?   @db.Text
+  heroSubtitleEn    String   @db.Text
   heroImage         String   @default("/capture.png")
   
   storyTitle        String   @default("قصتنا")
   storyTitleEn      String   @default("Our Story")
-  storyContent      String   @default("تأسست شركتنا عام 2008 بهدف تقديم حلول معمارية فاخرة تجمع بين الأصالة العربية واللمسات العصرية.")
-  storyContentEn    String   @default("Our company was founded in 2008 with the aim of providing luxury architectural solutions.")
+  storyContent      String   @db.Text
+  storyContentEn    String   @db.Text
   storyImage        String   @default("/capture.png")
   
   missionTitle      String   @default("رسالتنا")
   missionTitleEn    String   @default("Our Mission")
-  missionContent    String   @default("تصميم مساحات تعبر عن طموح أصحابها بأعلى معايير الجودة والإبداع والاستدامة.")
-  missionContentEn  String   @default("Designing spaces that express their owners' ambitions with the highest standards of quality, creativity, and sustainability.")
+  missionContent    String   @db.Text
+  missionContentEn  String   @db.Text
   
   visionTitle       String   @default("رؤيتنا")
   visionTitleEn     String   @default("Our Vision")
-  visionContent     String   @default("أن نكون الخيار الأول عالميًا في تقديم حلول معمارية فاخرة تحترم الهوية وتتخطى التوقعات.")
-  visionContentEn   String   @default("To be the first choice globally in providing luxury architectural solutions that respect identity and exceed expectations.")
+  visionContent     String   @db.Text
+  visionContentEn   String   @db.Text
   
   whyChooseTitle    String   @default("لماذا تختارنا")
   whyChooseTitleEn  String   @default("Why Choose Us")
@@ -156,26 +156,26 @@ model AboutUs {
   milestone1Year    String   @default("2008")
   milestone1Title   String   @default("التأسيس")
   milestone1TitleEn String   @default("Foundation")
-  milestone1Desc    String   @default("تأسيس الشركة وبداية رحلة التميّز")
-  milestone1DescEn  String   @default("Company foundation and the beginning of the excellence journey")
+  milestone1Desc    String   @db.Text
+  milestone1DescEn  String   @db.Text
   
   milestone2Year    String   @default("2015")
   milestone2Title   String   @default("التوسع الدولي")
   milestone2TitleEn String   @default("International Expansion")
-  milestone2Desc    String   @default("بداية العمل في 20 دولة حول العالم")
-  milestone2DescEn  String   @default("Beginning of operations in 20 countries worldwide")
+  milestone2Desc    String   @db.Text
+  milestone2DescEn  String   @db.Text
   
   milestone3Year    String   @default("2020")
   milestone3Title   String   @default("الجوائز العالمية")
   milestone3TitleEn String   @default("International Awards")
-  milestone3Desc    String   @default("حصد أول 10 جوائز عالمية في التصميم")
-  milestone3DescEn  String   @default("Winning the first 10 international design awards")
+  milestone3Desc    String   @db.Text
+  milestone3DescEn  String   @db.Text
   
   milestone4Year    String   @default("2025")
   milestone4Title   String   @default("الريادة")
   milestone4TitleEn String   @default("Leadership")
-  milestone4Desc    String   @default("وصول عدد المشاريع إلى 250+ مشروع")
-  milestone4DescEn  String   @default("Reaching 250+ projects")
+  milestone4Desc    String   @db.Text
+  milestone4DescEn  String   @db.Text
   
   foundersTitle     String   @default("المؤسسون")
   foundersTitleEn   String   @default("Founders")
@@ -184,16 +184,16 @@ model AboutUs {
   founder1Position  String   @default("المؤسس والرئيس التنفيذي")
   founder1PositionEn String  @default("Founder & CEO")
   founder1Image     String   @default("/capture.png")
-  founder1Bio        String   @default("مهندس معماري بخبرة تزيد عن 20 عامًا في التصميم المعماري الفاخر")
-  founder1BioEn     String   @default("Architect with over 20 years of experience in luxury architectural design")
+  founder1Bio        String   @db.Text
+  founder1BioEn     String   @db.Text
   
   founder2Name      String   @default("محمد أحمد")
   founder2NameEn    String   @default("Mohammed Ahmed")
   founder2Position  String   @default("المؤسس الشريك والمدير التنفيذي")
   founder2PositionEn String  @default("Co-Founder & Executive Director")
   founder2Image     String   @default("/capture.png")
-  founder2Bio        String   @default("خبير في الهندسة المعمارية والتصميم الداخلي")
-  founder2BioEn     String   @default("Expert in architecture and interior design")
+  founder2Bio        String   @db.Text
+  founder2BioEn     String   @db.Text
   
   updatedAt         DateTime @updatedAt
   createdAt         DateTime @default(now())
@@ -252,8 +252,8 @@ model ContactUs {
   // Info Section
   infoTitle         String   @default("تواصلوا معنا")
   infoTitleEn       String   @default("Get in Touch")
-  infoDescription   String   @default("سواء كان لديك سؤال حول خدماتنا، أو تحتاج إلى استشارة معمارية، أو تريد مناقشة مشروعك القادم، نحن هنا للمساعدة.")
-  infoDescriptionEn String   @default("Whether you have a question about our services, need architectural consultation, or want to discuss your next project, we're here to help.")
+  infoDescription   String   @db.Text
+  infoDescriptionEn String   @db.Text
   
   // Contact Info
   addressLabel      String   @default("العنوان")
@@ -331,8 +331,8 @@ model Project {
   id            String   @id @default(cuid())
   title         String   @default("")
   titleEn        String   @default("")
-  description   String   @default("")
-  descriptionEn String   @default("")
+  description   String   @db.Text
+  descriptionEn String   @db.Text
   image         String   @default("https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png")
   location      String?  @default("")
   locationEn     String?  @default("")

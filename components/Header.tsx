@@ -101,9 +101,15 @@ export default function Header({ locale, settings, headerLogo, isHomePage = fals
           )
         )}
         {settings?.showContact !== false && (
-          <Link href={`/${locale}/contact-us`} onClick={() => setIsMenuOpen(false)}>
-            {t.nav.contact}
-          </Link>
+          isHomePage ? (
+            <a href="#contact" onClick={(e) => handleSmoothScroll(e, 'contact')}>
+              {t.nav.contact}
+            </a>
+          ) : (
+            <Link href={`/${locale}/contact-us`} onClick={() => setIsMenuOpen(false)}>
+              {t.nav.contact}
+            </Link>
+          )
         )}
         {settings?.showLanguageSwitcher !== false && (
           <LanguageSwitcher currentLocale={locale} />
