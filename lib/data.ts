@@ -263,7 +263,27 @@ export async function getAboutUsContent(locale: Locale): Promise<AboutUsContent 
     
     if (!content) {
       content = await prisma.aboutUs.create({
-        data: {},
+        data: {
+          heroSubtitleEn: '',
+          storyContent: '',
+          storyContentEn: '',
+          missionContent: '',
+          missionContentEn: '',
+          visionContent: '',
+          visionContentEn: '',
+          milestone1Desc: '',
+          milestone1DescEn: '',
+          milestone2Desc: '',
+          milestone2DescEn: '',
+          milestone3Desc: '',
+          milestone3DescEn: '',
+          milestone4Desc: '',
+          milestone4DescEn: '',
+          founder1Bio: '',
+          founder1BioEn: '',
+          founder2Bio: '',
+          founder2BioEn: '',
+        },
       });
     }
     
