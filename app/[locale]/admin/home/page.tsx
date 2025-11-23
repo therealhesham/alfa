@@ -180,10 +180,11 @@ function EditableField({
     );
   }
 
-  // For textarea and input, we need to use a div in display mode since they can't have children
+  // For textarea and input, we need to use a span in display mode since they can't have children
+  // Using span instead of div to avoid hydration errors when used inside inline elements like <p> or <h4>
   if (as === "textarea" || as === "input") {
     return (
-      <div
+      <span
         onClick={handleClick}
         className={className}
         style={{
@@ -204,7 +205,7 @@ function EditableField({
         title="انقر للتعديل"
       >
         {value || placeholder}
-      </div>
+      </span>
     );
   }
 
@@ -396,10 +397,14 @@ export default function AdminHomePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [contactEmails, setContactEmails] = useState<Array<{ id: string; email: string; isActive: boolean }>>([]);
+  const [newEmail, setNewEmail] = useState("");
+  const [loadingEmails, setLoadingEmails] = useState(false);
 
   useEffect(() => {
     fetchContent();
     fetchContactContent();
+    fetchContactEmails();
   }, [currentLocale]);
 
   const fetchContent = async () => {
@@ -481,6 +486,97 @@ export default function AdminHomePage() {
   const handleContactChange = (field: keyof ContactUsContent, value: string) => {
     if (!contactContent) return;
     setContactContent({ ...contactContent, [field]: value });
+  };
+
+  const fetchContactEmails = async () => {
+    try {
+      setLoadingEmails(true);
+      const response = await fetch("/api/contact-emails");
+      if (response.ok) {
+        const data = await response.json();
+        setContactEmails(data);
+      }
+    } catch (error) {
+      console.error("Error fetching contact emails:", error);
+    } finally {
+      setLoadingEmails(false);
+    }
+  };
+
+  const handleAddEmail = async () => {
+    if (!newEmail.trim()) {
+      alert(currentLocale === "ar" ? "يرجى إدخال عنوان بريد إلكتروني" : "Please enter an email address");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(newEmail)) {
+      alert(currentLocale === "ar" ? "يرجى إدخال عنوان بريد إلكتروني صحيح" : "Please enter a valid email address");
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/contact-emails", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: newEmail }),
+      });
+
+      if (response.ok) {
+        setNewEmail("");
+        fetchContactEmails();
+      } else {
+        const data = await response.json();
+        alert(data.error || (currentLocale === "ar" ? "حدث خطأ أثناء إضافة البريد الإلكتروني" : "Error adding email"));
+      }
+    } catch (error) {
+      console.error("Error adding email:", error);
+      alert(currentLocale === "ar" ? "حدث خطأ أثناء إضافة البريد الإلكتروني" : "Error adding email");
+    }
+  };
+
+  const handleDeleteEmail = async (id: string) => {
+    if (!confirm(currentLocale === "ar" ? "هل أنت متأكد من حذف هذا البريد الإلكتروني؟" : "Are you sure you want to delete this email?")) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/contact-emails?id=${id}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        fetchContactEmails();
+      } else {
+        alert(currentLocale === "ar" ? "حدث خطأ أثناء حذف البريد الإلكتروني" : "Error deleting email");
+      }
+    } catch (error) {
+      console.error("Error deleting email:", error);
+      alert(currentLocale === "ar" ? "حدث خطأ أثناء حذف البريد الإلكتروني" : "Error deleting email");
+    }
+  };
+
+  const handleToggleEmail = async (id: string, isActive: boolean) => {
+    try {
+      const response = await fetch(`/api/contact-emails/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ isActive: !isActive }),
+      });
+
+      if (response.ok) {
+        fetchContactEmails();
+      } else {
+        alert(currentLocale === "ar" ? "حدث خطأ أثناء تحديث البريد الإلكتروني" : "Error updating email");
+      }
+    } catch (error) {
+      console.error("Error updating email:", error);
+      alert(currentLocale === "ar" ? "حدث خطأ أثناء تحديث البريد الإلكتروني" : "Error updating email");
+    }
   };
 
   // Show loading while checking authentication
@@ -1367,6 +1463,190 @@ export default function AdminHomePage() {
           `}</style>
         </section>
       )}
+
+      {/* Contact Emails Management Section */}
+      <section style={{
+        margin: "3rem 0",
+        padding: "2rem",
+        backgroundColor: "rgba(250, 247, 242, 0.95)",
+        borderRadius: "12px",
+        maxWidth: "1200px",
+        marginLeft: "auto",
+        marginRight: "auto",
+      }}>
+        <h2 style={{
+          fontSize: "1.75rem",
+          fontWeight: 700,
+          marginBottom: "1rem",
+          color: "#0F1C2A",
+          fontFamily: "var(--heading-font)",
+        }}>
+          {currentLocale === "ar" ? "إدارة عناوين البريد الإلكتروني" : "Contact Email Management"}
+        </h2>
+        <p style={{
+          marginBottom: "1.5rem",
+          color: "#666",
+          fontSize: "0.95rem",
+          fontFamily: "var(--body-font)",
+        }}>
+          {currentLocale === "ar" 
+            ? "أضف عناوين البريد الإلكتروني التي ستستقبل رسائل نموذج التواصل من صفحة الرئيسية. سيتم إرسال رسائل contact us إلى جميع العناوين النشطة." 
+            : "Add email addresses that will receive contact form messages from the home page. Contact us messages will be sent to all active email addresses."}
+        </p>
+
+        {/* Add Email Form */}
+        <div style={{
+          display: "flex",
+          gap: "0.5rem",
+          marginBottom: "2rem",
+          flexWrap: "wrap",
+        }}>
+          <input
+            type="email"
+            value={newEmail}
+            onChange={(e) => setNewEmail(e.target.value)}
+            placeholder={currentLocale === "ar" ? "أدخل عنوان البريد الإلكتروني" : "Enter email address"}
+            style={{
+              flex: "1",
+              minWidth: "200px",
+              padding: "0.75rem",
+              border: "2px solid rgba(15, 28, 42, 0.2)",
+              borderRadius: "8px",
+              fontSize: "1rem",
+              outline: "none",
+              fontFamily: "var(--body-font)",
+            }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleAddEmail();
+              }
+            }}
+          />
+          <button
+            onClick={handleAddEmail}
+            style={{
+              padding: "0.75rem 1.5rem",
+              backgroundColor: "#0F1C2A",
+              color: "#FAF7F2",
+              border: "none",
+              borderRadius: "8px",
+              fontSize: "1rem",
+              fontWeight: 600,
+              cursor: "pointer",
+              transition: "all 0.2s",
+              fontFamily: "var(--body-font)",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = "#D4C19D";
+              e.currentTarget.style.color = "#0F1C2A";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "#0F1C2A";
+              e.currentTarget.style.color = "#FAF7F2";
+            }}
+          >
+            {currentLocale === "ar" ? "إضافة" : "Add"}
+          </button>
+        </div>
+
+        {/* Emails List */}
+        {loadingEmails ? (
+          <p style={{ textAlign: "center", color: "#666", fontFamily: "var(--body-font)" }}>
+            {currentLocale === "ar" ? "جاري التحميل..." : "Loading..."}
+          </p>
+        ) : contactEmails.length === 0 ? (
+          <p style={{ textAlign: "center", color: "#666", fontFamily: "var(--body-font)" }}>
+            {currentLocale === "ar" ? "لا توجد عناوين بريد إلكتروني مضافة" : "No email addresses added"}
+          </p>
+        ) : (
+          <div style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "0.75rem",
+          }}>
+            {contactEmails.map((email) => (
+              <div
+                key={email.id}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  padding: "1rem",
+                  backgroundColor: email.isActive ? "white" : "rgba(0, 0, 0, 0.05)",
+                  borderRadius: "8px",
+                  border: "1px solid rgba(15, 28, 42, 0.1)",
+                  opacity: email.isActive ? 1 : 0.6,
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "1rem", flex: 1 }}>
+                  <span style={{
+                    fontWeight: 600,
+                    color: "#0F1C2A",
+                    fontFamily: "var(--body-font)",
+                  }}>
+                    {email.email}
+                  </span>
+                  <span style={{
+                    padding: "0.25rem 0.75rem",
+                    borderRadius: "999px",
+                    fontSize: "0.85rem",
+                    fontWeight: 600,
+                    backgroundColor: email.isActive ? "#d4edda" : "#f8d7da",
+                    color: email.isActive ? "#155724" : "#721c24",
+                    fontFamily: "var(--body-font)",
+                  }}>
+                    {email.isActive 
+                      ? (currentLocale === "ar" ? "نشط" : "Active")
+                      : (currentLocale === "ar" ? "غير نشط" : "Inactive")}
+                  </span>
+                </div>
+                <div style={{ display: "flex", gap: "0.5rem" }}>
+                  <button
+                    onClick={() => handleToggleEmail(email.id, email.isActive)}
+                    style={{
+                      padding: "0.5rem 1rem",
+                      backgroundColor: email.isActive ? "#ffc107" : "#28a745",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "6px",
+                      fontSize: "0.9rem",
+                      fontWeight: 600,
+                      cursor: "pointer",
+                      transition: "all 0.2s",
+                      fontFamily: "var(--body-font)",
+                    }}
+                    title={email.isActive 
+                      ? (currentLocale === "ar" ? "تعطيل" : "Disable")
+                      : (currentLocale === "ar" ? "تفعيل" : "Enable")}
+                  >
+                    {email.isActive 
+                      ? (currentLocale === "ar" ? "تعطيل" : "Disable")
+                      : (currentLocale === "ar" ? "تفعيل" : "Enable")}
+                  </button>
+                  <button
+                    onClick={() => handleDeleteEmail(email.id)}
+                    style={{
+                      padding: "0.5rem 1rem",
+                      backgroundColor: "#dc3545",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "6px",
+                      fontSize: "0.9rem",
+                      fontWeight: 600,
+                      cursor: "pointer",
+                      transition: "all 0.2s",
+                      fontFamily: "var(--body-font)",
+                    }}
+                    title={currentLocale === "ar" ? "حذف" : "Delete"}
+                  >
+                    {currentLocale === "ar" ? "حذف" : "Delete"}
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
 
       <footer>
         <EditableImage

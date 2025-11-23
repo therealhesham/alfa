@@ -32,6 +32,13 @@ const adminRoutes: AdminRoute[] = [
     },
   },
   {
+    slug: "messages",
+    labels: {
+      ar: "الرسائل",
+      en: "Messages",
+    },
+  },
+  {
     slug: "projects",
     labels: {
       ar: "المشاريع",
