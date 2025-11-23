@@ -218,6 +218,14 @@ model SiteSettings {
   // WhatsApp Settings
   whatsappNumber    String?  @default("5")
   
+  // Email Settings
+  smtpHost          String?  @default("")
+  smtpPort          String?  @default("587")
+  smtpUser          String?  @default("")
+  smtpPass          String?  @default("")
+  fromEmail         String?  @default("")
+  emailEnabled      Boolean  @default(false)
+  
   updatedAt         DateTime @updatedAt
   createdAt         DateTime @default(now())
 }

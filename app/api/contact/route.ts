@@ -1,41 +1,64 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-// Helper function to send email (you can replace this with your email service)
-async function sendEmail(to: string, subject: string, html: string) {
-  // TODO: Implement actual email sending using your preferred service
-  // Examples: nodemailer, Resend, SendGrid, AWS SES, etc.
-  
-  // For now, we'll log the email details
-  console.log('Email would be sent:', {
-    to,
-    subject,
-    html,
-    timestamp: new Date().toISOString(),
-  });
+// Helper function to send email using settings from database
+async function sendEmail(to: string, subject: string, html: string, emailSettings: any) {
+  // Check if email is enabled
+  if (!emailSettings.emailEnabled) {
+    console.log('Email sending is disabled in settings');
+    return false;
+  }
 
-  // Example with nodemailer (uncomment and configure):
-  /*
-  const nodemailer = require('nodemailer');
-  const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: parseInt(process.env.SMTP_PORT || '587'),
-    secure: false,
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-  });
+  // Check if all required settings are provided
+  if (!emailSettings.smtpHost || !emailSettings.smtpUser || !emailSettings.smtpPass || !emailSettings.fromEmail) {
+    console.log('Email settings are incomplete:', {
+      hasHost: !!emailSettings.smtpHost,
+      hasUser: !!emailSettings.smtpUser,
+      hasPass: !!emailSettings.smtpPass,
+      hasFrom: !!emailSettings.fromEmail,
+    });
+    return false;
+  }
 
-  await transporter.sendMail({
-    from: process.env.FROM_EMAIL,
-    to,
-    subject,
-    html,
-  });
-  */
+  try {
+    // Try to use nodemailer if available
+    let nodemailer;
+    try {
+      nodemailer = require('nodemailer');
+    } catch (e) {
+      console.log('Nodemailer is not installed. Install it with: npm install nodemailer');
+      console.log('Email would be sent:', {
+        to,
+        subject,
+        from: emailSettings.fromEmail,
+        timestamp: new Date().toISOString(),
+      });
+      return false;
+    }
 
-  return true;
+    const transporter = nodemailer.createTransport({
+      host: emailSettings.smtpHost,
+      port: parseInt(emailSettings.smtpPort || '587'),
+      secure: parseInt(emailSettings.smtpPort || '587') === 465,
+      auth: {
+        user: emailSettings.smtpUser,
+        pass: emailSettings.smtpPass,
+      },
+    });
+
+    await transporter.sendMail({
+      from: emailSettings.fromEmail,
+      to,
+      subject,
+      html,
+    });
+
+    console.log('Email sent successfully to:', to);
+    return true;
+  } catch (error) {
+    console.error('Error sending email:', error);
+    return false;
+  }
 }
 
 export async function POST(request: Request) {
@@ -72,6 +95,9 @@ export async function POST(request: Request) {
       },
     });
 
+    // Get email settings from database
+    const siteSettings = await prisma.siteSettings.findFirst();
+    
     // Get all active contact emails from database
     const contactEmails = await prisma.contactEmail.findMany({
       where: {
@@ -111,13 +137,24 @@ export async function POST(request: Request) {
       <p><small>Submitted at: ${new Date().toLocaleString()}</small></p>
     `;
 
-    // Send email to all active contact emails
-    const emailPromises = contactEmails.map(contactEmail =>
-      sendEmail(contactEmail.email, emailSubject, emailHtml)
-    );
+    // Send email to all active contact emails if email settings are configured
+    if (siteSettings) {
+      const emailPromises = contactEmails.map(contactEmail =>
+        sendEmail(contactEmail.email, emailSubject, emailHtml, {
+          emailEnabled: siteSettings.emailEnabled,
+          smtpHost: siteSettings.smtpHost,
+          smtpPort: siteSettings.smtpPort,
+          smtpUser: siteSettings.smtpUser,
+          smtpPass: siteSettings.smtpPass,
+          fromEmail: siteSettings.fromEmail,
+        })
+      );
 
-    // Wait for all emails to be sent (or logged)
-    await Promise.all(emailPromises);
+      // Wait for all emails to be sent
+      await Promise.all(emailPromises);
+    } else {
+      console.log('Email settings not found in database');
+    }
 
     console.log('Contact form submission processed:', {
       name,
