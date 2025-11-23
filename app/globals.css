@@ -1605,7 +1605,7 @@ footer p {
     position: fixed;
     top: 0;
     right: -100%;
-    width: min(380px, 90vw);
+    width: min(300px, 90vw);
     height: 100vh;
     background: linear-gradient(180deg, 
       rgba(250, 247, 242, 0.98) 0%, 
