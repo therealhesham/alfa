@@ -884,7 +884,7 @@ export default function AdminHomePage() {
               as="p"
             />
           </div>
-          <div className="stat">
+          {/* <div className="stat">
             <EditableField
               value={content.statsCountriesNum}
               onChange={(value) => handleChange("statsCountriesNum", value)}
@@ -907,7 +907,7 @@ export default function AdminHomePage() {
               onChange={(value) => handleChange("statsAwards", value)}
               as="p"
             />
-          </div>
+          </div> */}
         </div>
       </section>
 

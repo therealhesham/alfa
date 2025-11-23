@@ -401,18 +401,18 @@ export default async function HomePage({ params }: HomePageProps) {
             </h3>
             <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.statsYears}</p>
           </div>
-          <div className="stat" style={{ fontFamily: settings?.bodyFont }}>
+          {/* <div className="stat" style={{ fontFamily: settings?.bodyFont }}>
             <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
               {displayContent.statsCountriesNum}
             </h3>
             <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.statsCountries}</p>
-          </div>
-          <div className="stat" style={{ fontFamily: settings?.bodyFont }}>
+          </div> */}
+          {/* <div className="stat" style={{ fontFamily: settings?.bodyFont }}>
             <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
               {displayContent.statsAwardsNum}
             </h3>
             <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.statsAwards}</p>
-          </div>
+          </div> */}
         </div>
       </section>
 
