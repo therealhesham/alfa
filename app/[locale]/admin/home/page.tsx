@@ -88,8 +88,19 @@ function EditableField({
   useEffect(() => {
     if (isEditing && inputRef.current) {
       inputRef.current.focus();
+      // Safari requires a small delay before setSelectionRange works properly
       if (inputRef.current instanceof HTMLTextAreaElement) {
-        inputRef.current.setSelectionRange(inputRef.current.value.length, inputRef.current.value.length);
+        setTimeout(() => {
+          try {
+            if (inputRef.current instanceof HTMLTextAreaElement) {
+              const length = inputRef.current.value.length;
+              inputRef.current.setSelectionRange(length, length);
+            }
+          } catch (e) {
+            // Safari may throw an error if textarea is not ready, ignore it
+            console.debug('setSelectionRange error (Safari compatibility):', e);
+          }
+        }, 0);
       }
     }
   }, [isEditing]);
