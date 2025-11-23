@@ -12,7 +12,30 @@ export async function GET(request: Request) {
     if (!content) {
       // Create default content if none exists
       content = await prisma.homeContent.create({
-        data: {},
+        data: {
+          aboutP1: '',
+          aboutP1En: '',
+          aboutP2: '',
+          aboutP2En: '',
+          visionVisionText: '',
+          visionVisionTextEn: '',
+          visionMissionText: '',
+          visionMissionTextEn: '',
+          service1Desc: '',
+          service1DescEn: '',
+          service2Desc: '',
+          service2DescEn: '',
+          service3Desc: '',
+          service3DescEn: '',
+          service4Desc: '',
+          service4DescEn: '',
+          project1Desc: '',
+          project1DescEn: '',
+          project2Desc: '',
+          project2DescEn: '',
+          project3Desc: '',
+          project3DescEn: '',
+        },
       });
     }
     
