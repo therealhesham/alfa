@@ -164,6 +164,11 @@ export default function Header({ locale, settings, headerLogo, isHomePage = fals
       )}
       <nav className={`mobile-sidebar ${isMenuOpen ? "nav-open" : ""}`}>
         <div className="sidebar-header">
+          {settings?.showLanguageSwitcher !== false && (
+            <div className="sidebar-language-switcher-top">
+              <LanguageSwitcher currentLocale={locale} />
+            </div>
+          )}
           <button
             className="sidebar-close-btn"
             onClick={closeMenu}
@@ -221,11 +226,6 @@ export default function Header({ locale, settings, headerLogo, isHomePage = fals
                 <span className="nav-link-text">{t.nav.contact}</span>
               </Link>
             )
-          )}
-        </div>
-        <div className="sidebar-footer">
-          {settings?.showLanguageSwitcher !== false && (
-            <LanguageSwitcher currentLocale={locale} />
           )}
         </div>
       </nav>
