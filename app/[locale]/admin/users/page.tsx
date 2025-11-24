@@ -277,6 +277,24 @@ export default function AdminUsersPage() {
     return null;
   }
 
+  // Check if user is admin - only admins can access this page
+  if (currentUser.role !== "admin") {
+    return (
+      <div style={{ minHeight: "100vh", background: "var(--light)", paddingTop: "80px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ textAlign: "center", padding: "2rem" }}>
+          <h1 style={{ fontSize: "2rem", marginBottom: "1rem", color: "#dc3545" }}>
+            {currentLocale === "ar" ? "غير مصرح" : "Access Denied"}
+          </h1>
+          <p style={{ fontSize: "1.2rem", color: "#666" }}>
+            {currentLocale === "ar" 
+              ? "ليس لديك صلاحية للوصول إلى هذه الصفحة. هذه الصفحة متاحة فقط للمديرين." 
+              : "You don't have permission to access this page. This page is only available for administrators."}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={{ minHeight: "100vh", background: "var(--light)", paddingTop: "80px" }}>
       <LogoutButton />

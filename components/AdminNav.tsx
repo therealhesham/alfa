@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { Locale } from "@/i18n";
+import { useAuth } from "@/lib/use-auth";
 
 type AdminRoute = {
   slug: string;
@@ -70,6 +71,15 @@ const adminRoutes: AdminRoute[] = [
 
 export default function AdminNav({ locale }: { locale: Locale }) {
   const pathname = usePathname();
+  const { user } = useAuth(locale);
+
+  // Filter routes based on user role - hide users route for non-admins
+  const filteredRoutes = adminRoutes.filter((route) => {
+    if (route.slug === "users") {
+      return user?.role === "admin";
+    }
+    return true;
+  });
 
   return (
     <div
@@ -95,7 +105,7 @@ export default function AdminNav({ locale }: { locale: Locale }) {
           padding: "0 0.5rem",
         }}
       >
-        {adminRoutes.map((route) => {
+        {filteredRoutes.map((route) => {
           const href = `/${locale}/admin/${route.slug}`;
           const isActive = pathname?.startsWith(href);
 

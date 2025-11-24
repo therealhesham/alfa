@@ -1,13 +1,13 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { requireAuthForAdmin, checkAuth } from '@/lib/auth-middleware';
+import { requireAuthForAdmin, checkAuth, requireAdminRole } from '@/lib/auth-middleware';
 import { NextRequest } from 'next/server';
 import bcrypt from 'bcryptjs';
 
 export async function GET(request: NextRequest) {
   try {
-    // Check authentication
-    const authResponse = await requireAuthForAdmin(request);
+    // Check authentication and admin role
+    const authResponse = await requireAdminRole(request);
     if (authResponse) {
       return authResponse;
     }
@@ -41,8 +41,8 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    // Check authentication
-    const authResponse = await requireAuthForAdmin(request);
+    // Check authentication and admin role
+    const authResponse = await requireAdminRole(request);
     if (authResponse) {
       return authResponse;
     }
@@ -119,8 +119,8 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
   try {
-    // Check authentication
-    const authResponse = await requireAuthForAdmin(request);
+    // Check authentication and admin role
+    const authResponse = await requireAdminRole(request);
     if (authResponse) {
       return authResponse;
     }
@@ -220,8 +220,8 @@ export async function PUT(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   try {
-    // Check authentication
-    const authResponse = await requireAuthForAdmin(request);
+    // Check authentication and admin role
+    const authResponse = await requireAdminRole(request);
     if (authResponse) {
       return authResponse;
     }

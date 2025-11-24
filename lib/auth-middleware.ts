@@ -63,3 +63,28 @@ export async function requireAuthForAdmin(
   return null;
 }
 
+export async function requireAdminRole(
+  request: NextRequest
+): Promise<NextResponse | null> {
+  const { user, isAuthenticated } = await checkAuth(request);
+
+  if (!isAuthenticated) {
+    const pathname = request.nextUrl.pathname;
+    const locale = pathname.split('/')[1] === 'en' ? 'en' : 'ar';
+    const url = request.nextUrl.clone();
+    url.pathname = `/${locale}/login`;
+    url.searchParams.set('redirect', pathname);
+    return NextResponse.redirect(url);
+  }
+
+  // Check if user has admin role
+  if (!user || user.role !== 'admin') {
+    return NextResponse.json(
+      { error: 'Forbidden: Admin access required' },
+      { status: 403 }
+    );
+  }
+
+  return null;
+}
+
