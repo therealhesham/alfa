@@ -379,7 +379,7 @@ model OurProjectsContent {
   id                String   @id @default(cuid())
   
   // Hero Section
-  heroLogo          String   @default("https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png")
+  heroLogo          String   @db.Text
   heroTitle         String   @default("مشاريعنا")
   heroTitleEn       String   @default("Our Projects")
   heroSubtitle      String   @default("نفخر بتقديم مشاريع استثنائية حول العالم")
