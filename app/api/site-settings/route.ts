@@ -9,7 +9,7 @@ export async function GET() {
     if (!settings) {
       // Create default settings if none exists
       settings = await prisma.siteSettings.create({
-        data: {},
+        data: {} as any,
       });
     }
     

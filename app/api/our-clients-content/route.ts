@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
     if (!content) {
       // Create default content if none exists
       content = await (prisma as any).ourClientsContent.create({
-        data: {},
+        data: {} as any,
       });
     }
     

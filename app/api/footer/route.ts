@@ -12,7 +12,7 @@ export async function GET(request: Request) {
     if (!content) {
       // Create default content if none exists
       content = await prisma.footer.create({
-        data: {},
+        data: {} as any,
       });
     }
     
