@@ -1,14 +1,22 @@
-import Image from "next/image";
-import Link from "next/link";
 import type { Metadata } from "next";
-import { getHomeContent, getSiteSettings, getFooterContent, getContactUsContent } from "@/lib/data";
+import { getHomeContent, getSiteSettings, getFooterContent, getContactUsContent, getProjects } from "@/lib/data";
 import { getTranslations } from "@/lib/i18n";
 import { generateSEOMetadata } from "@/lib/seo";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import FontsProvider from "@/components/FontsProvider";
 import HomeContactForm from "@/components/HomeContactForm";
-import { Home, Layers, Activity, HelpCircle, Calendar, MapPin } from "lucide-react";
+import { Home, Layers, Activity, HelpCircle } from "lucide-react";
+import {
+  AnimatedHero,
+  AnimatedAbout,
+  AnimatedVision,
+  AnimatedQuote,
+  AnimatedServices,
+  AnimatedProjects,
+  AnimatedStats,
+} from "./AnimatedSections";
+import { ScrollSnapContainer } from "./ScrollSnapContainer";
 import type { Locale } from "@/i18n";
 
 // ISR: Revalidate every 60 seconds
@@ -40,49 +48,6 @@ export async function generateMetadata({
       ? ["تصميم معماري", "هندسة معمارية", "تصميم داخلي", "مشاريع معمارية", "فخامة", "تميز", "ظلال المدينة"]
       : ["Architectural Design", "Interior Design", "Luxury Architecture", "Engineering", "Projects", "City Shadows"],
   });
-}
-
-async function getProjects(locale: Locale, limit: number = 3) {
-  try {
-    const { prisma } = await import('@/lib/prisma');
-    const projects = await prisma.project.findMany({
-      where: {
-        isPublished: true,
-      },
-      orderBy: {
-        order: 'asc',
-      },
-      take: limit,
-    });
-    
-    // Map projects based on locale
-    return projects.map((project) => {
-      if (locale === 'en') {
-        return {
-          id: project.id,
-          title: project.titleEn || project.title,
-          description: project.descriptionEn || project.description,
-          image: project.image,
-          location: project.locationEn || project.location,
-          category: project.categoryEn || project.category,
-          year: project.year,
-        };
-      }
-      
-      return {
-        id: project.id,
-        title: project.title,
-        description: project.description,
-        image: project.image,
-        location: project.location,
-        category: project.category,
-        year: project.year,
-      };
-    });
-  } catch (error) {
-    console.error('Error fetching projects:', error);
-    return [];
-  }
 }
 
 interface HomePageProps {
@@ -192,278 +157,151 @@ export default async function HomePage({ params }: HomePageProps) {
         isHomePage={true}
       />
 
-      <section id="hero" className="hero" style={{ fontFamily: settings?.bodyFont }}>
-        <Image
-          src={displayContent.heroLogo || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
-          alt={t.common.logoAlt}
-          width={300}
-          height={300}
-          className="hero-logo"
-          unoptimized
+      <ScrollSnapContainer>
+        <AnimatedHero
+        heroLogo={displayContent.heroLogo || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
+        heroTitle={displayContent.heroTitle}
+        heroSubtitle={displayContent.heroSubtitle}
+        logoAlt={t.common.logoAlt}
+        bodyFont={settings?.bodyFont}
+        headingFont={settings?.headingFont}
+        primaryFont={settings?.primaryFont}
+      />
+
+      <AnimatedAbout
+        aboutTitle={displayContent.aboutTitle}
+        aboutP1={displayContent.aboutP1}
+        aboutP2={displayContent.aboutP2}
+        readMoreText={t.about.readMore}
+        readMoreLink={`/${validLocale}/about-us`}
+        bodyFont={settings?.bodyFont}
+        headingFont={settings?.headingFont}
+        primaryFont={settings?.primaryFont}
+      />
+
+      <AnimatedVision
+        visionTitle={displayContent.visionTitle}
+        visionVision={displayContent.visionVision}
+        visionVisionText={displayContent.visionVisionText}
+        visionMission={displayContent.visionMission}
+        visionMissionText={displayContent.visionMissionText}
+        visionValues={displayContent.visionValues}
+        visionValuesText={displayContent.visionValuesText}
+        bodyFont={settings?.bodyFont}
+        headingFont={settings?.headingFont}
+        primaryFont={settings?.primaryFont}
+      />
+
+      {/* Quote Section - OUD Style */}
+      <AnimatedQuote
+        title={validLocale === "ar" ? "في ظلال المدينة" : "At City Shadows"}
+        text={validLocale === "ar" 
+          ? "نؤمن أن العقارات هي أكثر بكثير من المباني والمساحات. إنها فن تشكيل أنماط الحياة المكررة وبناء مجتمعات تعكس الأناقة الخالدة والعيش الراقي."
+          : "We believe that real estate is far more than structures and spaces. It's the art of shaping refined lifestyles and cultivating communities that reflect timeless elegance and elevated living."}
+        author={validLocale === "ar" ? "المدير التنفيذي" : "Managing Director"}
+        bodyFont={settings?.bodyFont}
+        headingFont={settings?.headingFont}
+        primaryFont={settings?.primaryFont}
+      />
+
+      <AnimatedServices
+        title={displayContent.servicesTitle || t.services.title}
+        subtitle={displayContent.servicesSubtitle || t.services.subtitle}
+        services={[
+          {
+            icon: 'Home',
+            title: displayContent.service1Title || t.services.service1,
+            description: displayContent.service1Desc || t.services.service1Desc,
+          },
+          {
+            icon: 'Layers',
+            title: displayContent.service2Title || t.services.service2,
+            description: displayContent.service2Desc || t.services.service2Desc,
+          },
+          {
+            icon: 'Activity',
+            title: displayContent.service3Title || t.services.service3,
+            description: displayContent.service3Desc || t.services.service3Desc,
+          },
+          {
+            icon: 'HelpCircle',
+            title: displayContent.service4Title || t.services.service4,
+            description: displayContent.service4Desc || t.services.service4Desc,
+          },
+        ]}
+        bodyFont={settings?.bodyFont}
+        headingFont={settings?.headingFont}
+        primaryFont={settings?.primaryFont}
+      />
+
+      {projects.length > 0 && (
+        <AnimatedProjects
+          title={displayContent.projectsTitle || t.projectsSection.title}
+          subtitle={displayContent.projectsSubtitle || t.projectsSection.subtitle}
+          projects={projects}
+          viewMoreText={displayContent.projectsViewMore || t.projectsSection.viewMore}
+          viewMoreLink={`/${validLocale}/our-projects`}
+          bodyFont={settings?.bodyFont}
+          headingFont={settings?.headingFont}
+          primaryFont={settings?.primaryFont}
         />
-        <h1 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
-          {displayContent.heroTitle}
-        </h1>
-        <p style={{ fontFamily: settings?.bodyFont }}>
-          {displayContent.heroSubtitle}
-        </p>
-      </section>
+      )}
 
-      <section id="about" className="about" style={{ fontFamily: settings?.bodyFont }}>
-        <h2 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
-          {displayContent.aboutTitle}
-        </h2>
-        <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.aboutP1}</p>
-        <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.aboutP2}</p>
-        <div className="about-read-more-container" style={{ fontFamily: settings?.bodyFont }}>
-          <Link href={`/${validLocale}/about-us`} className="about-read-more-btn" style={{ fontFamily: settings?.bodyFont }}>
-            {t.about.readMore}
-          </Link>
-        </div>
-      </section>
-
-      <section id="vision" className="vision" style={{ fontFamily: settings?.bodyFont }}>
-        <h2 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
-          {displayContent.visionTitle}
-        </h2>
-        <div className="cards" style={{ fontFamily: settings?.bodyFont }}>
-          <div className="card" style={{ fontFamily: settings?.bodyFont }}>
-            <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
-              {displayContent.visionVision}
-            </h3>
-            <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.visionVisionText}</p>
-          </div>
-          <div className="card" style={{ fontFamily: settings?.bodyFont }}>
-            <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
-              {displayContent.visionMission}
-            </h3>
-            <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.visionMissionText}</p>
-          </div>
-          <div className="card" style={{ fontFamily: settings?.bodyFont }}>
-            <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
-              {displayContent.visionValues}
-            </h3>
-            <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.visionValuesText}</p>
-          </div>
-        </div>
-      </section>
-
-      <section id="services" className="services" style={{ fontFamily: settings?.bodyFont }}>
-        <h2 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
-          {displayContent.servicesTitle || t.services.title}
-        </h2>
-        <p className="section-subtitle" style={{ fontFamily: settings?.bodyFont }}>{displayContent.servicesSubtitle || t.services.subtitle}</p>
-        <div className="services-grid" style={{ fontFamily: settings?.bodyFont }}>
-          <div className="service-card" style={{ fontFamily: settings?.bodyFont }}>
-            <div className="service-icon">
-              <Home size={48} strokeWidth={1.5} />
-            </div>
-            <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
-              {displayContent.service1Title || t.services.service1}
-            </h3>
-            <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.service1Desc || t.services.service1Desc}</p>
-          </div>
-          <div className="service-card" style={{ fontFamily: settings?.bodyFont }}>
-            <div className="service-icon">
-              <Layers size={48} strokeWidth={1.5} />
-            </div>
-            <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
-              {displayContent.service2Title || t.services.service2}
-            </h3>
-            <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.service2Desc || t.services.service2Desc}</p>
-          </div>
-          <div className="service-card" style={{ fontFamily: settings?.bodyFont }}>
-            <div className="service-icon">
-              <Activity size={48} strokeWidth={1.5} />
-            </div>
-            <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
-              {displayContent.service3Title || t.services.service3}
-            </h3>
-            <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.service3Desc || t.services.service3Desc}</p>
-          </div>
-          <div className="service-card" style={{ fontFamily: settings?.bodyFont }}>
-            <div className="service-icon">
-              <HelpCircle size={48} strokeWidth={1.5} />
-            </div>
-            <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
-              {displayContent.service4Title || t.services.service4}
-            </h3>
-            <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.service4Desc || t.services.service4Desc}</p>
-          </div>
-        </div>
-      </section>
-
-      <section id="projects" className="projects" style={{ fontFamily: settings?.bodyFont }}>
-        <h2 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
-          {displayContent.projectsTitle || t.projectsSection.title}
-        </h2>
-        <p className="section-subtitle" style={{ fontFamily: settings?.bodyFont }}>{displayContent.projectsSubtitle || t.projectsSection.subtitle}</p>
-        <div className="projects-grid" style={{ fontFamily: settings?.bodyFont }}>
-          {projects.length > 0 ? (
-            projects.map((project) => (
-              <div key={project.id} className="project-card" style={{ fontFamily: settings?.bodyFont }}>
-                <div className="project-image">
-                  <Image
-                    src={project.image || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
-                    alt={project.title}
-                    width={400}
-                    height={300}
-                    unoptimized
-                  />
-                </div>
-                <div className="project-content" style={{ fontFamily: settings?.bodyFont }}>
-                  {project.category && (
-                    <div style={{
-                      fontSize: '0.9rem',
-                      color: 'var(--gold)',
-                      fontWeight: '600',
-                      marginBottom: '0.5rem',
-                      textTransform: 'uppercase',
-                      letterSpacing: '1px',
-                      fontFamily: settings?.bodyFont
-                    }}>
-                      {project.category}
-                    </div>
-                  )}
-                  <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
-                    {project.title}
-                  </h3>
-                  <p style={{ fontFamily: settings?.bodyFont }}>{project.description}</p>
-                  {(project.location || project.year) && (
-                    <div style={{
-                      display: 'flex',
-                      gap: '1rem',
-                      flexWrap: 'wrap',
-                      fontSize: '0.9rem',
-                      color: '#999',
-                      marginTop: '0.5rem',
-                      fontFamily: settings?.bodyFont
-                    }}>
-                      {project.location && (
-                        <span style={{ fontFamily: settings?.bodyFont, display: "flex", alignItems: "center", gap: "0.25rem" }}>
-                          <MapPin size={16} />
-                          {project.location}
-                        </span>
-                      )}
-                      {project.year && <span style={{ fontFamily: settings?.bodyFont }}><Calendar/>{project.year}</span>}
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))
-          ) : (
-            // Fallback to default projects if no projects in database
-            <>
-              <div className="project-card" style={{ fontFamily: settings?.bodyFont }}>
-                <div className="project-image">
-                  <Image
-                    src={displayContent.project1Image || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
-                    alt={displayContent.project1Title || t.projectsSection.project1}
-                    width={400}
-                    height={300}
-                    unoptimized
-                  />
-                </div>
-                <div className="project-content" style={{ fontFamily: settings?.bodyFont }}>
-                  <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
-                    {displayContent.project1Title || t.projectsSection.project1}
-                  </h3>
-                  <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.project1Desc || t.projectsSection.project1Desc}</p>
-                </div>
-              </div>
-              <div className="project-card" style={{ fontFamily: settings?.bodyFont }}>
-                <div className="project-image">
-                  <Image
-                    src={displayContent.project2Image || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
-                    alt={displayContent.project2Title || t.projectsSection.project2}
-                    width={400}
-                    height={300}
-                    unoptimized
-                  />
-                </div>
-                <div className="project-content" style={{ fontFamily: settings?.bodyFont }}>
-                  <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
-                    {displayContent.project2Title || t.projectsSection.project2}
-                  </h3>
-                  <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.project2Desc || t.projectsSection.project2Desc}</p>
-                </div>
-              </div>
-              <div className="project-card" style={{ fontFamily: settings?.bodyFont }}>
-                <div className="project-image">
-                  <Image
-                    src={displayContent.project3Image || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
-                    alt={displayContent.project3Title || t.projectsSection.project3}
-                    width={400}
-                    height={300}
-                    unoptimized
-                  />
-                </div>
-                <div className="project-content" style={{ fontFamily: settings?.bodyFont }}>
-                  <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
-                    {displayContent.project3Title || t.projectsSection.project3}
-                  </h3>
-                  <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.project3Desc || t.projectsSection.project3Desc}</p>
-                </div>
-              </div>
-            </>
-          )}
-        </div>
-        <div className="view-more-container" style={{ fontFamily: settings?.bodyFont }}>
-          <a href={`/${validLocale}/our-projects`} className="view-more-btn" style={{ fontFamily: settings?.bodyFont }}>
-            {displayContent.projectsViewMore || t.projectsSection.viewMore} →
-          </a>
-        </div>
-      </section>
-
-      <section id="stats" className="stats" style={{ fontFamily: settings?.bodyFont }}>
-        <h2 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
-          {displayContent.statsTitle}
-        </h2>
-        <div className="stats-grid" style={{ fontFamily: settings?.bodyFont }}>
-          <div className="stat" style={{ fontFamily: settings?.bodyFont }}>
-            <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
-              {displayContent.statsProjectsNum}
-            </h3>
-            <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.statsProjects}</p>
-          </div>
-          <div className="stat" style={{ fontFamily: settings?.bodyFont }}>
-            <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
-              {displayContent.statsYearsNum}
-            </h3>
-            <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.statsYears}</p>
-          </div>
-          {/* <div className="stat" style={{ fontFamily: settings?.bodyFont }}>
-            <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
-              {displayContent.statsCountriesNum}
-            </h3>
-            <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.statsCountries}</p>
-          </div> */}
-          {/* <div className="stat" style={{ fontFamily: settings?.bodyFont }}>
-            <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
-              {displayContent.statsAwardsNum}
-            </h3>
-            <p style={{ fontFamily: settings?.bodyFont }}>{displayContent.statsAwards}</p>
-          </div> */}
-        </div>
-      </section>
-
-      <HomeContactForm
-        locale={validLocale}
-        settings={settings}
-        content={displayContactContent}
+      <AnimatedStats
+        title={displayContent.statsTitle}
+        stats={[
+          {
+            number: displayContent.statsProjectsNum,
+            label: displayContent.statsProjects,
+          },
+          {
+            number: displayContent.statsYearsNum,
+            label: displayContent.statsYears,
+          },
+        ]}
+        bodyFont={settings?.bodyFont}
+        headingFont={settings?.headingFont}
+        primaryFont={settings?.primaryFont}
       />
 
-      <Footer
-        locale={validLocale}
-        settings={settings}
-        footerLogo={footerContent?.footerLogo || displayContent.footerLogo}
-        footerCopyright={footerContent?.footerCopyright || displayContent.footerCopyright}
-        companyName={footerContent?.companyName}
-        addressLabel={footerContent?.addressLabel}
-        addressValue={footerContent?.addressValue}
-        phoneLabelInfo={footerContent?.phoneLabelInfo}
-        phoneValue={footerContent?.phoneValue}
-      />
+      <section 
+        id="contact"
+        className="scroll-snap-section"
+        style={{ 
+          scrollSnapAlign: 'start',
+          scrollSnapStop: 'always',
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <HomeContactForm
+          locale={validLocale}
+          settings={settings}
+          content={displayContactContent}
+        />
+      </section>
+
+      <section 
+        className="scroll-snap-section"
+        style={{ 
+          scrollSnapAlign: 'start',
+          scrollSnapStop: 'always',
+        }}
+      >
+        <Footer
+          locale={validLocale}
+          settings={settings}
+          footerLogo={footerContent?.footerLogo || displayContent.footerLogo}
+          footerCopyright={footerContent?.footerCopyright || displayContent.footerCopyright}
+          companyName={footerContent?.companyName}
+          addressLabel={footerContent?.addressLabel}
+          addressValue={footerContent?.addressValue}
+          phoneLabelInfo={footerContent?.phoneLabelInfo}
+          phoneValue={footerContent?.phoneValue}
+        />
+      </section>
+      </ScrollSnapContainer>
     </FontsProvider>
   );
 }

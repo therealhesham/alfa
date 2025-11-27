@@ -107,10 +107,10 @@ export default function ContactForm({ locale, settings, content }: ContactFormPr
       <div className="contact-wrapper">
         <div className="contact-hero">
           <div className="contact-content">
-            <h1 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
+            <h1 style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>
               {content.heroTitle}
             </h1>
-            <p style={{ fontFamily: settings?.bodyFont }}>
+            <p style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>
               {content.heroSubtitle}
             </p>
           </div>
@@ -119,7 +119,7 @@ export default function ContactForm({ locale, settings, content }: ContactFormPr
         <div className="contact-container">
           <div className="contact-grid">
             <div className="contact-form-section">
-              <h2 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
+              <h2 style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>
                 {content.formTitle}
               </h2>
               
@@ -137,7 +137,7 @@ export default function ContactForm({ locale, settings, content }: ContactFormPr
 
               <form onSubmit={handleSubmit} className="contact-form">
                 <div className="form-group">
-                  <label htmlFor="name" style={{ fontFamily: settings?.bodyFont }}>
+                  <label htmlFor="name" style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>
                     {content.nameLabel} <span className="required">*</span>
                   </label>
                   <input
@@ -147,13 +147,13 @@ export default function ContactForm({ locale, settings, content }: ContactFormPr
                     value={formData.name}
                     onChange={handleChange}
                     className={errors.name ? "error" : ""}
-                    style={{ fontFamily: settings?.bodyFont }}
+                    style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}
                   />
                   {errors.name && <span className="field-error">{errors.name}</span>}
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="email" style={{ fontFamily: settings?.bodyFont }}>
+                  <label htmlFor="email" style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>
                     {content.emailLabel} <span className="required">*</span>
                   </label>
                   <input
@@ -163,13 +163,13 @@ export default function ContactForm({ locale, settings, content }: ContactFormPr
                     value={formData.email}
                     onChange={handleChange}
                     className={errors.email ? "error" : ""}
-                    style={{ fontFamily: settings?.bodyFont }}
+                    style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}
                   />
                   {errors.email && <span className="field-error">{errors.email}</span>}
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="phone" style={{ fontFamily: settings?.bodyFont }}>
+                  <label htmlFor="phone" style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>
                     {content.phoneLabel}
                   </label>
                   <input
@@ -178,12 +178,12 @@ export default function ContactForm({ locale, settings, content }: ContactFormPr
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
-                    style={{ fontFamily: settings?.bodyFont }}
+                    style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}
                   />
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="subject" style={{ fontFamily: settings?.bodyFont }}>
+                  <label htmlFor="subject" style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>
                     {content.subjectLabel} <span className="required">*</span>
                   </label>
                   <input
@@ -193,13 +193,13 @@ export default function ContactForm({ locale, settings, content }: ContactFormPr
                     value={formData.subject}
                     onChange={handleChange}
                     className={errors.subject ? "error" : ""}
-                    style={{ fontFamily: settings?.bodyFont }}
+                    style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}
                   />
                   {errors.subject && <span className="field-error">{errors.subject}</span>}
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="message" style={{ fontFamily: settings?.bodyFont }}>
+                  <label htmlFor="message" style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>
                     {content.messageLabel} <span className="required">*</span>
                   </label>
                   <textarea
@@ -209,7 +209,7 @@ export default function ContactForm({ locale, settings, content }: ContactFormPr
                     onChange={handleChange}
                     rows={6}
                     className={errors.message ? "error" : ""}
-                    style={{ fontFamily: settings?.bodyFont }}
+                    style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}
                   />
                   {errors.message && <span className="field-error">{errors.message}</span>}
                 </div>
@@ -226,10 +226,10 @@ export default function ContactForm({ locale, settings, content }: ContactFormPr
             </div>
 
             <div className="contact-info-section">
-              <h2 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
+              <h2 style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>
                 {content.infoTitle}
               </h2>
-              <p style={{ fontFamily: settings?.bodyFont }}>
+              <p style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>
                 {content.infoDescription}
               </p>
 
@@ -242,10 +242,10 @@ export default function ContactForm({ locale, settings, content }: ContactFormPr
                     </svg>
                   </div>
                   <div className="info-content">
-                    <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
+                    <h3 style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>
                       {content.addressLabel}
                     </h3>
-                    <p style={{ fontFamily: settings?.bodyFont }}>
+                    <p style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>
                       {content.addressValue}
                     </p>
                   </div>
@@ -258,10 +258,10 @@ export default function ContactForm({ locale, settings, content }: ContactFormPr
                     </svg>
                   </div>
                   <div className="info-content">
-                    <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
+                    <h3 style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>
                       {content.phoneLabelInfo}
                     </h3>
-                    <p style={{ fontFamily: settings?.bodyFont }}>
+                    <p style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>
                       {content.phoneValue}
                     </p>
                   </div>
@@ -275,10 +275,10 @@ export default function ContactForm({ locale, settings, content }: ContactFormPr
                     </svg>
                   </div>
                   <div className="info-content">
-                    <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
+                    <h3 style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>
                       {content.emailLabelInfo}
                     </h3>
-                    <p style={{ fontFamily: settings?.bodyFont }}>
+                    <p style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>
                       {content.emailValue}
                     </p>
                   </div>
@@ -292,10 +292,10 @@ export default function ContactForm({ locale, settings, content }: ContactFormPr
                     </svg>
                   </div>
                   <div className="info-content">
-                    <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
+                    <h3 style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>
                       {content.hoursLabel}
                     </h3>
-                    <p style={{ fontFamily: settings?.bodyFont }}>
+                    <p style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>
                       {content.hoursValue}
                     </p>
                   </div>

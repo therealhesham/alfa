@@ -29,6 +29,19 @@ export async function GET(request: NextRequest) {
     
     // Map projects based on locale
     const mappedProjects = projects.map((project) => {
+      // Parse images JSON array if exists
+      let images: string[] = [];
+      if ((project as any).images) {
+        try {
+          images = JSON.parse((project as any).images);
+          if (!Array.isArray(images)) {
+            images = [];
+          }
+        } catch (e) {
+          images = [];
+        }
+      }
+      
       if (locale === 'en') {
         return {
           id: project.id,
@@ -37,10 +50,12 @@ export async function GET(request: NextRequest) {
           description: project.descriptionEn || project.description,
           descriptionEn: project.descriptionEn,
           image: project.image,
+          images: images,
           location: project.locationEn || project.location,
           locationEn: project.locationEn,
           category: project.categoryEn || project.category,
           categoryEn: project.categoryEn,
+          projectType: (project as any).projectType || 'commercial',
           year: project.year,
           order: project.order,
           isPublished: project.isPublished,
@@ -56,10 +71,12 @@ export async function GET(request: NextRequest) {
         description: project.description,
         descriptionEn: project.descriptionEn,
         image: project.image,
+        images: images,
         location: project.location,
         locationEn: project.locationEn,
         category: project.category,
         categoryEn: project.categoryEn,
+        projectType: (project as any).projectType || 'commercial',
         year: project.year,
         order: project.order,
         isPublished: project.isPublished,
@@ -93,10 +110,12 @@ export async function POST(request: NextRequest) {
       description,
       descriptionEn,
       image,
+      images,
       location,
       locationEn,
       category,
       categoryEn,
+      projectType,
       year,
       order,
       isPublished,
@@ -109,10 +128,12 @@ export async function POST(request: NextRequest) {
         description: description || '',
         descriptionEn: descriptionEn || '',
         image: image || 'https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png',
+        images: images ? JSON.stringify(images) : null,
         location: location || null,
         locationEn: locationEn || null,
         category: category || null,
         categoryEn: categoryEn || null,
+        projectType: projectType || 'commercial',
         year: year || null,
         order: order || 0,
         isPublished: isPublished !== undefined ? isPublished : true,
@@ -145,10 +166,12 @@ export async function PUT(request: NextRequest) {
       description,
       descriptionEn,
       image,
+      images,
       location,
       locationEn,
       category,
       categoryEn,
+      projectType,
       year,
       order,
       isPublished,
@@ -161,22 +184,29 @@ export async function PUT(request: NextRequest) {
       );
     }
     
+    const updateData: any = {
+      title: title !== undefined ? title : undefined,
+      titleEn: titleEn !== undefined ? titleEn : undefined,
+      description: description !== undefined ? description : undefined,
+      descriptionEn: descriptionEn !== undefined ? descriptionEn : undefined,
+      image: image !== undefined ? image : undefined,
+      location: location !== undefined ? location : undefined,
+      locationEn: locationEn !== undefined ? locationEn : undefined,
+      category: category !== undefined ? category : undefined,
+      categoryEn: categoryEn !== undefined ? categoryEn : undefined,
+      projectType: projectType !== undefined ? projectType : undefined,
+      year: year !== undefined ? year : undefined,
+      order: order !== undefined ? order : undefined,
+      isPublished: isPublished !== undefined ? isPublished : undefined,
+    };
+    
+    if (images !== undefined) {
+      updateData.images = images ? JSON.stringify(images) : null;
+    }
+    
     const project = await prisma.project.update({
       where: { id },
-      data: {
-        title: title !== undefined ? title : undefined,
-        titleEn: titleEn !== undefined ? titleEn : undefined,
-        description: description !== undefined ? description : undefined,
-        descriptionEn: descriptionEn !== undefined ? descriptionEn : undefined,
-        image: image !== undefined ? image : undefined,
-        location: location !== undefined ? location : undefined,
-        locationEn: locationEn !== undefined ? locationEn : undefined,
-        category: category !== undefined ? category : undefined,
-        categoryEn: categoryEn !== undefined ? categoryEn : undefined,
-        year: year !== undefined ? year : undefined,
-        order: order !== undefined ? order : undefined,
-        isPublished: isPublished !== undefined ? isPublished : undefined,
-      },
+      data: updateData,
     });
     
     return NextResponse.json({ project });

@@ -342,10 +342,12 @@ model Project {
   description   String   @db.Text
   descriptionEn String   @db.Text
   image         String   @default("https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png")
+  images        String?  @db.Text // JSON array of additional images
   location      String?  @default("")
   locationEn     String?  @default("")
   category      String?  @default("")
   categoryEn    String?  @default("")
+  projectType   String?  @default("commercial") // "commercial" or "residential"
   year          String?  @default("")
   order         Int      @default(0)
   isPublished   Boolean  @default(true)
@@ -371,5 +373,91 @@ model ContactMessage {
   isRead        Boolean  @default(false)
   updatedAt     DateTime @updatedAt
   createdAt     DateTime @default(now())
+}
+
+model OurProjectsContent {
+  id                String   @id @default(cuid())
+  
+  // Hero Section
+  heroLogo          String   @default("https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png")
+  heroTitle         String   @default("مشاريعنا")
+  heroTitleEn       String   @default("Our Projects")
+  heroSubtitle      String   @default("نفخر بتقديم مشاريع استثنائية حول العالم")
+  heroSubtitleEn    String   @default("We are proud to present exceptional projects around the world")
+  
+  // Hero Stats
+  showStats         Boolean  @default(true)
+  stat1Icon        String   @default("Globe")
+  stat1Number      String   @default("48")
+  stat1Label       String   @default("دولة")
+  stat1LabelEn     String   @default("Countries")
+  
+  stat2Icon        String   @default("Building2")
+  stat2Number      String   @default("250+")
+  stat2Label       String   @default("مشروع")
+  stat2LabelEn     String   @default("Projects")
+  
+  stat3Icon        String   @default("Award")
+  stat3Number      String   @default("22")
+  stat3Label       String   @default("جائزة")
+  stat3LabelEn     String   @default("Awards")
+  
+  // Projects Gallery Section
+  galleryIcon      String   @default("Layers")
+  galleryTitle     String   @default("معرض المشاريع")
+  galleryTitleEn   String   @default("Projects Gallery")
+  gallerySubtitle  String   @default("استكشف مجموعة من أروع مشاريعنا المعمارية")
+  gallerySubtitleEn String  @default("Explore a collection of our finest architectural projects")
+  
+  // Empty State
+  emptyMessage     String   @default("لا توجد مشاريع متاحة حالياً")
+  emptyMessageEn   String   @default("No projects available at the moment")
+  
+  updatedAt       DateTime @updatedAt
+  createdAt       DateTime @default(now())
+}
+
+model OurClientsContent {
+  id                String   @id @default(cuid())
+  
+  // Stats Section
+  statsTitle        String   @default("إنجازاتنا بالأرقام")
+  statsTitleEn      String   @default("Our Achievements in Numbers")
+  statsSubtitle     String   @default("سنوات من الخبرة والتميز في التصميم المعماري الفاخر")
+  statsSubtitleEn   String   @default("Years of experience and excellence in luxury architectural design")
+  showStats         Boolean  @default(true)
+  
+  // Stats
+  statsStat1Icon    String   @default("Building2")
+  statsStat1Number   String   @default("250+")
+  statsStat1Label   String   @default("مشروع مكتمل")
+  statsStat1LabelEn String   @default("Completed Projects")
+  
+  statsStat2Icon    String   @default("Globe")
+  statsStat2Number   String   @default("48")
+  statsStat2Label   String   @default("دولة حول العالم")
+  statsStat2LabelEn String   @default("Countries Worldwide")
+  
+  statsStat3Icon    String   @default("Award")
+  statsStat3Number   String   @default("22")
+  statsStat3Label   String   @default("جائزة دولية")
+  statsStat3LabelEn String   @default("International Awards")
+  
+  statsStat4Icon    String   @default("Users")
+  statsStat4Number   String   @default("500+")
+  statsStat4Label   String   @default("عميل راضٍ")
+  statsStat4LabelEn String   @default("Satisfied Clients")
+  
+  // Clients Section
+  clientsTitle      String   @default("عملاؤنا")
+  clientsTitleEn    String   @default("Our Clients")
+  clientsSubtitle   String   @default("نفتخر بثقة عملائنا الكرام من حول العالم")
+  clientsSubtitleEn String   @default("We are proud of the trust of our valued clients from around the world")
+  
+  // Client Logos (stored as JSON array)
+  clientLogos       String   @db.Text @default("[]")
+  
+  updatedAt       DateTime @updatedAt
+  createdAt       DateTime @default(now())
 }
 

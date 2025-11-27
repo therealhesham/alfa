@@ -1,11 +1,26 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Tajawal } from "next/font/google";
+import { PT_Serif, Aboreto, Montserrat } from "next/font/google";
 
-const tajawal = Tajawal({
-  weight: ["300", "400", "700", "900"],
-  subsets: ["arabic", "latin"],
-  variable: "--font-tajawal",
+const ptSerif = PT_Serif({
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  variable: "--font-pt-serif",
+});
+
+const aboreto = Aboreto({
+  weight: ["400"],
+  style: ["normal"],
+  subsets: ["latin"],
+  variable: "--font-aboreto",
+});
+
+const montserrat = Montserrat({
+  weight: ["400", "500"],
+  style: ["normal"],
+  subsets: ["latin"],
+  variable: "--font-montserrat",
 });
 
 // Default metadata for root layout
@@ -61,15 +76,15 @@ export default function RootLayout({
     <html lang="ar" dir="rtl">
       <head>
         <link
-          href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700;900&display=swap"
+          href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Aboreto:ital,wght@0,400&family=Montserrat:ital,wght@0,400;0,500&display=swap"
           rel="stylesheet"
         />
         <link rel="canonical" href={process.env.NEXT_PUBLIC_SITE_URL || "https://cityshadows.com"} />
       </head>
       <body
-        className={`${tajawal.variable} antialiased`}
+        className={`${ptSerif.variable} ${aboreto.variable} ${montserrat.variable} antialiased`}
         style={{
-          fontFamily: "var(--font-tajawal), 'Tajawal', sans-serif",
+          fontFamily: "var(--font-kufi), 'DG Kufi', 'Noto Kufi Arabic', Arial, sans-serif",
         }}
       >
         {children}

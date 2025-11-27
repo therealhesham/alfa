@@ -83,7 +83,7 @@ export default async function AboutUsPage({ params }: AboutUsPageProps) {
         textAlign: 'center',
         color: 'white',
         position: 'relative',
-        fontFamily: settings?.bodyFont 
+        fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' 
       }}>
         <div style={{
           position: 'absolute',
@@ -98,13 +98,13 @@ export default async function AboutUsPage({ params }: AboutUsPageProps) {
             fontSize: '3rem', 
             marginBottom: '1rem', 
             fontWeight: 'bold',
-            fontFamily: settings?.headingFont || settings?.primaryFont 
+            fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' 
           }}>
             {content.heroTitle}
           </h1>
           <p style={{ 
             fontSize: '1.5rem',
-            fontFamily: settings?.bodyFont 
+            fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' 
           }}>{content.heroSubtitle}</p>
         </div>
       </section>
@@ -114,13 +114,13 @@ export default async function AboutUsPage({ params }: AboutUsPageProps) {
         padding: '4rem 2rem', 
         maxWidth: '1200px', 
         margin: '0 auto',
-        fontFamily: settings?.bodyFont 
+        fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' 
       }}>
         <h2 style={{ 
           fontSize: '2.5rem', 
           marginBottom: '2rem', 
           textAlign: 'center',
-          fontFamily: settings?.headingFont || settings?.primaryFont 
+          fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' 
         }}>
           {content.storyTitle}
         </h2>
@@ -140,7 +140,7 @@ export default async function AboutUsPage({ params }: AboutUsPageProps) {
               fontSize: '1.2rem', 
               lineHeight: '1.8', 
               textAlign: validLocale === 'ar' ? 'right' : 'left',
-              fontFamily: settings?.bodyFont 
+              fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' 
             }}>
               {content.storyContent}
             </p>
@@ -151,7 +151,7 @@ export default async function AboutUsPage({ params }: AboutUsPageProps) {
       {/* Mission & Vision Section */}
       <section className="vision" style={{ 
         padding: '4rem 2rem',
-        fontFamily: settings?.bodyFont 
+        fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' 
       }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3rem' }}>
           <div className="card" style={{ 
@@ -164,7 +164,7 @@ export default async function AboutUsPage({ params }: AboutUsPageProps) {
               fontSize: '2rem', 
               marginBottom: '1rem', 
               color: 'var(--gold)',
-              fontFamily: settings?.headingFont || settings?.primaryFont 
+              fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' 
             }}>
               {content.missionTitle}
             </h3>
@@ -172,7 +172,7 @@ export default async function AboutUsPage({ params }: AboutUsPageProps) {
               fontSize: '1.1rem', 
               lineHeight: '1.8', 
               color: '#333',
-              fontFamily: settings?.bodyFont 
+              fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' 
             }}>
               {content.missionContent}
             </p>
@@ -187,7 +187,7 @@ export default async function AboutUsPage({ params }: AboutUsPageProps) {
               fontSize: '2rem', 
               marginBottom: '1rem', 
               color: 'var(--gold)',
-              fontFamily: settings?.headingFont || settings?.primaryFont 
+              fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' 
             }}>
               {content.visionTitle}
             </h3>
@@ -195,7 +195,7 @@ export default async function AboutUsPage({ params }: AboutUsPageProps) {
               fontSize: '1.1rem', 
               lineHeight: '1.8', 
               color: '#333',
-              fontFamily: settings?.bodyFont 
+              fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' 
             }}>
               {content.visionContent}
             </p>
@@ -208,13 +208,13 @@ export default async function AboutUsPage({ params }: AboutUsPageProps) {
         padding: '4rem 2rem', 
         maxWidth: '1200px', 
         margin: '0 auto',
-        fontFamily: settings?.bodyFont 
+        fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' 
       }}>
         <h2 style={{ 
           fontSize: '2.5rem', 
           marginBottom: '3rem', 
           textAlign: 'center',
-          fontFamily: settings?.headingFont || settings?.primaryFont 
+          fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' 
         }}>
           {content.whyChooseTitle}
         </h2>
@@ -232,7 +232,7 @@ export default async function AboutUsPage({ params }: AboutUsPageProps) {
             <h4 style={{ 
               fontSize: '1.3rem', 
               marginBottom: '0.5rem',
-              fontFamily: settings?.headingFont || settings?.primaryFont,
+              fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
@@ -241,7 +241,7 @@ export default async function AboutUsPage({ params }: AboutUsPageProps) {
             </h4>
             <p style={{ 
               fontSize: '1.1rem',
-              fontFamily: settings?.bodyFont 
+              fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' 
             }}>{content.whyChoosePoint1}</p>
           </div>
         
@@ -252,14 +252,14 @@ export default async function AboutUsPage({ params }: AboutUsPageProps) {
       <section style={{ 
         padding: '4rem 2rem', 
         backgroundColor: 'var(--beige)',
-        fontFamily: settings?.bodyFont 
+        fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' 
       }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
           <h2 style={{ 
             fontSize: '2.5rem', 
             marginBottom: '2rem', 
             color: 'var(--dark)',
-            fontFamily: settings?.headingFont || settings?.primaryFont 
+            fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' 
           }}>
             {content.valuesTitle}
           </h2>
@@ -267,7 +267,7 @@ export default async function AboutUsPage({ params }: AboutUsPageProps) {
             fontSize: '1.5rem', 
             lineHeight: '2', 
             color: '#333',
-            fontFamily: settings?.bodyFont 
+            fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' 
           }}>
             {content.valuesContent}
           </p>

@@ -86,9 +86,39 @@ export default function AdminSettingsPage() {
     if (!settings) return;
     
     const root = document.documentElement;
-    root.style.setProperty('--primary-font', settings.primaryFont);
-    root.style.setProperty('--heading-font', settings.headingFont);
-    root.style.setProperty('--body-font', settings.bodyFont);
+    const isDevelopment = process.env.NODE_ENV === 'development';
+    
+    // Apply fonts
+    if (settings.primaryFont) {
+      root.style.setProperty('--primary-font', settings.primaryFont);
+    }
+    if (settings.headingFont) {
+      root.style.setProperty('--heading-font', settings.headingFont);
+    }
+    if (settings.bodyFont) {
+      root.style.setProperty('--body-font', settings.bodyFont);
+      document.body.style.fontFamily = settings.bodyFont;
+    }
+    
+    // Log in development mode
+    if (isDevelopment) {
+      console.log('🔤 Fonts Applied from Admin:', {
+        primaryFont: settings.primaryFont || 'not set',
+        headingFont: settings.headingFont || 'not set',
+        bodyFont: settings.bodyFont || 'not set',
+      });
+      
+      // Verify CSS variables are set
+      const primaryFont = root.style.getPropertyValue('--primary-font') || getComputedStyle(root).getPropertyValue('--primary-font');
+      const headingFont = root.style.getPropertyValue('--heading-font') || getComputedStyle(root).getPropertyValue('--heading-font');
+      const bodyFont = root.style.getPropertyValue('--body-font') || getComputedStyle(root).getPropertyValue('--body-font');
+      
+      console.log('✅ CSS Variables Set:', {
+        '--primary-font': primaryFont,
+        '--heading-font': headingFont,
+        '--body-font': bodyFont,
+      });
+    }
   };
 
   const handleChange = (field: keyof SiteSettings, value: string | boolean | null) => {
@@ -97,6 +127,7 @@ export default function AdminSettingsPage() {
   };
 
   const commonFonts = [
+    'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif',
     "Arial, sans-serif",
     "Helvetica, sans-serif",
     "Times New Roman, serif",
@@ -107,10 +138,12 @@ export default function AdminSettingsPage() {
     "Trebuchet MS, sans-serif",
     "Impact, sans-serif",
     "Comic Sans MS, cursive",
+    "PT Serif, serif",
+    "Aboreto, cursive",
+    "Montserrat, sans-serif",
     "Roboto, sans-serif",
     "Open Sans, sans-serif",
     "Lato, sans-serif",
-    "Montserrat, sans-serif",
     "Poppins, sans-serif",
     "Playfair Display, serif",
     "Merriweather, serif",
@@ -246,11 +279,17 @@ export default function AdminSettingsPage() {
                 cursor: 'pointer'
               }}
             >
-              {commonFonts.map((font) => (
-                <option key={font} value={font} style={{ fontFamily: font }}>
-                  {font}
-                </option>
-              ))}
+              {commonFonts.map((font) => {
+                // Display simpler name for DG Kufi
+                const displayName = font.includes('DG Kufi') 
+                  ? 'DG Kufi (الخط الافتراضي)' 
+                  : font;
+                return (
+                  <option key={font} value={font} style={{ fontFamily: font }}>
+                    {displayName}
+                  </option>
+                );
+              })}
             </select>
             <p style={{
               marginTop: '0.5rem',
@@ -288,11 +327,17 @@ export default function AdminSettingsPage() {
                 cursor: 'pointer'
               }}
             >
-              {commonFonts.map((font) => (
-                <option key={font} value={font} style={{ fontFamily: font }}>
-                  {font}
-                </option>
-              ))}
+              {commonFonts.map((font) => {
+                // Display simpler name for DG Kufi
+                const displayName = font.includes('DG Kufi') 
+                  ? 'DG Kufi (الخط الافتراضي)' 
+                  : font;
+                return (
+                  <option key={font} value={font} style={{ fontFamily: font }}>
+                    {displayName}
+                  </option>
+                );
+              })}
             </select>
             <p style={{
               marginTop: '0.5rem',
@@ -330,11 +375,17 @@ export default function AdminSettingsPage() {
                 cursor: 'pointer'
               }}
             >
-              {commonFonts.map((font) => (
-                <option key={font} value={font} style={{ fontFamily: font }}>
-                  {font}
-                </option>
-              ))}
+              {commonFonts.map((font) => {
+                // Display simpler name for DG Kufi
+                const displayName = font.includes('DG Kufi') 
+                  ? 'DG Kufi (الخط الافتراضي)' 
+                  : font;
+                return (
+                  <option key={font} value={font} style={{ fontFamily: font }}>
+                    {displayName}
+                  </option>
+                );
+              })}
             </select>
             <p style={{
               marginTop: '0.5rem',

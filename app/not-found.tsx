@@ -87,9 +87,9 @@ export default function NotFound() {
         }
 
         .not-found-number span {
-          font-family: 'Tajawal', sans-serif;
+          font-family: var(--font-pt-serif), 'PT Serif', serif;
           font-size: clamp(8rem, 20vw, 15rem);
-          font-weight: 900;
+          font-weight: 700;
           color: #D4C19D;
           line-height: 1;
           display: block;
@@ -98,7 +98,7 @@ export default function NotFound() {
         }
 
         .not-found-content h1 {
-          font-family: 'Tajawal', sans-serif;
+          font-family: var(--font-pt-serif), 'PT Serif', serif;
           font-size: clamp(2rem, 6vw, 4rem);
           color: #0F1C2A;
           margin-bottom: 1.5rem;
@@ -108,7 +108,7 @@ export default function NotFound() {
         }
 
         .not-found-content p {
-          font-family: 'Tajawal', sans-serif;
+          font-family: var(--font-montserrat), 'Montserrat', sans-serif;
           font-size: clamp(1.1rem, 3vw, 1.4rem);
           color: #0F1C2A;
           opacity: 0.85;
@@ -130,7 +130,7 @@ export default function NotFound() {
           border: 2px solid #0F1C2A;
           animation: fadeInUp 0.8s ease-out 0.8s both;
           box-shadow: 0 4px 15px rgba(15, 28, 42, 0.2);
-          font-family: 'Tajawal', sans-serif;
+          font-family: var(--font-montserrat), 'Montserrat', sans-serif;
         }
 
         .not-found-button:hover {

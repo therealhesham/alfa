@@ -562,3 +562,55 @@ export async function getSiteSettings(): Promise<SiteSettings | null> {
   }
 }
 
+export interface Project {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  location?: string | null;
+  category?: string | null;
+  year?: string | null;
+}
+
+export async function getProjects(locale: Locale, limit?: number): Promise<Project[]> {
+  try {
+    const projects = await prisma.project.findMany({
+      where: {
+        isPublished: true,
+      },
+      orderBy: {
+        order: 'asc',
+      },
+      take: limit,
+    });
+    
+    // Map projects based on locale
+    return projects.map((project) => {
+      if (locale === 'en') {
+        return {
+          id: project.id,
+          title: (project as any).titleEn || project.title,
+          description: (project as any).descriptionEn || project.description,
+          image: project.image,
+          location: (project as any).locationEn || project.location,
+          category: (project as any).categoryEn || project.category,
+          year: project.year,
+        };
+      }
+      
+      return {
+        id: project.id,
+        title: project.title,
+        description: project.description,
+        image: project.image,
+        location: project.location,
+        category: project.category,
+        year: project.year,
+      };
+    });
+  } catch (error) {
+    console.error('Error fetching projects:', error);
+    return [];
+  }
+}
+

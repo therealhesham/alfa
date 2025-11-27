@@ -110,10 +110,10 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
       <div className="home-contact-section" id="contact">
         <div className="home-contact-container">
           <div className="home-contact-header">
-            <h2 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
+            <h2 style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>
               {content.formTitle || content.heroTitle}
             </h2>
-            <p style={{ fontFamily: settings?.bodyFont }}>
+            <p style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>
               {content.heroSubtitle}
             </p>
           </div>
@@ -134,7 +134,7 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
 
               <form onSubmit={handleSubmit} className="home-contact-form" id="contact-form">
                 <div className="home-form-group">
-                  <label htmlFor="home-name" style={{ fontFamily: settings?.bodyFont }}>
+                  <label htmlFor="home-name" style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>
                     {content.nameLabel} <span className="required">*</span>
                   </label>
                   <input
@@ -144,7 +144,7 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
                     value={formData.name}
                     onChange={handleChange}
                     className={errors.name ? "error" : ""}
-                    style={{ fontFamily: settings?.bodyFont }}
+                    style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}
                   />
                   {errors.name && <span className="field-error">{errors.name}</span>}
                 </div>
@@ -160,7 +160,7 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
                     value={formData.email}
                     onChange={handleChange}
                     className={errors.email ? "error" : ""}
-                    style={{ fontFamily: settings?.bodyFont }}
+                    style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}
                   />
                   {errors.email && <span className="field-error">{errors.email}</span>}
                 </div>
@@ -175,7 +175,7 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
-                    style={{ fontFamily: settings?.bodyFont }}
+                    style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}
                   />
                 </div>
 
@@ -190,7 +190,7 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
                     value={formData.subject}
                     onChange={handleChange}
                     className={errors.subject ? "error" : ""}
-                    style={{ fontFamily: settings?.bodyFont }}
+                    style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}
                   />
                   {errors.subject && <span className="field-error">{errors.subject}</span>}
                 </div>
@@ -206,7 +206,7 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
                     onChange={handleChange}
                     rows={6}
                     className={errors.message ? "error" : ""}
-                    style={{ fontFamily: settings?.bodyFont }}
+                    style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}
                   />
                   {errors.message && <span className="field-error">{errors.message}</span>}
                 </div>
@@ -223,10 +223,10 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
             </div>
 
             <div className="home-contact-info">
-              <h3 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
+              <h3 style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>
                 {content.infoTitle}
               </h3>
-              <p style={{ fontFamily: settings?.bodyFont }}>
+              <p style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>
                 {content.infoDescription}
               </p>
 
@@ -236,10 +236,10 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
                     <MapPin size={24} />
                   </div>
                   <div className="home-info-content">
-                    <h4 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
+                    <h4 style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>
                       {content.addressLabel}
                     </h4>
-                    <p style={{ fontFamily: settings?.bodyFont }}>
+                    <p style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>
                       {content.addressValue}
                     </p>
                   </div>
@@ -250,10 +250,10 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
                     <Phone size={24} />
                   </div>
                   <div className="home-info-content">
-                    <h4 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
+                    <h4 style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>
                       {content.phoneLabelInfo}
                     </h4>
-                    <p style={{ fontFamily: settings?.bodyFont }}>
+                    <p style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>
                       {content.phoneValue}
                     </p>
                   </div>
@@ -264,10 +264,10 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
                     <Mail size={24} />
                   </div>
                   <div className="home-info-content">
-                    <h4 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
+                    <h4 style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>
                       {content.emailLabelInfo}
                     </h4>
-                    <p style={{ fontFamily: settings?.bodyFont }}>
+                    <p style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>
                       {content.emailValue}
                     </p>
                   </div>
@@ -278,10 +278,10 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
                     <Clock size={24} />
                   </div>
                   <div className="home-info-content">
-                    <h4 style={{ fontFamily: settings?.headingFont || settings?.primaryFont }}>
+                    <h4 style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>
                       {content.hoursLabel}
                     </h4>
-                    <p style={{ fontFamily: settings?.bodyFont }}>
+                    <p style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>
                       {content.hoursValue}
                     </p>
                   </div>
@@ -294,14 +294,51 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
 
       <style jsx>{`
         .home-contact-section {
-          padding: clamp(60px, 10vw, 130px) clamp(1.5rem, 5vw, 8%);
-          background: linear-gradient(135deg, rgba(250, 247, 242, 0.95) 0%, rgba(232, 217, 192, 0.9) 100%);
+          padding: clamp(100px, 12vw, 150px) clamp(1.5rem, 5vw, 8%);
+          padding-top: clamp(180px, 20vw, 250px);
+          background: #000000;
           position: relative;
+          z-index: 1;
+        }
+
+        .home-contact-section::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: 
+            radial-gradient(2px 2px at 20% 30%, rgba(255, 255, 255, 0.6) 0%, transparent 50%),
+            radial-gradient(1px 1px at 50% 50%, rgba(255, 255, 255, 0.4) 0%, transparent 50%);
+          background-size: 200% 200%;
+          opacity: 0.5;
+          z-index: 0;
+        }
+
+        .home-contact-section::after {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 0;
+          right: 0;
+          height: 1px;
+          background: repeating-linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.3) 0px,
+            rgba(255, 255, 255, 0.3) 2px,
+            transparent 2px,
+            transparent 8px
+          );
+          z-index: 0;
+          opacity: 0.4;
         }
 
         .home-contact-container {
           max-width: 1200px;
           margin: 0 auto;
+          position: relative;
+          z-index: 1;
         }
 
         .home-contact-header {
@@ -311,17 +348,18 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
 
         .home-contact-header h2 {
           font-size: clamp(2.2rem, 7vw, 4rem);
-          color: var(--dark);
+          color: var(--gold);
           margin-bottom: 1.5rem;
           font-weight: 800;
           line-height: 1.2;
           letter-spacing: -0.02em;
+          text-shadow: 0 2px 15px rgba(212, 193, 157, 0.2);
         }
 
         .home-contact-header p {
           font-size: clamp(1.1rem, 2.5vw, 1.4rem);
-          color: var(--dark);
-          opacity: 0.85;
+          color: rgba(212, 193, 157, 0.85);
+          opacity: 0.9;
           line-height: 1.8;
           max-width: 700px;
           margin: 0 auto;
@@ -336,13 +374,25 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
 
         .home-contact-form-wrapper,
         .home-contact-info {
-          background: rgba(255, 255, 255, 0.98);
+          background: rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(10px);
           padding: clamp(30px, 5vw, 50px);
           border-radius: 24px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
           box-shadow: 
-            0 20px 60px rgba(15, 28, 42, 0.12),
-            0 8px 25px rgba(15, 28, 42, 0.08),
-            0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+            0 20px 60px rgba(0, 0, 0, 0.5),
+            0 8px 25px rgba(0, 0, 0, 0.3);
+          transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .home-contact-form-wrapper:hover,
+        .home-contact-info:hover {
+          transform: translateY(-5px);
+          box-shadow: 
+            0 35px 80px rgba(0, 0, 0, 0.7),
+            0 15px 35px rgba(0, 0, 0, 0.5),
+            0 0 0 1px rgba(212, 193, 157, 0.3) inset;
+          border-color: rgba(255, 255, 255, 0.3);
         }
 
         .home-success-message {
@@ -375,7 +425,7 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
         }
 
         .home-form-group label {
-          color: var(--dark);
+          color: var(--gold);
           font-weight: 600;
           margin-bottom: 0.5rem;
           font-size: 1rem;
@@ -389,11 +439,11 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
         .home-form-group textarea {
           width: 100%;
           padding: 0.875rem;
-          border: 2px solid rgba(15, 28, 42, 0.2);
+          border: 2px solid rgba(255, 255, 255, 0.1);
           border-radius: 8px;
           font-size: 1rem;
-          background: #FAF7F2;
-          color: var(--dark);
+          background: rgba(255, 255, 255, 0.05);
+          color: rgba(212, 193, 157, 0.9);
           transition: all 0.3s ease;
         }
 
@@ -401,7 +451,8 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
         .home-form-group textarea:focus {
           outline: none;
           border-color: var(--gold);
-          box-shadow: 0 0 0 3px rgba(212, 193, 157, 0.1);
+          box-shadow: 0 0 0 3px rgba(212, 193, 157, 0.2);
+          background: rgba(255, 255, 255, 0.08);
         }
 
         .home-form-group input.error,
@@ -417,24 +468,30 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
 
         .home-submit-button {
           padding: 1rem 2.5rem;
-          background: var(--dark);
-          color: #FAF7F2;
-          border: 2px solid var(--dark);
-          border-radius: 8px;
+          background: rgba(255, 255, 255, 0.1);
+          backdrop-filter: blur(10px);
+          color: var(--gold);
+          border: 1px solid rgba(212, 193, 157, 0.3);
+          border-radius: 50px;
           font-size: 1.1rem;
-          font-weight: 600;
+          font-weight: 700;
           cursor: pointer;
-          transition: all 0.3s ease;
-          box-shadow: 0 4px 15px rgba(15, 28, 42, 0.2);
+          transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+          box-shadow: 
+            0 8px 25px rgba(0, 0, 0, 0.5),
+            0 3px 10px rgba(0, 0, 0, 0.3);
           margin-top: 0.5rem;
+          letter-spacing: 0.5px;
         }
 
         .home-submit-button:hover:not(:disabled) {
-          background: var(--gold);
-          color: var(--dark);
-          border-color: var(--gold);
-          transform: translateY(-2px);
-          box-shadow: 0 6px 20px rgba(212, 193, 157, 0.4);
+          background: rgba(212, 193, 157, 0.2);
+          color: var(--gold);
+          border-color: rgba(212, 193, 157, 0.5);
+          transform: translateY(-5px) scale(1.05);
+          box-shadow: 
+            0 12px 40px rgba(0, 0, 0, 0.7),
+            0 6px 20px rgba(0, 0, 0, 0.5);
         }
 
         .home-submit-button:disabled {
@@ -444,15 +501,15 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
 
         .home-contact-info h3 {
           font-size: clamp(1.6rem, 3.5vw, 2.2rem);
-          color: var(--dark);
+          color: var(--gold);
           margin-bottom: 1rem;
           font-weight: 800;
           letter-spacing: -0.01em;
         }
 
         .home-contact-info > p {
-          color: var(--dark);
-          opacity: 0.85;
+          color: rgba(212, 193, 157, 0.85);
+          opacity: 0.9;
           line-height: 1.8;
           margin-bottom: 2rem;
           font-size: 1.1rem;
@@ -484,14 +541,14 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
 
         .home-info-content h4 {
           font-size: 1.25rem;
-          color: var(--dark);
+          color: var(--gold);
           margin-bottom: 0.5rem;
           font-weight: 600;
         }
 
         .home-info-content p {
-          color: var(--dark);
-          opacity: 0.85;
+          color: rgba(212, 193, 157, 0.8);
+          opacity: 0.9;
           line-height: 1.6;
           margin: 0;
         }

@@ -1,13 +1,14 @@
-import Image from "next/image";
 import type { Metadata } from "next";
-import { getSiteSettings, getFooterContent } from "@/lib/data";
+import { getSiteSettings, getFooterContent, getHomeContent } from "@/lib/data";
 import { getTranslations } from "@/lib/i18n";
 import { generateSEOMetadata } from "@/lib/seo";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import FontsProvider from "@/components/FontsProvider";
+import OurClients from "./OurClients";
+import ProjectsClient from "./ProjectsClient";
+import HeroSection from "./HeroSection";
 import type { Locale } from "@/i18n";
-import { Calendar, PinIcon } from "lucide-react";
 
 // ISR: Revalidate every 60 seconds
 export const revalidate = 60;
@@ -46,49 +47,190 @@ interface OurProjectsPageProps {
 
 async function getProjects(locale: Locale) {
   try {
-    const { prisma } = await import('@/lib/prisma');
-    const projects = await prisma.project.findMany({
-      where: {
-        isPublished: true,
-      },
-      orderBy: {
-        order: 'asc',
-      },
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/projects?locale=${locale}`, {
+      cache: 'no-store',
     });
     
-    // Map projects based on locale
-    return projects.map((project) => {
-      if (locale === 'en') {
-        return {
-          id: project.id,
-          title: project.titleEn || project.title,
-          description: project.descriptionEn || project.description,
-          image: project.image,
-          location: project.locationEn || project.location,
-          category: project.categoryEn || project.category,
-          year: project.year,
-          order: project.order,
-          createdAt: project.createdAt,
-          updatedAt: project.updatedAt,
-        };
-      }
-      
-      return {
-        id: project.id,
-        title: project.title,
-        description: project.description,
-        image: project.image,
-        location: project.location,
-        category: project.category,
-        year: project.year,
-        order: project.order,
-        createdAt: project.createdAt,
-        updatedAt: project.updatedAt,
-      };
-    });
+    if (!response.ok) {
+      throw new Error('Failed to fetch projects');
+    }
+    
+    const data = await response.json();
+    return data.projects || [];
   } catch (error) {
     console.error('Error fetching projects:', error);
     return [];
+  }
+}
+
+async function getOurProjectsContent(locale: Locale) {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/our-projects-content?locale=${locale}`, {
+      cache: 'no-store',
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch our-projects content');
+    }
+    
+    const content = await response.json();
+    
+    // Map content based on locale
+    if (locale === 'en') {
+      return {
+        heroLogo: content.heroLogo,
+        heroTitle: content.heroTitle,
+        heroSubtitle: content.heroSubtitle,
+        showStats: content.showStats ?? true,
+        stat1Icon: content.stat1Icon,
+        stat1Number: content.stat1Number,
+        stat1Label: content.stat1Label,
+        stat2Icon: content.stat2Icon,
+        stat2Number: content.stat2Number,
+        stat2Label: content.stat2Label,
+        stat3Icon: content.stat3Icon,
+        stat3Number: content.stat3Number,
+        stat3Label: content.stat3Label,
+        galleryIcon: content.galleryIcon,
+        galleryTitle: content.galleryTitle,
+        gallerySubtitle: content.gallerySubtitle,
+        emptyMessage: content.emptyMessage,
+      };
+    }
+    
+    return {
+      heroLogo: content.heroLogo,
+      heroTitle: content.heroTitle,
+      heroSubtitle: content.heroSubtitle,
+      showStats: content.showStats ?? true,
+      stat1Icon: content.stat1Icon,
+      stat1Number: content.stat1Number,
+      stat1Label: content.stat1Label,
+      stat2Icon: content.stat2Icon,
+      stat2Number: content.stat2Number,
+      stat2Label: content.stat2Label,
+      stat3Icon: content.stat3Icon,
+      stat3Number: content.stat3Number,
+      stat3Label: content.stat3Label,
+      galleryIcon: content.galleryIcon,
+      galleryTitle: content.galleryTitle,
+      gallerySubtitle: content.gallerySubtitle,
+      emptyMessage: content.emptyMessage,
+    };
+  } catch (error) {
+    console.error('Error fetching our-projects content:', error);
+    // Return defaults on error
+    return {
+      heroLogo: "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png",
+      heroTitle: locale === 'ar' ? 'مشاريعنا' : 'Our Projects',
+      heroSubtitle: locale === 'ar' 
+        ? 'نفخر بتقديم مشاريع استثنائية حول العالم' 
+        : 'We are proud to present exceptional projects around the world',
+      showStats: true,
+      stat1Icon: 'Globe',
+      stat1Number: '48',
+      stat1Label: locale === 'ar' ? 'دولة' : 'Countries',
+      stat2Icon: 'Building2',
+      stat2Number: '250+',
+      stat2Label: locale === 'ar' ? 'مشروع' : 'Projects',
+      stat3Icon: 'Award',
+      stat3Number: '22',
+      stat3Label: locale === 'ar' ? 'جائزة' : 'Awards',
+      galleryIcon: 'Layers',
+      galleryTitle: locale === 'ar' ? 'معرض المشاريع' : 'Projects Gallery',
+      gallerySubtitle: locale === 'ar' 
+        ? 'استكشف مجموعة من أروع مشاريعنا المعمارية' 
+        : 'Explore a collection of our finest architectural projects',
+      emptyMessage: locale === 'ar' 
+        ? 'لا توجد مشاريع متاحة حالياً' 
+        : 'No projects available at the moment',
+    };
+  }
+}
+
+async function getOurClientsContent(locale: Locale) {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/our-clients-content?locale=${locale}`, {
+      cache: 'no-store',
+    });
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch our-clients content');
+    }
+    
+    const content = await response.json();
+    
+    // Map content based on locale
+    if (locale === 'en') {
+      return {
+        statsTitle: content.statsTitle,
+        statsSubtitle: content.statsSubtitle,
+        showStats: content.showStats ?? true,
+        statsStat1Icon: content.statsStat1Icon,
+        statsStat1Number: content.statsStat1Number,
+        statsStat1Label: content.statsStat1Label,
+        statsStat2Icon: content.statsStat2Icon,
+        statsStat2Number: content.statsStat2Number,
+        statsStat2Label: content.statsStat2Label,
+        statsStat3Icon: content.statsStat3Icon,
+        statsStat3Number: content.statsStat3Number,
+        statsStat3Label: content.statsStat3Label,
+        statsStat4Icon: content.statsStat4Icon,
+        statsStat4Number: content.statsStat4Number,
+        statsStat4Label: content.statsStat4Label,
+        clientsTitle: content.clientsTitle,
+        clientsSubtitle: content.clientsSubtitle,
+        clientLogos: content.clientLogos || [],
+      };
+    }
+    
+    return {
+      statsTitle: content.statsTitle,
+      statsSubtitle: content.statsSubtitle,
+      showStats: content.showStats ?? true,
+      statsStat1Icon: content.statsStat1Icon,
+      statsStat1Number: content.statsStat1Number,
+      statsStat1Label: content.statsStat1Label,
+      statsStat2Icon: content.statsStat2Icon,
+      statsStat2Number: content.statsStat2Number,
+      statsStat2Label: content.statsStat2Label,
+      statsStat3Icon: content.statsStat3Icon,
+      statsStat3Number: content.statsStat3Number,
+      statsStat3Label: content.statsStat3Label,
+      statsStat4Icon: content.statsStat4Icon,
+      statsStat4Number: content.statsStat4Number,
+      statsStat4Label: content.statsStat4Label,
+      clientsTitle: content.clientsTitle,
+      clientsSubtitle: content.clientsSubtitle,
+      clientLogos: content.clientLogos || [],
+    };
+  } catch (error) {
+    console.error('Error fetching our-clients content:', error);
+    // Return defaults on error
+    return {
+      statsTitle: locale === 'ar' ? 'إنجازاتنا بالأرقام' : 'Our Achievements in Numbers',
+      statsSubtitle: locale === 'ar' 
+        ? 'سنوات من الخبرة والتميز في التصميم المعماري الفاخر'
+        : 'Years of experience and excellence in luxury architectural design',
+      showStats: true,
+      statsStat1Icon: 'Building2',
+      statsStat1Number: '250+',
+      statsStat1Label: locale === 'ar' ? 'مشروع مكتمل' : 'Completed Projects',
+      statsStat2Icon: 'Globe',
+      statsStat2Number: '48',
+      statsStat2Label: locale === 'ar' ? 'دولة حول العالم' : 'Countries Worldwide',
+      statsStat3Icon: 'Award',
+      statsStat3Number: '22',
+      statsStat3Label: locale === 'ar' ? 'جائزة دولية' : 'International Awards',
+      statsStat4Icon: 'Users',
+      statsStat4Number: '500+',
+      statsStat4Label: locale === 'ar' ? 'عميل راضٍ' : 'Satisfied Clients',
+      clientsTitle: locale === 'ar' ? 'عملاؤنا' : 'Our Clients',
+      clientsSubtitle: locale === 'ar' 
+        ? 'نفتخر بثقة عملائنا الكرام من حول العالم'
+        : 'We are proud of the trust of our valued clients from around the world',
+      clientLogos: [],
+    };
   }
 }
 
@@ -98,10 +240,13 @@ export default async function OurProjectsPage({ params }: OurProjectsPageProps) 
   const t = getTranslations(validLocale);
 
   // Fetch data in parallel
-  const [projects, settings, footerContent] = await Promise.all([
+  const [projects, settings, footerContent, pageContent, homeContent, clientsContent] = await Promise.all([
     getProjects(validLocale),
     getSiteSettings(),
     getFooterContent(validLocale),
+    getOurProjectsContent(validLocale),
+    getHomeContent(validLocale),
+    getOurClientsContent(validLocale),
   ]);
 
   return (
@@ -109,197 +254,61 @@ export default async function OurProjectsPage({ params }: OurProjectsPageProps) 
       <Header 
         locale={validLocale} 
         settings={settings} 
-        headerLogo="https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"
+        headerLogo={homeContent?.headerLogo || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
         isHomePage={false}
       />
 
       {/* Hero Section */}
-      <section className="hero-projects" style={{ 
-        paddingTop: '140px',
-        paddingBottom: '80px',
-        textAlign: 'center',
-        fontFamily: settings?.bodyFont,
-        background: 'linear-gradient(135deg, rgba(250, 247, 242, 0.95) 0%, rgba(232, 217, 192, 0.85) 100%)',
-        position: 'relative',
-        overflow: 'hidden'
+      <HeroSection
+        heroLogo={pageContent.heroLogo}
+        heroTitle={pageContent.heroTitle}
+        heroSubtitle={pageContent.heroSubtitle}
+        showStats={pageContent.showStats}
+        stat1Icon={pageContent.stat1Icon}
+        stat1Number={pageContent.stat1Number}
+        stat1Label={pageContent.stat1Label}
+        stat2Icon={pageContent.stat2Icon}
+        stat2Number={pageContent.stat2Number}
+        stat2Label={pageContent.stat2Label}
+        stat3Icon={pageContent.stat3Icon}
+        stat3Number={pageContent.stat3Number}
+        stat3Label={pageContent.stat3Label}
+        settings={settings}
+        locale={validLocale}
+      />
+
+      {/* Projects Section */}
+      <section className="projects" style={{ 
+        padding: '5rem 2rem',
+        fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif',
+        background: 'radial-gradient(ellipse at center top, rgba(212, 193, 157, 0.15) 0%, transparent 60%), radial-gradient(ellipse at center bottom, rgba(232, 217, 192, 0.12) 0%, transparent 60%), #000000',
+        position: 'relative'
       }}>
         <div style={{
-          maxWidth: '900px',
-          margin: '0 auto',
-          padding: '0 2rem',
-          position: 'relative',
-          zIndex: 1
+          maxWidth: '1400px',
+          margin: '0 auto'
         }}>
+          {/* Section Icon */}
           <div style={{
-            display: 'inline-block',
-            width: '80px',
-            height: '4px',
-            background: 'var(--gold)',
-            marginBottom: '2rem',
-            borderRadius: '2px'
-          }} />
-          <h1 style={{ 
-            fontSize: 'clamp(2.5rem, 6vw, 4rem)', 
-            marginBottom: '1.5rem',
-            fontFamily: settings?.headingFont || settings?.primaryFont,
-            fontWeight: 700,
-            color: 'var(--dark)',
-            lineHeight: 1.2,
-            letterSpacing: '-0.02em'
+            textAlign: 'center',
+            marginBottom: '4rem'
           }}>
-            {validLocale === 'ar' ? 'مشاريعنا' : 'Our Projects'}
-          </h1>
-          <p style={{ 
-            fontSize: 'clamp(1.1rem, 2.5vw, 1.4rem)', 
-            color: '#555',
-            fontFamily: settings?.bodyFont,
-            lineHeight: 1.8,
-            maxWidth: '700px',
-            margin: '0 auto',
-            opacity: 0.9
-          }}>
-            {validLocale === 'ar' 
-              ? 'نفخر بتقديم مشاريع استثنائية حول العالم' 
-              : 'We are proud to present exceptional projects around the world'}
-          </p>
+           
+         
+          </div>
+
+          {/* Projects Grid - Client Component */}
+          <ProjectsClient 
+            projects={projects}
+            locale={validLocale}
+            settings={settings}
+            pageContent={pageContent}
+          />
         </div>
       </section>
 
-      {/* Projects Grid */}
-      <section className="projects" style={{ 
-        padding: '5rem 2rem',
-        fontFamily: settings?.bodyFont,
-        background: 'var(--light)'
-      }}>
-        {projects.length === 0 ? (
-          <div style={{ 
-            textAlign: 'center', 
-            padding: '5rem 2rem',
-            color: '#666' 
-          }}>
-            <p style={{ 
-              fontSize: '1.2rem',
-              fontFamily: settings?.bodyFont,
-              opacity: 0.8
-            }}>
-              {validLocale === 'ar' 
-                ? 'لا توجد مشاريع متاحة حالياً' 
-                : 'No projects available at the moment'}
-            </p>
-          </div>
-        ) : (
-          <div className="projects-grid">
-            {projects.map((project: any) => (
-              <div 
-                key={project.id}
-                className="project-card"
-                style={{
-                  position: 'relative'
-                }}
-              >
-                <div className="project-image" style={{
-                  position: 'relative',
-                  overflow: 'hidden'
-                }}>
-                  <Image
-                    src={project.image || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
-                    alt={project.title}
-                    fill
-                    style={{
-                      objectFit: 'cover',
-                      transition: 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)'
-                    }}
-                    unoptimized
-                  />
-                  <div style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background: 'linear-gradient(to bottom, transparent 0%, rgba(15, 28, 42, 0.1) 100%)',
-                    opacity: 0,
-                    transition: 'opacity 0.4s ease'
-                  }} className="project-overlay" />
-                </div>
-                <div className="project-content" style={{
-                  padding: '2rem'
-                }}>
-                  {project.category && (
-                    <div style={{
-                      fontSize: '0.75rem',
-                      color: 'var(--gold)',
-                      fontWeight: '700',
-                      marginBottom: '1rem',
-                      textTransform: 'uppercase',
-                      letterSpacing: '2px',
-                      fontFamily: settings?.bodyFont
-                    }}>
-                      {project.category}
-                    </div>
-                  )}
-                  <h3 style={{ 
-                    fontFamily: settings?.headingFont || settings?.primaryFont,
-                    fontSize: 'clamp(1.4rem, 3vw, 1.8rem)',
-                    fontWeight: 700,
-                    color: 'var(--dark)',
-                    marginBottom: '1rem',
-                    lineHeight: 1.3,
-                    letterSpacing: '-0.01em'
-                  }}>
-                    {project.title}
-                  </h3>
-                  <p style={{ 
-                    fontFamily: settings?.bodyFont,
-                    fontSize: '1rem',
-                    lineHeight: 1.7,
-                    color: '#555',
-                    marginBottom: '1.5rem',
-                    opacity: 0.9
-                  }}>
-                    {project.description}
-                  </p>
-                  <div style={{
-                    display: 'flex',
-                    gap: '1.5rem',
-                    flexWrap: 'wrap',
-                    alignItems: 'center',
-                    paddingTop: '1.5rem',
-                    borderTop: '1px solid rgba(15, 28, 42, 0.08)'
-                  }}>
-                    {project.location && (
-                      <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem',
-                        fontSize: '0.9rem',
-                        color: '#666',
-                        fontFamily: settings?.bodyFont
-                      }}>
-                        <PinIcon size={16} style={{ color: 'var(--gold)', flexShrink: 0 }} />
-                        <span>{project.location}</span>
-                      </div>
-                    )}
-                    {project.year && (
-                      <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem',
-                        fontSize: '0.9rem',
-                        color: '#666',
-                        fontFamily: settings?.bodyFont
-                      }}>
-                        <Calendar size={16} style={{ color: 'var(--gold)', flexShrink: 0 }} />
-                        <span>{project.year}</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </section>
+      {/* Our Clients & Stats Section */}
+      <OurClients locale={validLocale} settings={settings} content={clientsContent} />
 
       <Footer
         locale={validLocale}

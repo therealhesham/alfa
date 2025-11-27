@@ -1,15 +1,33 @@
 import type { Metadata } from "next";
-import { Tajawal } from "next/font/google";
+import { PT_Serif, Aboreto, Montserrat } from "next/font/google";
 import "../globals.css";
 import { Locale } from "@/i18n";
 import { getTranslations } from "@/lib/i18n";
 import { generateSEOMetadata, getOrganizationStructuredData, getWebSiteStructuredData } from "@/lib/seo";
 import WhatsAppButtonWrapper from "@/components/WhatsAppButtonWrapper";
 
-const tajawal = Tajawal({
-  weight: ["300", "400", "700", "900"],
-  subsets: ["arabic", "latin"],
-  variable: "--font-tajawal",
+const ptSerif = PT_Serif({
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  variable: "--font-pt-serif",
+  display: "swap",
+});
+
+const aboreto = Aboreto({
+  weight: ["400"],
+  style: ["normal"],
+  subsets: ["latin"],
+  variable: "--font-aboreto",
+  display: "swap",
+});
+
+const montserrat = Montserrat({
+  weight: ["400", "500"],
+  style: ["normal"],
+  subsets: ["latin"],
+  variable: "--font-montserrat",
+  display: "swap",
 });
 
 export async function generateMetadata({
@@ -56,7 +74,12 @@ export default async function LocaleLayout({
   const websiteData = getWebSiteStructuredData(validLocale);
 
   return (
-    <div lang={validLocale} dir={isRTL ? "rtl" : "ltr"} className={tajawal.variable}>
+    <div lang={validLocale} dir={isRTL ? "rtl" : "ltr"} className={`${ptSerif.variable} ${aboreto.variable} ${montserrat.variable}`}>
+      {/* DG Kufi Font */}
+      <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+      />
       {/* Structured Data (JSON-LD) */}
       <script
         type="application/ld+json"

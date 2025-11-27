@@ -40,10 +40,24 @@ const adminRoutes: AdminRoute[] = [
     },
   },
   {
-    slug: "projects",
+    slug: "our-projects",
     labels: {
       ar: "المشاريع",
       en: "Projects",
+    },
+  },
+  {
+    slug: "our-projects-content",
+    labels: {
+      ar: "محتوى المشاريع",
+      en: "Projects Content",
+    },
+  },
+  {
+    slug: "our-clients",
+    labels: {
+      ar: "العملاء",
+      en: "Clients",
     },
   },
   {
@@ -106,7 +120,7 @@ export default function AdminNav({ locale }: { locale: Locale }) {
         }}
       >
         {filteredRoutes.map((route) => {
-          const href = `/${locale}/admin/${route.slug}`;
+          const href = `/admin/${route.slug}`;
           const isActive = pathname?.startsWith(href);
 
           return (
