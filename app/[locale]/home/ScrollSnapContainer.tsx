@@ -1,9 +1,7 @@
 'use client';
 
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
-import { ReactNode, useRef, useState, useEffect, Children } from 'react';
-import 'react-scroll-snapper/index.css';
-import { ScrollSnapper } from 'react-scroll-snapper';
+import { ReactNode, useRef, Children } from 'react';
 
 interface ScrollSnapContainerProps {
   children: ReactNode;
@@ -11,7 +9,6 @@ interface ScrollSnapContainerProps {
 
 export function ScrollSnapContainer({ children }: ScrollSnapContainerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [pageIndex, setPageIndex] = useState(0);
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
@@ -28,24 +25,8 @@ export function ScrollSnapContainer({ children }: ScrollSnapContainerProps) {
   const backgroundY = useTransform(smoothProgress, [0, 1], ['0%', '15%']);
   const backgroundOpacity = useTransform(smoothProgress, [0, 0.5, 1], [0.03, 0.06, 0.03]);
 
-  // Convert children to array and wrap each in a div for ScrollSnapper
+  // Convert children to array
   const childrenArray = Children.toArray(children);
-
-  // Add keyboard navigation
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowDown' && pageIndex < childrenArray.length - 1) {
-        e.preventDefault();
-        setPageIndex((prev) => Math.min(prev + 1, childrenArray.length - 1));
-      } else if (e.key === 'ArrowUp' && pageIndex > 0) {
-        e.preventDefault();
-        setPageIndex((prev) => Math.max(prev - 1, 0));
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [pageIndex, childrenArray.length]);
 
   return (
     <div
@@ -55,6 +36,12 @@ export function ScrollSnapContainer({ children }: ScrollSnapContainerProps) {
         position: 'relative',
         width: '100%',
         height: '100vh',
+        overflowY: 'auto',
+        overflowX: 'hidden',
+        scrollSnapType: 'y mandatory',
+        scrollBehavior: 'smooth',
+        WebkitOverflowScrolling: 'touch',
+        direction: 'ltr', // Force scrollbar to right side
       }}
     >
       {/* Elegant animated background gradient */}
@@ -87,21 +74,13 @@ export function ScrollSnapContainer({ children }: ScrollSnapContainerProps) {
           pointerEvents: 'none',
         }}
       />
-      <ScrollSnapper
-        index={pageIndex}
-        onIndexChange={setPageIndex}
-        className="ScrollSnapper-vertical"
+      {/* Content wrapper - ensures all mouse interactions work */}
+      <div
         style={{
-          height: '100vh',
           width: '100%',
           display: 'flex',
           flexDirection: 'column',
-          overflowY: 'auto',
-          overflowX: 'hidden',
-          scrollSnapType: 'y mandatory',
-          scrollBehavior: 'smooth',
-          WebkitOverflowScrolling: 'touch',
-          direction: 'ltr', // Force scrollbar to right side
+          pointerEvents: 'auto', // Ensure mouse interactions work
         }}
       >
         {childrenArray.map((child, index) => (
@@ -113,12 +92,13 @@ export function ScrollSnapContainer({ children }: ScrollSnapContainerProps) {
               flexShrink: 0,
               scrollSnapAlign: 'start',
               scrollSnapStop: 'always',
+              pointerEvents: 'auto', // Ensure mouse interactions work
             }}
           >
             {child}
           </div>
         ))}
-      </ScrollSnapper>
+      </div>
     </div>
   );
 }

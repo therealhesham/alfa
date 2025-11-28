@@ -49,6 +49,18 @@ body {
 .scroll-snap-container {
   position: relative;
   width: 100%;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  direction: ltr; /* Force scrollbar to right side */
+  pointer-events: auto; /* Ensure mouse interactions work */
+}
+
+.scroll-snap-container > div {
+  pointer-events: auto; /* Ensure mouse interactions work */
 }
 
 .scroll-snap-section {
@@ -59,6 +71,7 @@ body {
   flex-direction: column;
   justify-content: center;
   position: relative;
+  pointer-events: auto; /* Ensure mouse interactions work */
 }
 
 /* Enhanced scroll snap for better UX */
@@ -85,34 +98,8 @@ body {
   }
 }
 
-/* React Scroll Snapper - Vertical Configuration */
-.ScrollSnapper-vertical {
-  display: flex !important;
-  flex-direction: column !important;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  scroll-snap-type: y mandatory !important;
-  scroll-behavior: smooth !important;
-  height: 100vh !important;
-  width: 100% !important;
-  direction: ltr !important; /* Force scrollbar to right side */
-}
-
-/* Force scrollbar to right side in RTL layouts */
-[dir="rtl"] .ScrollSnapper-vertical {
-  direction: ltr !important;
-}
-
-.ScrollSnapper-vertical > * {
-  width: 100% !important;
-  min-height: 100vh !important;
-  flex-shrink: 0 !important;
-  scroll-snap-align: start !important;
-  scroll-snap-stop: always !important;
-}
-
 /* Ensure content inside maintains RTL direction */
-[dir="rtl"] .ScrollSnapper-vertical > * {
+[dir="rtl"] .scroll-snap-container > div > div {
   direction: rtl;
 }
 

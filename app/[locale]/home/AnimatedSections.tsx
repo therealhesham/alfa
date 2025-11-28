@@ -147,30 +147,6 @@ export function AnimatedAbout({
   primaryFont,
 }: AnimatedAboutProps) {
   const sectionRef = useRef<HTMLElement>(null);
-  
-  // Track scroll progress from about section start to document end
-  // This will track from when about section enters viewport until the end of the page
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start center', 'end end'], // Start tracking when section enters center, end at document end
-  });
-
-  // Calculate intensity: starts at 1 (full) and decreases to 0 as you scroll down
-  // The intensity decreases gradually from the about section to the footer
-  const dustIntensity = useTransform(
-    scrollYProgress,
-    [0, 0.2, 0.8, 1], // Gradual decrease: full at start, start fading at 20%, mostly gone at 80%, zero at end
-    [1, 1, 0.3, 0]    // Full intensity until 20%, then fade to 30% at 80%, zero at end
-  );
-
-  const [intensity, setIntensity] = useState(1);
-
-  useEffect(() => {
-    const unsubscribe = dustIntensity.on('change', (latest) => {
-      setIntensity(Math.max(0, Math.min(1, latest))); // Clamp between 0 and 1
-    });
-    return () => unsubscribe();
-  }, [dustIntensity]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -213,38 +189,36 @@ export function AnimatedAbout({
       viewport={{ once: true, margin: '-100px' }}
       variants={containerVariants}
     >
-      <DustParticles 
-        id="about-dust" 
-        direction="right" 
-        intensity={intensity}
-      />
-      <motion.h2
-        variants={itemVariants}
-        style={{ fontFamily: headingFont || primaryFont }}
-      >
-        {aboutTitle}
-      </motion.h2>
-      <motion.p
-        variants={itemVariants}
-        style={{ fontFamily: bodyFont }}
-      >
-        {aboutP1}
-      </motion.p>
-      <motion.p
-        variants={itemVariants}
-        style={{ fontFamily: bodyFont }}
-      >
-        {aboutP2}
-      </motion.p>
-      <motion.div
-        variants={itemVariants}
-        className="about-read-more-container"
-        style={{ fontFamily: bodyFont }}
-      >
-        <Link href={readMoreLink} className="about-read-more-btn" style={{ fontFamily: bodyFont }}>
-          {readMoreText}
-        </Link>
-      </motion.div>
+      <DustParticles id="about-dust" />
+      <div style={{ position: 'relative', zIndex: 1 }}>
+        <motion.h2
+          variants={itemVariants}
+          style={{ fontFamily: headingFont || primaryFont }}
+        >
+          {aboutTitle}
+        </motion.h2>
+        <motion.p
+          variants={itemVariants}
+          style={{ fontFamily: bodyFont }}
+        >
+          {aboutP1}
+        </motion.p>
+        <motion.p
+          variants={itemVariants}
+          style={{ fontFamily: bodyFont }}
+        >
+          {aboutP2}
+        </motion.p>
+        {/* <motion.div 
+          variants={itemVariants}
+          className="about-read-more-container "
+          style={{ fontFamily: bodyFont }}
+        >
+          <Link href={readMoreLink} className="about-read-more-btn" style={{ fontFamily: bodyFont }}>
+            {readMoreText}
+          </Link>
+        </motion.div> */}
+      </div>
     </motion.section>
   );
 }

@@ -27,12 +27,15 @@ export default function DustParticles({ id = 'dust-particles', className = '' }:
 
   const options = useMemo(
     () => ({
+      fullScreen: {
+        enable: false,
+      },
       background: {
         color: {
           value: 'transparent',
         },
       },
-      fpsLimit: 120,
+      fpsLimit: 60,
       interactivity: {
         events: {
           onClick: {
@@ -80,7 +83,7 @@ export default function DustParticles({ id = 'dust-particles', className = '' }:
           type: 'circle' as const,
         },
         size: {
-          value: { min: 0.5, max: 1.5 },
+          value: { min: 0.5, max: 2.5  },
           animation: {
             enable: true,
             speed: 2,
@@ -96,21 +99,32 @@ export default function DustParticles({ id = 'dust-particles', className = '' }:
   if (!init) return null;
 
   return (
-    <Particles
-      id={id}
-      particlesLoaded={particlesLoaded}
-      options={options}
-      className={className}
+    <div
       style={{
         position: 'absolute',
         top: 0,
         left: 0,
         width: '100%',
         height: '100%',
-        zIndex: 0,
+        margin: 0,
+        padding: 0,
+        zIndex: -1,
         pointerEvents: 'none',
       }}
-    />
+      className={className}
+    >
+      <Particles
+        id={id}
+        particlesLoaded={particlesLoaded}
+        options={options}
+        style={{
+          width: '100%',
+          height: '100%',
+          margin: 0,
+          padding: 0,
+        }}
+      />
+    </div>
   );
 }
 

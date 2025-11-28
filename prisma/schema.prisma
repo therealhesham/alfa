@@ -455,7 +455,7 @@ model OurClientsContent {
   clientsSubtitleEn String   @default("We are proud of the trust of our valued clients from around the world")
   
   // Client Logos (stored as JSON array)
-  clientLogos       String   @db.Text @default("[]")
+  clientLogos       String?  @db.Text
   
   updatedAt       DateTime @updatedAt
   createdAt       DateTime @default(now())
