@@ -85,6 +85,37 @@ body {
   }
 }
 
+/* React Scroll Snapper - Vertical Configuration */
+.ScrollSnapper-vertical {
+  display: flex !important;
+  flex-direction: column !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  scroll-snap-type: y mandatory !important;
+  scroll-behavior: smooth !important;
+  height: 100vh !important;
+  width: 100% !important;
+  direction: ltr !important; /* Force scrollbar to right side */
+}
+
+/* Force scrollbar to right side in RTL layouts */
+[dir="rtl"] .ScrollSnapper-vertical {
+  direction: ltr !important;
+}
+
+.ScrollSnapper-vertical > * {
+  width: 100% !important;
+  min-height: 100vh !important;
+  flex-shrink: 0 !important;
+  scroll-snap-align: start !important;
+  scroll-snap-stop: always !important;
+}
+
+/* Ensure content inside maintains RTL direction */
+[dir="rtl"] .ScrollSnapper-vertical > * {
+  direction: rtl;
+}
+
 /* Default font variables for the project */
 :root {
   --font-kufi: 'DG Kufi', 'Noto Kufi Arabic', Arial, sans-serif;
@@ -128,9 +159,10 @@ body::before {
   background-position: 0% 0%;
   animation: starryNight 20s linear infinite;
   opacity: 0.6;
-  z-index: 0;
+  z-index: -1;
   pointer-events: none;
 }
+
 
 @keyframes starryNight {
   0% {
@@ -156,7 +188,7 @@ body::after {
     transparent 2px,
     transparent 8px
   );
-  z-index: 0;
+  z-index: -1;
   pointer-events: none;
   opacity: 0.4;
 }
@@ -358,8 +390,8 @@ header:hover {
 
 .language-button {
   background: transparent;
-  border: 2px solid var(--dark);
-  color: var(--dark);
+  border: 2px solid var(--gold);
+  color: var(--gold);
   padding: 0.5rem 1rem;
   border-radius: 6px;
   font-weight: 600;
@@ -371,9 +403,9 @@ header:hover {
 }
 
 .language-button:hover {
-  background: var(--dark);
-  color: var(--light);
-  border-color: var(--dark);
+  background: var(--gold);
+  color: var(--dark);
+  border-color: var(--gold);
 }
 
 .language-backdrop {
@@ -390,12 +422,12 @@ header:hover {
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
-  background: rgba(250, 247, 242, 0.98);
+  background: var(--dark);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(15, 28, 42, 0.1);
+  border: 1px solid rgba(212, 193, 157, 0.3);
   border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(15, 28, 42, 0.15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   min-width: 100px;
   z-index: 1002;
   overflow: hidden;
@@ -419,7 +451,7 @@ header:hover {
   padding: 0.75rem 1rem;
   background: transparent;
   border: none;
-  color: var(--dark);
+  color: var(--gold);
   font-weight: 600;
   font-size: 0.95rem;
   font-family: var(--font-kufi), 'DG Kufi', 'Noto Kufi Arabic', Arial, sans-serif !important;
@@ -429,7 +461,7 @@ header:hover {
 }
 
 .language-dropdown button:hover {
-  background: rgba(15, 28, 42, 0.05);
+  background: rgba(212, 193, 157, 0.15);
 }
 
 .language-dropdown button.active {
@@ -544,6 +576,7 @@ nav a {
   position: relative;
   padding: 0.5rem 0.75rem;
   border-radius: 8px;
+  white-space: nowrap;
 }
 
 nav a::before {
@@ -597,6 +630,7 @@ nav a:hover::after {
   text-align: center;
   position: relative;
   overflow: hidden;
+  z-index: 0;
 }
 
 .hero .hero-video {
@@ -616,102 +650,13 @@ nav a:hover::after {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 1;
+  z-index: 2;
 }
 
-.hero::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(2px 2px at 20% 30%, rgba(255, 255, 255, 0.8) 0%, transparent 50%),
-    radial-gradient(2px 2px at 60% 70%, rgba(255, 255, 255, 0.8) 0%, transparent 50%),
-    radial-gradient(1px 1px at 50% 50%, rgba(255, 255, 255, 0.6) 0%, transparent 50%),
-    radial-gradient(1px 1px at 80% 10%, rgba(255, 255, 255, 0.6) 0%, transparent 50%),
-    radial-gradient(2px 2px at 90% 40%, rgba(255, 255, 255, 0.8) 0%, transparent 50%),
-    radial-gradient(1px 1px at 33% 60%, rgba(255, 255, 255, 0.6) 0%, transparent 50%),
-    radial-gradient(1px 1px at 55% 20%, rgba(255, 255, 255, 0.6) 0%, transparent 50%),
-    radial-gradient(2px 2px at 10% 80%, rgba(255, 255, 255, 0.8) 0%, transparent 50%),
-    radial-gradient(1px 1px at 75% 50%, rgba(255, 255, 255, 0.6) 0%, transparent 50%),
-    radial-gradient(1px 1px at 40% 90%, rgba(255, 255, 255, 0.6) 0%, transparent 50%);
-  background-size: 200% 200%;
-  background-position: 0% 0%;
-  animation: starryNight 20s linear infinite;
-  opacity: 0.8;
-  z-index: 0;
-}
-
-.hero::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: repeating-linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0.4) 0px,
-    rgba(255, 255, 255, 0.4) 2px,
-    transparent 2px,
-    transparent 8px
-  );
-  z-index: 0;
-  opacity: 0.5;
-}
-
-.hero::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: 
-    radial-gradient(circle at 20% 30%, rgba(212, 193, 157, 0.2) 0%, transparent 40%),
-    radial-gradient(circle at 80% 70%, rgba(232, 217, 192, 0.25) 0%, transparent 40%),
-    linear-gradient(180deg, rgba(250, 247, 242, 0.4) 0%, rgba(232, 217, 192, 0.6) 100%);
-  z-index: 0;
-  animation: heroGradient 15s ease infinite;
-}
-
-.hero::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(212, 193, 157, 0.1) 0%, transparent 70%);
-  animation: heroShimmer 20s linear infinite;
-  z-index: 0;
-}
-
-@keyframes heroGradient {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.8;
-    transform: scale(1.05);
-  }
-}
-
-@keyframes heroShimmer {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
 
 .hero > * {
   position: relative;
-  z-index: 2;
+  z-index: 3;
 }
 
 .hero img,
@@ -2361,6 +2306,7 @@ footer p {
     display: block;
     transition: color 0.3s ease;
     font-family: var(--font-kufi), 'DG Kufi', 'Noto Kufi Arabic', Arial, sans-serif !important;
+    white-space: nowrap;
   }
 
   .mobile-sidebar .nav-link:hover .nav-link-text {

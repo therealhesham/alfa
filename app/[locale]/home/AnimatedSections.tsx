@@ -4,8 +4,9 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Home, Layers, Activity, HelpCircle, Calendar, MapPin, Sparkles, Target, Heart } from 'lucide-react';
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import type { Locale } from '@/i18n';
+import DustParticles from '@/components/DustParticles';
 
 const iconMap: { [key: string]: any } = {
   Home,
@@ -145,6 +146,32 @@ export function AnimatedAbout({
   headingFont,
   primaryFont,
 }: AnimatedAboutProps) {
+  const sectionRef = useRef<HTMLElement>(null);
+  
+  // Track scroll progress from about section start to document end
+  // This will track from when about section enters viewport until the end of the page
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start center', 'end end'], // Start tracking when section enters center, end at document end
+  });
+
+  // Calculate intensity: starts at 1 (full) and decreases to 0 as you scroll down
+  // The intensity decreases gradually from the about section to the footer
+  const dustIntensity = useTransform(
+    scrollYProgress,
+    [0, 0.2, 0.8, 1], // Gradual decrease: full at start, start fading at 20%, mostly gone at 80%, zero at end
+    [1, 1, 0.3, 0]    // Full intensity until 20%, then fade to 30% at 80%, zero at end
+  );
+
+  const [intensity, setIntensity] = useState(1);
+
+  useEffect(() => {
+    const unsubscribe = dustIntensity.on('change', (latest) => {
+      setIntensity(Math.max(0, Math.min(1, latest))); // Clamp between 0 and 1
+    });
+    return () => unsubscribe();
+  }, [dustIntensity]);
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -172,18 +199,25 @@ export function AnimatedAbout({
 
   return (
     <motion.section
+      ref={sectionRef}
       id="about"
       className="about scroll-snap-section"
       style={{ 
         fontFamily: bodyFont,
         scrollSnapAlign: 'start',
         scrollSnapStop: 'always',
+        position: 'relative',
       }}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: '-100px' }}
       variants={containerVariants}
     >
+      <DustParticles 
+        id="about-dust" 
+        direction="right" 
+        intensity={intensity}
+      />
       <motion.h2
         variants={itemVariants}
         style={{ fontFamily: headingFont || primaryFont }}
@@ -294,12 +328,14 @@ export function AnimatedVision({
         fontFamily: bodyFont,
         scrollSnapAlign: 'start',
         scrollSnapStop: 'always',
+        position: 'relative',
       }}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: '-100px' }}
       variants={containerVariants}
     >
+      <DustParticles id="vision-dust" />
       <motion.h2
         variants={itemVariants}
         style={{ fontFamily: headingFont || primaryFont }}
@@ -494,12 +530,14 @@ export function AnimatedQuote({ title, text, author, bodyFont, headingFont, prim
         fontFamily: bodyFont,
         scrollSnapAlign: 'start',
         scrollSnapStop: 'always',
+        position: 'relative',
       }}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: '-100px' }}
       variants={containerVariants}
     >
+      <DustParticles id="quote-dust" />
       <motion.div className="quote-content" style={{ fontFamily: bodyFont }} variants={containerVariants}>
         <motion.h2
           className="quote-title"
@@ -602,12 +640,14 @@ export function AnimatedServices({
         fontFamily: bodyFont,
         scrollSnapAlign: 'start',
         scrollSnapStop: 'always',
+        position: 'relative',
       }}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: '-100px' }}
       variants={containerVariants}
     >
+      <DustParticles id="services-dust" />
       <motion.h2
         variants={itemVariants}
         style={{ fontFamily: headingFont || primaryFont }}
@@ -739,12 +779,14 @@ export function AnimatedProjects({
         fontFamily: bodyFont,
         scrollSnapAlign: 'start',
         scrollSnapStop: 'always',
+        position: 'relative',
       }}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: '-100px' }}
       variants={containerVariants}
     >
+      <DustParticles id="projects-dust" />
       <motion.h2
         variants={itemVariants}
         style={{ fontFamily: headingFont || primaryFont }}
@@ -914,12 +956,14 @@ export function AnimatedStats({ title, stats, bodyFont, headingFont, primaryFont
         fontFamily: bodyFont,
         scrollSnapAlign: 'start',
         scrollSnapStop: 'always',
+        position: 'relative',
       }}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: '-100px' }}
       variants={containerVariants}
     >
+      <DustParticles id="stats-dust" />
       <motion.h2
         variants={itemVariants}
         style={{ fontFamily: headingFont || primaryFont }}

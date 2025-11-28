@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { Locale } from "@/i18n";
 import type { ContactUsContent } from "@/lib/data";
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import DustParticles from "@/components/DustParticles";
 
 interface HomeContactFormProps {
   locale: Locale;
@@ -107,7 +108,8 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
 
   return (
     <>
-      <div className="home-contact-section" id="contact">
+      <div className="home-contact-section" id="contact" style={{ position: 'relative' }}>
+        <DustParticles id="contact-dust" />
         <div className="home-contact-container">
           <div className="home-contact-header">
             <h2 style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>
