@@ -105,6 +105,7 @@ export default function ProjectBookViewer({ project, locale, onClose }: ProjectB
             transform: "scale(1.1)" // Zoom in slightly to enhance abstract feel
           }}
           priority
+          unoptimized
         />
         {/* Noise Texture Overlay for grain */}
         <div style={{
@@ -327,6 +328,7 @@ export default function ProjectBookViewer({ project, locale, onClose }: ProjectB
             sizes="(max-width: 768px) 100vw, 50vw"
             style={{ objectFit: "cover" }}
             priority={currentPage === 0}
+            unoptimized
           />
           
           {/* Subtle vignette for depth */}
