@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { Globe, Award, Building2, Home } from "lucide-react";
+import { Globe, Award, Building2, Home, BookOpen } from "lucide-react";
 import ProjectBookViewer from "./ProjectBookViewer";
 import type { Locale } from "@/i18n";
 
@@ -109,13 +109,12 @@ export default function ProjectsClient({ projects, locale, settings, pageContent
           left: '50%',
           transform: 'translate(-50%, -50%)',
           color: 'var(--gold)',
-          fontSize: '3rem',
           opacity: 0,
           transition: 'opacity 0.4s ease',
           pointerEvents: 'none',
-          textShadow: '0 0 20px rgba(212, 193, 157, 0.5)'
+          filter: 'drop-shadow(0 0 20px rgba(212, 193, 157, 0.5))'
         }} className="project-hover-icon">
-          📖
+          <BookOpen size={48} strokeWidth={1.5} />
         </div>
       </div>
       <div className="project-content" style={{
