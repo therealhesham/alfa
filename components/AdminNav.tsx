@@ -83,6 +83,13 @@ const adminRoutes: AdminRoute[] = [
       en: "Users",
     },
   },
+  {
+    slug: "explanation",
+    labels: {
+      ar: "شرح",
+      en: "Explanation",
+    },
+  },
 ];
 
 export default function AdminNav({ locale }: { locale: Locale }) {
