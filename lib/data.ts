@@ -501,6 +501,10 @@ export interface FooterContent {
   addressValue: string;
   phoneLabelInfo: string;
   phoneValue: string;
+  showSocialMedia?: boolean;
+  instagramLink?: string;
+  facebookLink?: string;
+  xLink?: string;
 }
 
 export async function getFooterContent(locale: Locale): Promise<FooterContent | null> {
@@ -524,6 +528,10 @@ export async function getFooterContent(locale: Locale): Promise<FooterContent | 
         addressValue: contentAny.addressValueEn || '',
         phoneLabelInfo: contentAny.phoneLabelInfoEn || '',
         phoneValue: content.phoneValue || '',
+        showSocialMedia: contentAny.showSocialMedia ?? true,
+        instagramLink: contentAny.instagramLink || 'https://www.instagram.com',
+        facebookLink: contentAny.facebookLink || 'https://www.facebook.com',
+        xLink: contentAny.xLink || 'https://www.x.com',
       };
     }
     
@@ -537,6 +545,10 @@ export async function getFooterContent(locale: Locale): Promise<FooterContent | 
       addressValue: content.addressValue || '',
       phoneLabelInfo: content.phoneLabelInfo || '',
       phoneValue: content.phoneValue || '',
+      showSocialMedia: contentAny.showSocialMedia ?? true,
+      instagramLink: contentAny.instagramLink || 'https://www.instagram.com',
+      facebookLink: contentAny.facebookLink || 'https://www.facebook.com',
+      xLink: contentAny.xLink || 'https://www.x.com',
     };
   } catch (error) {
     console.error('Error fetching footer content:', error);

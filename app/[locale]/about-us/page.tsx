@@ -284,6 +284,10 @@ export default async function AboutUsPage({ params }: AboutUsPageProps) {
         addressValue={footerContent?.addressValue}
         phoneLabelInfo={footerContent?.phoneLabelInfo}
         phoneValue={footerContent?.phoneValue}
+        showSocialMedia={footerContent?.showSocialMedia}
+        instagramLink={footerContent?.instagramLink}
+        facebookLink={footerContent?.facebookLink}
+        xLink={footerContent?.xLink}
       />
     </FontsProvider>
   );

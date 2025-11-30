@@ -41,7 +41,7 @@ export default function AdminExplanationPage() {
       }}
     >
       <AdminNav locale={locale} />
-      <LogoutButton locale={locale} />
+      <LogoutButton />
 
       <div
         style={{

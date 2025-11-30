@@ -309,6 +309,10 @@ export default async function HomePage({ params }: HomePageProps) {
           addressValue={footerContent?.addressValue}
           phoneLabelInfo={footerContent?.phoneLabelInfo}
           phoneValue={footerContent?.phoneValue}
+          showSocialMedia={footerContent?.showSocialMedia}
+          instagramLink={footerContent?.instagramLink}
+          facebookLink={footerContent?.facebookLink}
+          xLink={footerContent?.xLink}
         />
       </section>
       </ScrollSnapContainer>

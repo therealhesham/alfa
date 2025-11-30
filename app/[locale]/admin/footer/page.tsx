@@ -17,6 +17,10 @@ interface FooterContent {
   addressValue: string;
   phoneLabelInfo: string;
   phoneValue: string;
+  showSocialMedia?: boolean;
+  instagramLink?: string;
+  facebookLink?: string;
+  xLink?: string;
 }
 
 interface EditableFieldProps {
@@ -422,7 +426,7 @@ export default function AdminFooterPage() {
     }
   };
 
-  const handleChange = (field: keyof FooterContent, value: string) => {
+  const handleChange = (field: keyof FooterContent, value: string | boolean) => {
     if (!content) return;
     setContent({ ...content, [field]: value });
   };
@@ -754,6 +758,91 @@ export default function AdminFooterPage() {
               placeholder={currentLocaleState === "ar" ? "مثال: © 2025 اسم الشركة – جميع الحقوق محفوظة" : "e.g., © 2025 Company Name – All Rights Reserved"}
             />
           </div>
+        </section>
+
+        {/* Social Media Section */}
+        <section style={{
+          marginBottom: "3rem",
+          padding: "2rem",
+          backgroundColor: "#FAF7F2",
+          borderRadius: "12px",
+        }}>
+          <h2 style={{
+            fontSize: "1.5rem",
+            fontWeight: 600,
+            marginBottom: "1.5rem",
+            color: "#0F1C2A",
+          }}>
+            {currentLocaleState === "ar" ? "وسائل التواصل الاجتماعي" : "Social Media"}
+          </h2>
+          
+          {/* Show/Hide Toggle */}
+          <div style={{ marginBottom: "2rem" }}>
+            <label style={{ 
+              display: "flex", 
+              alignItems: "center", 
+              gap: "1rem", 
+              cursor: "pointer",
+              fontSize: "1rem",
+              fontWeight: 600,
+            }}>
+              <input
+                type="checkbox"
+                checked={content.showSocialMedia ?? true}
+                onChange={(e) => handleChange("showSocialMedia", e.target.checked)}
+                style={{
+                  width: "24px",
+                  height: "24px",
+                  cursor: "pointer",
+                  accentColor: "#0F1C2A",
+                }}
+              />
+              <span>
+                {currentLocaleState === "ar" ? "إظهار قسم وسائل التواصل الاجتماعي" : "Show Social Media Section"}
+              </span>
+            </label>
+          </div>
+
+          {/* Social Media Links */}
+          {content.showSocialMedia && (
+            <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+              <div>
+                <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: 600 }}>
+                  {currentLocaleState === "ar" ? "رابط إنستجرام" : "Instagram Link"}
+                </label>
+                <EditableField
+                  value={content.instagramLink || "https://www.instagram.com"}
+                  onChange={(value) => handleChange("instagramLink", value)}
+                  as="input"
+                  placeholder={currentLocaleState === "ar" ? "https://www.instagram.com/yourprofile" : "https://www.instagram.com/yourprofile"}
+                />
+              </div>
+              
+              <div>
+                <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: 600 }}>
+                  {currentLocaleState === "ar" ? "رابط فيسبوك" : "Facebook Link"}
+                </label>
+                <EditableField
+                  value={content.facebookLink || "https://www.facebook.com"}
+                  onChange={(value) => handleChange("facebookLink", value)}
+                  as="input"
+                  placeholder={currentLocaleState === "ar" ? "https://www.facebook.com/yourpage" : "https://www.facebook.com/yourpage"}
+                />
+              </div>
+              
+              <div>
+                <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: 600 }}>
+                  {currentLocaleState === "ar" ? "رابط X (تويتر)" : "X (Twitter) Link"}
+                </label>
+                <EditableField
+                  value={content.xLink || "https://www.x.com"}
+                  onChange={(value) => handleChange("xLink", value)}
+                  as="input"
+                  placeholder={currentLocaleState === "ar" ? "https://www.x.com/yourprofile" : "https://www.x.com/yourprofile"}
+                />
+              </div>
+            </div>
+          )}
         </section>
       </div>
     </>

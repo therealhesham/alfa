@@ -28,11 +28,16 @@ export async function GET(request: Request) {
         addressValue: contentAny.addressValueEn,
         phoneLabelInfo: contentAny.phoneLabelInfoEn,
         phoneValue: content.phoneValue,
+        showSocialMedia: contentAny.showSocialMedia ?? true,
+        instagramLink: contentAny.instagramLink ?? "https://www.instagram.com",
+        facebookLink: contentAny.facebookLink ?? "https://www.facebook.com",
+        xLink: contentAny.xLink ?? "https://www.x.com",
       };
       return NextResponse.json(englishContent);
     }
     
     // Arabic content (default)
+    const contentAny = content as any;
     const arabicContent = {
       id: content.id,
       footerLogo: content.footerLogo,
@@ -42,6 +47,10 @@ export async function GET(request: Request) {
       addressValue: content.addressValue,
       phoneLabelInfo: content.phoneLabelInfo,
       phoneValue: content.phoneValue,
+      showSocialMedia: contentAny.showSocialMedia ?? true,
+      instagramLink: contentAny.instagramLink ?? "https://www.instagram.com",
+      facebookLink: contentAny.facebookLink ?? "https://www.facebook.com",
+      xLink: contentAny.xLink ?? "https://www.x.com",
     };
     
     return NextResponse.json(arabicContent);
@@ -109,6 +118,10 @@ export async function PUT(request: Request) {
     // Common fields (not language-specific)
     if (contentData.footerLogo !== undefined) updateData.footerLogo = contentData.footerLogo;
     if (contentData.phoneValue !== undefined) updateData.phoneValue = contentData.phoneValue;
+    if (contentData.showSocialMedia !== undefined) updateData.showSocialMedia = contentData.showSocialMedia;
+    if (contentData.instagramLink !== undefined) updateData.instagramLink = contentData.instagramLink;
+    if (contentData.facebookLink !== undefined) updateData.facebookLink = contentData.facebookLink;
+    if (contentData.xLink !== undefined) updateData.xLink = contentData.xLink;
     
     if (!content) {
       content = await prisma.footer.create({

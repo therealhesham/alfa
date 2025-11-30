@@ -327,6 +327,12 @@ model Footer {
   phoneLabelInfoEn  String   @default("Phone")
   phoneValue        String   @default("+1 234 567 8900")
   
+  // Social Media
+  showSocialMedia   Boolean  @default(true)
+  instagramLink     String   @default("https://www.instagram.com")
+  facebookLink      String   @default("https://www.facebook.com")
+  xLink             String   @default("https://www.x.com")
+  
   updatedAt         DateTime @updatedAt
   createdAt         DateTime @default(now())
 }
