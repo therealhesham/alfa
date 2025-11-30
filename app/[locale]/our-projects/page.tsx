@@ -5,7 +5,6 @@ import { generateSEOMetadata } from "@/lib/seo";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import FontsProvider from "@/components/FontsProvider";
-import OurClients from "./OurClients";
 import ProjectsClient from "./ProjectsClient";
 import HeroSection from "./HeroSection";
 import type { Locale } from "@/i18n";
@@ -188,103 +187,6 @@ async function getOurProjectsContent(locale: Locale) {
   }
 }
 
-async function getOurClientsContent(locale: Locale) {
-  try {
-    // Check if model exists in Prisma client
-    if (!('ourClientsContent' in prisma)) {
-      throw new Error('OurClientsContent model not found');
-    }
-    
-    let content = await (prisma as any).ourClientsContent.findFirst();
-    
-    if (!content) {
-      // Create default content if none exists
-      content = await (prisma as any).ourClientsContent.create({
-        data: {},
-      });
-    }
-    
-    // Parse client logos JSON
-    let clientLogos = [];
-    try {
-      clientLogos = JSON.parse(content.clientLogos || '[]');
-    } catch (e) {
-      clientLogos = [];
-    }
-    
-    // Map content based on locale
-    if (locale === 'en') {
-      return {
-        statsTitle: content.statsTitleEn || content.statsTitle,
-        statsSubtitle: content.statsSubtitleEn || content.statsSubtitle,
-        showStats: (content as any).showStats ?? true,
-        statsStat1Icon: content.statsStat1Icon,
-        statsStat1Number: content.statsStat1Number,
-        statsStat1Label: content.statsStat1LabelEn || content.statsStat1Label,
-        statsStat2Icon: content.statsStat2Icon,
-        statsStat2Number: content.statsStat2Number,
-        statsStat2Label: content.statsStat2LabelEn || content.statsStat2Label,
-        statsStat3Icon: content.statsStat3Icon,
-        statsStat3Number: content.statsStat3Number,
-        statsStat3Label: content.statsStat3LabelEn || content.statsStat3Label,
-        statsStat4Icon: content.statsStat4Icon,
-        statsStat4Number: content.statsStat4Number,
-        statsStat4Label: content.statsStat4LabelEn || content.statsStat4Label,
-        clientsTitle: content.clientsTitleEn || content.clientsTitle,
-        clientsSubtitle: content.clientsSubtitleEn || content.clientsSubtitle,
-        clientLogos: clientLogos,
-      };
-    }
-    
-    return {
-      statsTitle: content.statsTitle,
-      statsSubtitle: content.statsSubtitle,
-      showStats: (content as any).showStats ?? true,
-      statsStat1Icon: content.statsStat1Icon,
-      statsStat1Number: content.statsStat1Number,
-      statsStat1Label: content.statsStat1Label,
-      statsStat2Icon: content.statsStat2Icon,
-      statsStat2Number: content.statsStat2Number,
-      statsStat2Label: content.statsStat2Label,
-      statsStat3Icon: content.statsStat3Icon,
-      statsStat3Number: content.statsStat3Number,
-      statsStat3Label: content.statsStat3Label,
-      statsStat4Icon: content.statsStat4Icon,
-      statsStat4Number: content.statsStat4Number,
-      statsStat4Label: content.statsStat4Label,
-      clientsTitle: content.clientsTitle,
-      clientsSubtitle: content.clientsSubtitle,
-      clientLogos: clientLogos,
-    };
-  } catch (error) {
-    console.error('Error fetching our-clients content:', error);
-    // Return defaults on error
-    return {
-      statsTitle: locale === 'ar' ? 'إنجازاتنا بالأرقام' : 'Our Achievements in Numbers',
-      statsSubtitle: locale === 'ar' 
-        ? 'سنوات من الخبرة والتميز في التصميم المعماري الفاخر'
-        : 'Years of experience and excellence in luxury architectural design',
-      showStats: true,
-      statsStat1Icon: 'Building2',
-      statsStat1Number: '250+',
-      statsStat1Label: locale === 'ar' ? 'مشروع مكتمل' : 'Completed Projects',
-      statsStat2Icon: 'Globe',
-      statsStat2Number: '48',
-      statsStat2Label: locale === 'ar' ? 'دولة حول العالم' : 'Countries Worldwide',
-      statsStat3Icon: 'Award',
-      statsStat3Number: '22',
-      statsStat3Label: locale === 'ar' ? 'جائزة دولية' : 'International Awards',
-      statsStat4Icon: 'Users',
-      statsStat4Number: '500+',
-      statsStat4Label: locale === 'ar' ? 'عميل راضٍ' : 'Satisfied Clients',
-      clientsTitle: locale === 'ar' ? 'عملاؤنا' : 'Our Clients',
-      clientsSubtitle: locale === 'ar' 
-        ? 'نفتخر بثقة عملائنا الكرام من حول العالم'
-        : 'We are proud of the trust of our valued clients from around the world',
-      clientLogos: [],
-    };
-  }
-}
 
 export default async function OurProjectsPage({ params }: OurProjectsPageProps) {
   const { locale } = await params;
@@ -292,13 +194,12 @@ export default async function OurProjectsPage({ params }: OurProjectsPageProps) 
   const t = getTranslations(validLocale);
 
   // Fetch data in parallel
-  const [projects, settings, footerContent, pageContent, homeContent, clientsContent] = await Promise.all([
+  const [projects, settings, footerContent, pageContent, homeContent] = await Promise.all([
     getProjects(validLocale),
     getSiteSettings(),
     getFooterContent(validLocale),
     getOurProjectsContent(validLocale),
     getHomeContent(validLocale),
-    getOurClientsContent(validLocale),
   ]);
 
   return (
@@ -358,9 +259,6 @@ export default async function OurProjectsPage({ params }: OurProjectsPageProps) 
           />
         </div>
       </section>
-
-      {/* Our Clients & Stats Section */}
-      <OurClients locale={validLocale} settings={settings} content={clientsContent} />
 
       <Footer
         locale={validLocale}

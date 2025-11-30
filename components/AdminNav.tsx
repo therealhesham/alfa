@@ -56,13 +56,6 @@ const adminRoutes: AdminRoute[] = [
     },
   },
   {
-    slug: "our-clients",
-    labels: {
-      ar: "العملاء",
-      en: "Clients",
-    },
-  },
-  {
     slug: "footer",
     labels: {
       ar: "الـ Footer",
