@@ -389,7 +389,16 @@ export default function AdminOurClientsPage() {
   return (
     <div style={{ minHeight: "100vh", background: "#f5f5f5" }}>
       <AdminNav locale={currentLocaleState} />
-      <LogoutButton />
+      <div
+        style={{
+          position: "fixed",
+          top: "5rem",
+          right: "1rem",
+          zIndex: 9999,
+        }}
+      >
+        <LogoutButton />
+      </div>
       
       <div style={{ padding: "2rem", maxWidth: "1400px", margin: "0 auto" }}>
         <div style={{ marginBottom: "2rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>

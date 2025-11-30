@@ -38,6 +38,15 @@ model HomeContent {
   visionValuesEn String  @default("Values")
   visionValuesText String @default("التميّز • الأصالة • الالتزام • الابتكار • الثقة")
   visionValuesTextEn String @default("Excellence • Authenticity • Commitment • Innovation • Trust")
+  
+  // Quote Section
+  quoteTitle    String   @default("في ظلال المدينة")
+  quoteTitleEn  String   @default("At City Shadows")
+  quoteText     String   @db.Text
+  quoteTextEn   String   @db.Text
+  quoteAuthor   String   @default("المدير التنفيذي")
+  quoteAuthorEn String   @default("Managing Director")
+  
   statsTitle    String   @default("إنجازاتنا بالأرقام")
   statsTitleEn  String   @default("Our Achievements in Numbers")
   statsProjects String   @default("مشروع منجز")

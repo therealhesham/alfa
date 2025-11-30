@@ -21,6 +21,8 @@ export async function GET(request: Request) {
           visionVisionTextEn: '',
           visionMissionText: '',
           visionMissionTextEn: '',
+          quoteText: '',
+          quoteTextEn: '',
           service1Desc: '',
           service1DescEn: '',
           service2Desc: '',
@@ -57,6 +59,9 @@ export async function GET(request: Request) {
         visionMissionText: contentAny.visionMissionTextEn,
         visionValues: contentAny.visionValuesEn,
         visionValuesText: contentAny.visionValuesTextEn,
+        quoteTitle: contentAny.quoteTitleEn,
+        quoteText: contentAny.quoteTextEn,
+        quoteAuthor: contentAny.quoteAuthorEn,
         statsTitle: contentAny.statsTitleEn,
         statsProjects: contentAny.statsProjectsEn,
         statsYears: contentAny.statsYearsEn,
@@ -112,6 +117,9 @@ export async function GET(request: Request) {
       visionMissionText: content.visionMissionText,
       visionValues: content.visionValues,
       visionValuesText: content.visionValuesText,
+      quoteTitle: contentAny.quoteTitle,
+      quoteText: contentAny.quoteText,
+      quoteAuthor: contentAny.quoteAuthor,
       statsTitle: content.statsTitle,
       statsProjects: content.statsProjects,
       statsYears: content.statsYears,
@@ -208,6 +216,9 @@ export async function PUT(request: Request) {
       if (contentData.visionMissionText !== undefined) updateData.visionMissionTextEn = contentData.visionMissionText;
       if (contentData.visionValues !== undefined) updateData.visionValuesEn = contentData.visionValues;
       if (contentData.visionValuesText !== undefined) updateData.visionValuesTextEn = contentData.visionValuesText;
+      if (contentData.quoteTitle !== undefined) updateData.quoteTitleEn = contentData.quoteTitle;
+      if (contentData.quoteText !== undefined) updateData.quoteTextEn = contentData.quoteText;
+      if (contentData.quoteAuthor !== undefined) updateData.quoteAuthorEn = contentData.quoteAuthor;
       if (contentData.statsTitle !== undefined) updateData.statsTitleEn = contentData.statsTitle;
       if (contentData.statsProjects !== undefined) updateData.statsProjectsEn = contentData.statsProjects;
       if (contentData.statsYears !== undefined) updateData.statsYearsEn = contentData.statsYears;
@@ -247,6 +258,9 @@ export async function PUT(request: Request) {
       if (contentData.visionMissionText !== undefined) updateData.visionMissionText = contentData.visionMissionText;
       if (contentData.visionValues !== undefined) updateData.visionValues = contentData.visionValues;
       if (contentData.visionValuesText !== undefined) updateData.visionValuesText = contentData.visionValuesText;
+      if (contentData.quoteTitle !== undefined) updateData.quoteTitle = contentData.quoteTitle;
+      if (contentData.quoteText !== undefined) updateData.quoteText = contentData.quoteText;
+      if (contentData.quoteAuthor !== undefined) updateData.quoteAuthor = contentData.quoteAuthor;
       if (contentData.statsTitle !== undefined) updateData.statsTitle = contentData.statsTitle;
       if (contentData.statsProjects !== undefined) updateData.statsProjects = contentData.statsProjects;
       if (contentData.statsYears !== undefined) updateData.statsYears = contentData.statsYears;

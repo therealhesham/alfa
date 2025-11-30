@@ -16,6 +16,9 @@ export interface HomeContent {
   visionMissionText: string;
   visionValues: string;
   visionValuesText: string;
+  quoteTitle: string;
+  quoteText: string;
+  quoteAuthor: string;
   statsTitle: string;
   statsProjects: string;
   statsYears: string;
@@ -151,6 +154,8 @@ export async function getHomeContent(locale: Locale): Promise<HomeContent | null
           visionVisionTextEn: '',
           visionMissionText: '',
           visionMissionTextEn: '',
+          quoteText: '',
+          quoteTextEn: '',
           service1Desc: '',
           service1DescEn: '',
           service2Desc: '',
@@ -186,6 +191,9 @@ export async function getHomeContent(locale: Locale): Promise<HomeContent | null
         visionMissionText: contentAny.visionMissionTextEn || '',
         visionValues: contentAny.visionValuesEn || '',
         visionValuesText: contentAny.visionValuesTextEn || '',
+        quoteTitle: contentAny.quoteTitleEn ?? '',
+        quoteText: contentAny.quoteTextEn ?? '',
+        quoteAuthor: contentAny.quoteAuthorEn ?? '',
         statsTitle: contentAny.statsTitleEn || '',
         statsProjects: contentAny.statsProjectsEn || '',
         statsYears: contentAny.statsYearsEn || '',
@@ -239,6 +247,9 @@ export async function getHomeContent(locale: Locale): Promise<HomeContent | null
       visionMissionText: content.visionMissionText || '',
       visionValues: content.visionValues || '',
       visionValuesText: content.visionValuesText || '',
+      quoteTitle: contentAny.quoteTitle ?? '',
+      quoteText: contentAny.quoteText ?? '',
+      quoteAuthor: contentAny.quoteAuthor ?? '',
       statsTitle: content.statsTitle || '',
       statsProjects: content.statsProjects || '',
       statsYears: content.statsYears || '',

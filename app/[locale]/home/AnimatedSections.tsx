@@ -113,7 +113,12 @@ export function AnimatedHero({ heroLogo, heroTitle, heroSubtitle, logoAlt, bodyF
         variants={itemVariants}
         style={{ fontFamily: headingFont || primaryFont }}
       >
-        {heroTitle}
+        {heroTitle.split('\n').map((line, index, array) => (
+          <span key={index}>
+            {line}
+            {index < array.length - 1 && <br />}
+          </span>
+        ))}
       </motion.h1>
       <motion.p
         variants={itemVariants}

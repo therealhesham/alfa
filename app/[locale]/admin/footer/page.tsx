@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
+import Image from "next/image";
 import type { Locale } from "@/i18n";
 import LogoutButton from "@/components/LogoutButton";
 import AdminNav from "@/components/AdminNav";
@@ -145,6 +146,224 @@ function EditableField({
   );
 }
 
+interface EditableImageProps {
+  src: string;
+  alt: string;
+  onChange: (newPath: string) => void;
+  width?: number;
+  height?: number;
+  style?: React.CSSProperties;
+  currentLocale: Locale;
+}
+
+function EditableImage({ src, alt, onChange, width = 140, height = 140, style, currentLocale }: EditableImageProps) {
+  const [isHovered, setIsHovered] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleImageClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert(currentLocale === "ar" ? "الرجاء اختيار ملف صورة" : "Please select an image file");
+      return;
+    }
+
+    setIsUploading(true);
+    
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('/api/upload-image', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+      
+      if (data.success) {
+        onChange(data.path);
+      } else {
+        alert(currentLocale === "ar" ? "فشل رفع الصورة" : "Failed to upload image");
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      alert(currentLocale === "ar" ? "حدث خطأ أثناء رفع الصورة" : "Error uploading image");
+    } finally {
+      setIsUploading(false);
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
+  const containerStyle: React.CSSProperties = {
+    position: 'relative',
+    display: 'inline-block',
+    cursor: 'pointer',
+    borderRadius: '12px',
+    overflow: 'hidden',
+    border: '2px dashed rgba(15, 28, 42, 0.2)',
+    padding: '1rem',
+    backgroundColor: '#ffffff',
+    transition: 'all 0.3s ease',
+    ...style
+  };
+
+  const imageStyle: React.CSSProperties = {
+    width: width,
+    height: height,
+    maxWidth: '100%',
+    borderRadius: '8px',
+    opacity: isUploading ? 0.6 : 1,
+    transition: 'opacity 0.2s',
+    objectFit: 'contain'
+  };
+
+  return (
+    <div
+      style={containerStyle}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      onClick={handleImageClick}
+    >
+      {src ? (
+        <Image
+          src={src || '/capture.png'}
+          alt={alt}
+          width={width}
+          height={height}
+          style={imageStyle}
+          unoptimized
+        />
+      ) : (
+        <div style={{
+          width: width,
+          height: height,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: 'rgba(15, 28, 42, 0.5)',
+          gap: '0.5rem',
+        }}>
+          <svg
+            width="48"
+            height="48"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+            <polyline points="21 15 16 10 5 21"></polyline>
+          </svg>
+          <span style={{ fontSize: '0.875rem', fontWeight: 500 }}>
+            {currentLocale === "ar" ? "انقر لرفع صورة" : "Click to upload image"}
+          </span>
+        </div>
+      )}
+      {isHovered && src && (
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.6)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            pointerEvents: 'none',
+            transition: 'all 0.2s',
+            borderRadius: '8px',
+          }}
+        >
+          <div style={{
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            borderRadius: '50%',
+            width: '60px',
+            height: '60px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <svg
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+            </svg>
+          </div>
+        </div>
+      )}
+      {isUploading && (
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            borderRadius: '8px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'white',
+            pointerEvents: 'none',
+            flexDirection: 'column',
+            gap: '1rem',
+          }}
+        >
+          <div style={{
+            width: '40px',
+            height: '40px',
+            border: '4px solid rgba(255, 255, 255, 0.3)',
+            borderTopColor: 'white',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+          }}></div>
+          <span style={{ fontSize: '0.95rem', fontWeight: 500 }}>
+            {currentLocale === "ar" ? "جاري الرفع..." : "Uploading..."}
+          </span>
+        </div>
+      )}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        style={{ display: 'none' }}
+        onChange={handleFileChange}
+      />
+      <style jsx>{`
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
+    </div>
+  );
+}
+
 export default function AdminFooterPage() {
   const params = useParams();
   const locale = (params?.locale as Locale) || "ar";
@@ -253,7 +472,16 @@ export default function AdminFooterPage() {
   return (
     <>
       <AdminNav locale={locale} />
-      <LogoutButton />
+      <div
+        style={{
+          position: "fixed",
+          top: "5rem",
+          right: "1rem",
+          zIndex: 9999,
+        }}
+      >
+        <LogoutButton />
+      </div>
 
       <div style={{
         position: "fixed",
@@ -367,15 +595,28 @@ export default function AdminFooterPage() {
             {currentLocaleState === "ar" ? "الشعار" : "Logo"}
           </h2>
           <div style={{ marginBottom: "1rem" }}>
-            <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: 600 }}>
-              {currentLocaleState === "ar" ? "رابط الشعار" : "Logo URL"}
+            <label style={{ display: "block", marginBottom: "1rem", fontWeight: 600, fontSize: "1rem" }}>
+              {currentLocaleState === "ar" ? "رفع الشعار" : "Upload Logo"}
             </label>
-            <EditableField
-              value={content.footerLogo}
-              onChange={(value) => handleChange("footerLogo", value)}
-              as="input"
-              placeholder={currentLocaleState === "ar" ? "أدخل رابط الشعار" : "Enter logo URL"}
+            <EditableImage
+              src={content.footerLogo}
+              alt={currentLocaleState === "ar" ? "شعار" : "Logo"}
+              onChange={(newPath) => handleChange("footerLogo", newPath)}
+              width={140}
+              height={140}
+              currentLocale={currentLocaleState}
+              style={{ width: "140px", height: "140px" }}
             />
+            <p style={{
+              marginTop: "0.75rem",
+              fontSize: "0.875rem",
+              color: "rgba(15, 28, 42, 0.6)",
+              fontStyle: "italic",
+            }}>
+              {currentLocaleState === "ar" 
+                ? "انقر على الصورة لرفع شعار جديد" 
+                : "Click on the image to upload a new logo"}
+            </p>
           </div>
         </section>
 

@@ -36,15 +36,36 @@ async function sendEmail(to: string, subject: string, html: string, emailSetting
       return false;
     }
 
+    console.log('Attempting to send email with settings:', {
+      host: emailSettings.smtpHost,
+      port: emailSettings.smtpPort,
+      user: emailSettings.smtpUser,
+      from: emailSettings.fromEmail,
+      to,
+    });
+
     const transporter = nodemailer.createTransport({
       host: emailSettings.smtpHost,
       port: parseInt(emailSettings.smtpPort || '587'),
       secure: parseInt(emailSettings.smtpPort || '587') === 465,
+      requireTLS: parseInt(emailSettings.smtpPort || '587') === 587, // Require TLS for port 587
       auth: {
         user: emailSettings.smtpUser,
         pass: emailSettings.smtpPass,
       },
+      tls: {
+        // Allow self-signed certificates (useful for some hosting providers)
+        rejectUnauthorized: false,
+      },
+      // Add connection timeout
+      connectionTimeout: 10000, // 10 seconds
+      greetingTimeout: 10000,
+      socketTimeout: 10000,
     });
+
+    // Verify connection before sending
+    await transporter.verify();
+    console.log('SMTP connection verified successfully');
 
     await transporter.sendMail({
       from: emailSettings.fromEmail,
@@ -55,8 +76,21 @@ async function sendEmail(to: string, subject: string, html: string, emailSetting
 
     console.log('Email sent successfully to:', to);
     return true;
-  } catch (error) {
-    console.error('Error sending email:', error);
+  } catch (error: any) {
+    console.error('Error sending email:', {
+      message: error.message,
+      code: error.code,
+      response: error.response,
+      responseCode: error.responseCode,
+      command: error.command,
+      host: emailSettings.smtpHost,
+    });
+    
+    // If connection to wrong server (Microsoft 365), suggest checking SMTP host
+    if (error.response && error.response.includes('OUTLOOK.COM')) {
+      console.error('⚠️ Warning: Connection to Microsoft 365 detected. Make sure SMTP host is set to cPanel server (mail.alfagolden.com or smtp.alfagolden.com)');
+    }
+    
     return false;
   }
 }

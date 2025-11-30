@@ -12,7 +12,8 @@
     "db:migrate": "prisma migrate dev",
     "db:studio": "prisma studio",
     "db:migrate-data": "tsx prisma/migrate-data.ts",
-    "create-admin": "tsx scripts/create-admin-user.ts"
+    "create-admin": "tsx scripts/create-admin-user.ts",
+    "setup-email": "tsx scripts/setup-email-config.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.0.0",

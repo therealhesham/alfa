@@ -139,7 +139,7 @@ export default function AdminMessagesPage() {
           <h1 style={{
             fontSize: "2.5rem",
             fontWeight: 700,
-            color: "#0F1C2A",
+            color: "var(--gold)",
           }}>
             {locale === "ar" ? "الرسائل الواردة" : "Incoming Messages"}
           </h1>
@@ -158,7 +158,7 @@ export default function AdminMessagesPage() {
             style={{
               padding: "0.75rem 1.5rem",
               backgroundColor: filter === "all" ? "#0F1C2A" : "transparent",
-              color: filter === "all" ? "#FAF7F2" : "#0F1C2A",
+              color: filter === "all" ? "#FAF7F2" : "var(--gold)",
               border: "2px solid #0F1C2A",
               borderRadius: "8px",
               fontSize: "1rem",
@@ -174,7 +174,7 @@ export default function AdminMessagesPage() {
             style={{
               padding: "0.75rem 1.5rem",
               backgroundColor: filter === "unread" ? "#0F1C2A" : "transparent",
-              color: filter === "unread" ? "#FAF7F2" : "#0F1C2A",
+              color: filter === "unread" ? "#FAF7F2" : "var(--gold)",
               border: "2px solid #0F1C2A",
               borderRadius: "8px",
               fontSize: "1rem",
@@ -210,7 +210,7 @@ export default function AdminMessagesPage() {
             style={{
               padding: "0.75rem 1.5rem",
               backgroundColor: filter === "read" ? "#0F1C2A" : "transparent",
-              color: filter === "read" ? "#FAF7F2" : "#0F1C2A",
+              color: filter === "read" ? "#FAF7F2" : "var(--gold)",
               border: "2px solid #0F1C2A",
               borderRadius: "8px",
               fontSize: "1rem",
@@ -276,7 +276,7 @@ export default function AdminMessagesPage() {
                       <h3 style={{
                         fontSize: "1.1rem",
                         fontWeight: 600,
-                        color: "#0F1C2A",
+                        color: "var(--gold)",
                         margin: 0,
                       }}>
                         {message.name}
@@ -330,7 +330,7 @@ export default function AdminMessagesPage() {
                 <h2 style={{
                   fontSize: "1.75rem",
                   fontWeight: 700,
-                  color: "#0F1C2A",
+                  color: "var(--gold)",
                   margin: 0,
                 }}>
                   {selectedMessage.subject}
@@ -378,11 +378,11 @@ export default function AdminMessagesPage() {
                 marginBottom: "1rem",
               }}>
                 <div style={{ marginBottom: "1rem" }}>
-                  <strong style={{ color: "#0F1C2A" }}>{locale === "ar" ? "الاسم:" : "Name:"}</strong>
+                  <strong style={{ color: "var(--gold)" }}>{locale === "ar" ? "الاسم:" : "Name:"}</strong>
                   <p style={{ margin: "0.5rem 0 0 0", color: "#666" }}>{selectedMessage.name}</p>
                 </div>
                 <div style={{ marginBottom: "1rem" }}>
-                  <strong style={{ color: "#0F1C2A" }}>{locale === "ar" ? "البريد الإلكتروني:" : "Email:"}</strong>
+                  <strong style={{ color: "var(--gold)" }}>{locale === "ar" ? "البريد الإلكتروني:" : "Email:"}</strong>
                   <p style={{ margin: "0.5rem 0 0 0", color: "#666" }}>
                     <a href={`mailto:${selectedMessage.email}`} style={{ color: "#0070f3" }}>
                       {selectedMessage.email}
@@ -391,7 +391,7 @@ export default function AdminMessagesPage() {
                 </div>
                 {selectedMessage.phone && (
                   <div style={{ marginBottom: "1rem" }}>
-                    <strong style={{ color: "#0F1C2A" }}>{locale === "ar" ? "الهاتف:" : "Phone:"}</strong>
+                    <strong style={{ color: "var(--gold)" }}>{locale === "ar" ? "الهاتف:" : "Phone:"}</strong>
                     <p style={{ margin: "0.5rem 0 0 0", color: "#666" }}>
                       <a href={`tel:${selectedMessage.phone}`} style={{ color: "#0070f3" }}>
                         {selectedMessage.phone}
@@ -400,7 +400,7 @@ export default function AdminMessagesPage() {
                   </div>
                 )}
                 <div style={{ marginBottom: "1rem" }}>
-                  <strong style={{ color: "#0F1C2A" }}>{locale === "ar" ? "التاريخ:" : "Date:"}</strong>
+                  <strong style={{ color: "var(--gold)" }}>{locale === "ar" ? "التاريخ:" : "Date:"}</strong>
                   <p style={{ margin: "0.5rem 0 0 0", color: "#666" }}>
                     {new Date(selectedMessage.createdAt).toLocaleString(locale === "ar" ? "ar-SA" : "en-US")}
                   </p>
@@ -412,7 +412,7 @@ export default function AdminMessagesPage() {
                 padding: "1.5rem",
                 borderRadius: "8px",
               }}>
-                <strong style={{ color: "#0F1C2A" }}>{locale === "ar" ? "الرسالة:" : "Message:"}</strong>
+                <strong style={{ color: "var(--gold)" }}>{locale === "ar" ? "الرسالة:" : "Message:"}</strong>
                 <p style={{
                   margin: "1rem 0 0 0",
                   color: "#666",

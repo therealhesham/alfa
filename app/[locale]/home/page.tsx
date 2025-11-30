@@ -83,6 +83,11 @@ export default async function HomePage({ params }: HomePageProps) {
     visionMissionText: t.vision.missionText,
     visionValues: t.vision.values,
     visionValuesText: t.vision.valuesText,
+    quoteTitle: validLocale === "ar" ? "في ظلال المدينة" : "At City Shadows",
+    quoteText: validLocale === "ar" 
+      ? "نؤمن أن العقارات هي أكثر بكثير من المباني والمساحات. إنها فن تشكيل أنماط الحياة المكررة وبناء مجتمعات تعكس الأناقة الخالدة والعيش الراقي."
+      : "We believe that real estate is far more than structures and spaces. It's the art of shaping refined lifestyles and cultivating communities that reflect timeless elegance and elevated living.",
+    quoteAuthor: validLocale === "ar" ? "المدير التنفيذي" : "Managing Director",
     statsTitle: t.stats.title,
     statsProjects: t.stats.projects,
     statsYears: t.stats.years,
@@ -192,13 +197,14 @@ export default async function HomePage({ params }: HomePageProps) {
         primaryFont={settings?.primaryFont}
       />
 
-      {/* Quote Section - OUD Style */}
       <AnimatedQuote
-        title={validLocale === "ar" ? "في ظلال المدينة" : "At City Shadows"}
-        text={validLocale === "ar" 
+        title={displayContent.quoteTitle || (validLocale === "ar" ? "في ظلال المدينة" : "At City Shadows")}
+        text={displayContent.quoteText || (validLocale === "ar" 
           ? "نؤمن أن العقارات هي أكثر بكثير من المباني والمساحات. إنها فن تشكيل أنماط الحياة المكررة وبناء مجتمعات تعكس الأناقة الخالدة والعيش الراقي."
-          : "We believe that real estate is far more than structures and spaces. It's the art of shaping refined lifestyles and cultivating communities that reflect timeless elegance and elevated living."}
-        author={validLocale === "ar" ? "المدير التنفيذي" : "Managing Director"}
+          : "We believe that real estate is far more than structures and spaces. It's the art of shaping refined lifestyles and cultivating communities that reflect timeless elegance and elevated living.")}
+        author={displayContent.quoteAuthor && displayContent.quoteAuthor.trim() !== '' 
+          ? displayContent.quoteAuthor 
+          : (validLocale === "ar" ? "المدير التنفيذي" : "Managing Director")}
         bodyFont={settings?.bodyFont}
         headingFont={settings?.headingFont}
         primaryFont={settings?.primaryFont}
@@ -257,6 +263,10 @@ export default async function HomePage({ params }: HomePageProps) {
           {
             number: displayContent.statsYearsNum,
             label: displayContent.statsYears,
+          },
+          {
+            number: displayContent.statsCountriesNum,
+            label: displayContent.statsCountries,
           },
         ]}
         bodyFont={settings?.bodyFont}

@@ -17,21 +17,23 @@ const adminRoutes: AdminRoute[] = [
       ar: "الرئيسية",
       en: "Home",
     },
-  },
-  {
-    slug: "about-us",
-    labels: {
-      ar: "من نحن",
-      en: "About Us",
-    },
-  },
-  {
-    slug: "contact-us",
-    labels: {
-      ar: "تواصلوا معنا",
-      en: "Contact Us",
-    },
-  },
+  }
+  // ,
+  // {
+  //   slug: "about-us",
+  //   labels: {
+  //     ar: "من نحن",
+  //     en: "About Us",
+  //   },
+  // }
+  ,
+  // {
+  //   slug: "contact-us",
+  //   labels: {
+  //     ar: "تواصلوا معنا",
+  //     en: "Contact Us",
+  //   },
+  // },
   {
     slug: "messages",
     labels: {

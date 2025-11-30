@@ -24,6 +24,9 @@ interface HomeContent {
   visionMissionText: string;
   visionValues: string;
   visionValuesText: string;
+  quoteTitle: string;
+  quoteText: string;
+  quoteAuthor: string;
   statsTitle: string;
   statsProjects: string;
   statsYears: string;
@@ -95,6 +98,7 @@ interface EditableFieldProps {
   className?: string;
   rows?: number;
   placeholder?: string;
+  displayAs?: "h1" | "h2" | "h3" | "p" | "span";
 }
 
 function EditableField({ 
@@ -103,7 +107,8 @@ function EditableField({
   as = "p", 
   className = "",
   rows = 3,
-  placeholder = ""
+  placeholder = "",
+  displayAs
 }: EditableFieldProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(value);
@@ -143,9 +148,19 @@ function EditableField({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && as !== "textarea") {
-      e.preventDefault();
-      handleBlur();
+    if (e.key === "Enter") {
+      if (as === "textarea") {
+        // Allow Shift+Enter for new line in textarea
+        if (!e.shiftKey) {
+          e.preventDefault();
+          handleBlur();
+        }
+        // Shift+Enter will naturally create a new line, so we don't prevent default
+      } else {
+        // For input fields, Enter closes the field
+        e.preventDefault();
+        handleBlur();
+      }
     } else if (e.key === "Escape") {
       setEditValue(value);
       setIsEditing(false);
@@ -183,6 +198,38 @@ function EditableField({
   // For textarea and input, we need to use a span in display mode since they can't have children
   // Using span instead of div to avoid hydration errors when used inside inline elements like <p> or <h4>
   if (as === "textarea" || as === "input") {
+    // If displayAs is specified, use that tag instead of span
+    if (displayAs) {
+      const DisplayTag = displayAs;
+      return (
+        <DisplayTag
+          onClick={handleClick}
+          className={className}
+          style={{
+            cursor: "pointer",
+            position: "relative",
+            padding: "0.25rem",
+            borderRadius: "4px",
+            transition: "background-color 0.2s",
+            whiteSpace: as === "textarea" ? "pre-wrap" : "normal",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = "rgba(0, 112, 243, 0.1)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = "transparent";
+          }}
+          title="انقر للتعديل"
+        >
+          {value.split('\n').map((line, index, array) => (
+            <span key={index}>
+              {line}
+              {index < array.length - 1 && <br />}
+            </span>
+          ))}
+        </DisplayTag>
+      );
+    }
     return (
       <span
         onClick={handleClick}
@@ -400,11 +447,22 @@ export default function AdminHomePage() {
   const [contactEmails, setContactEmails] = useState<Array<{ id: string; email: string; isActive: boolean }>>([]);
   const [newEmail, setNewEmail] = useState("");
   const [loadingEmails, setLoadingEmails] = useState(false);
+  const [projects, setProjects] = useState<Array<{
+    id: string;
+    title: string;
+    description: string;
+    image: string;
+    location?: string | null;
+    category?: string | null;
+    year?: string | null;
+  }>>([]);
+  const [loadingProjects, setLoadingProjects] = useState(false);
 
   useEffect(() => {
     fetchContent();
     fetchContactContent();
     fetchContactEmails();
+    fetchProjects();
   }, [currentLocale]);
 
   const fetchContent = async () => {
@@ -500,6 +558,23 @@ export default function AdminHomePage() {
       console.error("Error fetching contact emails:", error);
     } finally {
       setLoadingEmails(false);
+    }
+  };
+
+  const fetchProjects = async () => {
+    try {
+      setLoadingProjects(true);
+      const response = await fetch(`/api/projects?locale=${currentLocale}`);
+      if (response.ok) {
+        const data = await response.json();
+        // Get first 3 published projects (API already filters by isPublished: true when all is not set)
+        const publishedProjects = (data.projects || []).slice(0, 3);
+        setProjects(publishedProjects);
+      }
+    } catch (error) {
+      console.error("Error fetching projects:", error);
+    } finally {
+      setLoadingProjects(false);
     }
   };
 
@@ -763,7 +838,9 @@ export default function AdminHomePage() {
         <EditableField
           value={content.heroTitle}
           onChange={(value) => handleChange("heroTitle", value)}
-          as="h1"
+          as="textarea"
+          rows={2}
+          displayAs="h1"
         />
         <EditableField
           value={content.heroSubtitle}
@@ -837,6 +914,46 @@ export default function AdminHomePage() {
               onChange={(value) => handleChange("visionValuesText", value)}
               as="textarea"
               rows={2}
+            />
+          </div>
+        </div>
+      </section>
+
+      <section id="quote" className="quote-section" style={{
+        padding: "clamp(60px, 10vw, 130px) clamp(1.5rem, 5vw, 8%)",
+        position: "relative",
+        minHeight: "60vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}>
+        <div style={{
+          maxWidth: "900px",
+          margin: "0 auto",
+          textAlign: "center",
+          position: "relative",
+          zIndex: 2,
+        }}>
+          <div className="quote-title">
+            <EditableField
+              value={content.quoteTitle}
+              onChange={(value) => handleChange("quoteTitle", value)}
+              as="h2"
+            />
+          </div>
+          <div className="quote-text">
+            <EditableField
+              value={content.quoteText}
+              onChange={(value) => handleChange("quoteText", value)}
+              as="textarea"
+              rows={4}
+            />
+          </div>
+          <div className="quote-author">
+            <EditableField
+              value={content.quoteAuthor}
+              onChange={(value) => handleChange("quoteAuthor", value)}
+              as="p"
             />
           </div>
         </div>
@@ -934,91 +1051,134 @@ export default function AdminHomePage() {
           as="p"
           className="section-subtitle"
         />
-        <div className="projects-grid">
-          <div className="project-card">
-            <div className="project-image">
-              <EditableImage
-                src={content.project1Image}
-                alt={content.project1Title}
-                onChange={(newPath) => handleChange("project1Image", newPath)}
-                width={400}
-                height={300}
-                currentLocale={currentLocale}
-              />
-            </div>
-            <div className="project-content">
-              <EditableField
-                value={content.project1Title}
-                onChange={(value) => handleChange("project1Title", value)}
-                as="h3"
-              />
-              <EditableField
-                value={content.project1Desc}
-                onChange={(value) => handleChange("project1Desc", value)}
-                as="textarea"
-                rows={3}
-              />
-            </div>
+        {loadingProjects ? (
+          <div style={{ textAlign: "center", padding: "2rem", color: "#666" }}>
+            {currentLocale === "ar" ? "جاري تحميل المشاريع..." : "Loading projects..."}
           </div>
-          <div className="project-card">
-            <div className="project-image">
-              <EditableImage
-                src={content.project2Image}
-                alt={content.project2Title}
-                onChange={(newPath) => handleChange("project2Image", newPath)}
-                width={400}
-                height={300}
-                currentLocale={currentLocale}
-              />
-            </div>
-            <div className="project-content">
-              <EditableField
-                value={content.project2Title}
-                onChange={(value) => handleChange("project2Title", value)}
-                as="h3"
-              />
-              <EditableField
-                value={content.project2Desc}
-                onChange={(value) => handleChange("project2Desc", value)}
-                as="textarea"
-                rows={3}
-              />
-            </div>
+        ) : projects.length === 0 ? (
+          <div style={{ 
+            textAlign: "center", 
+            padding: "3rem", 
+            backgroundColor: "rgba(250, 247, 242, 0.5)",
+            borderRadius: "12px",
+            margin: "2rem 0"
+          }}>
+            <p style={{ marginBottom: "1rem", color: "#666" }}>
+              {currentLocale === "ar" 
+                ? "لا توجد مشاريع منشورة. قم بإضافة مشاريع من صفحة إدارة المشاريع." 
+                : "No published projects. Add projects from the projects management page."}
+            </p>
+            <a
+              href={`/${locale}/admin/our-projects`}
+              style={{
+                display: "inline-block",
+                padding: "0.75rem 1.5rem",
+                backgroundColor: "#0F1C2A",
+                color: "#FAF7F2",
+                textDecoration: "none",
+                borderRadius: "8px",
+                fontWeight: 600,
+                transition: "all 0.2s",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "#D4C19D";
+                e.currentTarget.style.color = "#0F1C2A";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "#0F1C2A";
+                e.currentTarget.style.color = "#FAF7F2";
+              }}
+            >
+              {currentLocale === "ar" ? "إدارة المشاريع" : "Manage Projects"}
+            </a>
           </div>
-          <div className="project-card">
-            <div className="project-image">
-              <EditableImage
-                src={content.project3Image}
-                alt={content.project3Title}
-                onChange={(newPath) => handleChange("project3Image", newPath)}
-                width={400}
-                height={300}
-                currentLocale={currentLocale}
-              />
+        ) : (
+          <>
+            <div className="projects-grid">
+              {projects.map((project) => (
+                <div key={project.id} className="project-card">
+                  <div className="project-image">
+                    <Image
+                      src={project.image || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
+                      alt={project.title}
+                      width={400}
+                      height={300}
+                      unoptimized
+                      style={{ width: "100%", height: "auto", objectFit: "cover" }}
+                    />
+                  </div>
+                  <div className="project-content">
+                    {project.category && (
+                      <div style={{
+                        fontSize: "0.9rem",
+                        color: "var(--gold)",
+                        fontWeight: "600",
+                        marginBottom: "0.5rem",
+                        textTransform: "uppercase",
+                        letterSpacing: "1px",
+                      }}>
+                        {project.category}
+                      </div>
+                    )}
+                    <h3>{project.title}</h3>
+                    <p>{project.description}</p>
+                    {(project.location || project.year) && (
+                      <div style={{
+                        display: "flex",
+                        gap: "1rem",
+                        flexWrap: "wrap",
+                        fontSize: "0.9rem",
+                        color: "#999",
+                        marginTop: "0.5rem",
+                      }}>
+                        {project.location && <span>📍 {project.location}</span>}
+                        {project.year && <span>📅 {project.year}</span>}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
-            <div className="project-content">
+            <div className="view-more-container" style={{ 
+              display: "flex", 
+              justifyContent: "space-between", 
+              alignItems: "center",
+              marginTop: "2rem",
+              gap: "1rem",
+              flexWrap: "wrap"
+            }}>
               <EditableField
-                value={content.project3Title}
-                onChange={(value) => handleChange("project3Title", value)}
-                as="h3"
+                value={content.projectsViewMore}
+                onChange={(value) => handleChange("projectsViewMore", value)}
+                as="input"
+                placeholder="نص زر المزيد"
               />
-              <EditableField
-                value={content.project3Desc}
-                onChange={(value) => handleChange("project3Desc", value)}
-                as="textarea"
-                rows={3}
-              />
+              <a
+                href={`/${locale}/admin/our-projects`}
+                style={{
+                  padding: "0.75rem 1.5rem",
+                  backgroundColor: "#0F1C2A",
+                  color: "#FAF7F2",
+                  textDecoration: "none",
+                  borderRadius: "8px",
+                  fontWeight: 600,
+                  transition: "all 0.2s",
+                  fontSize: "0.9rem",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = "#D4C19D";
+                  e.currentTarget.style.color = "#0F1C2A";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "#0F1C2A";
+                  e.currentTarget.style.color = "#FAF7F2";
+                }}
+              >
+                {currentLocale === "ar" ? "إدارة المشاريع" : "Manage Projects"}
+              </a>
             </div>
-          </div>
-        </div>
-        <div className="view-more-container">
-          <EditableField
-            value={content.projectsViewMore}
-            onChange={(value) => handleChange("projectsViewMore", value)}
-            as="input"
-            placeholder="نص زر المزيد"
-          />
-        </div>
+          </>
+        )}
       </section>
 
       <section id="stats" className="stats">
@@ -1052,7 +1212,7 @@ export default function AdminHomePage() {
               as="p"
             />
           </div>
-          {/* <div className="stat">
+          <div className="stat">
             <EditableField
               value={content.statsCountriesNum}
               onChange={(value) => handleChange("statsCountriesNum", value)}
@@ -1064,18 +1224,6 @@ export default function AdminHomePage() {
               as="p"
             />
           </div>
-          <div className="stat">
-            <EditableField
-              value={content.statsAwardsNum}
-              onChange={(value) => handleChange("statsAwardsNum", value)}
-              as="h3"
-            />
-            <EditableField
-              value={content.statsAwards}
-              onChange={(value) => handleChange("statsAwards", value)}
-              as="p"
-            />
-          </div> */}
         </div>
       </section>
 
