@@ -111,7 +111,7 @@ export default function Header({ locale, settings, headerLogo, isHomePage = fals
               {t.nav.about}
             </a>
           ) : (
-            <Link href={`/${locale}/about-us`}>
+            <Link href={`/${locale}/home#about`}>
               {t.nav.about}
             </Link>
           )
@@ -169,13 +169,13 @@ export default function Header({ locale, settings, headerLogo, isHomePage = fals
               <LanguageSwitcher currentLocale={locale} />
             </div>
           )}
-          <button
+          {/* <button
             className="sidebar-close-btn"
             onClick={closeMenu}
             aria-label="Close menu"
           >
             <X size={24} strokeWidth={2.5} />
-          </button>
+          </button> */}
         </div>
         <div className="sidebar-content">
           {settings?.showHome !== false && (
@@ -189,7 +189,7 @@ export default function Header({ locale, settings, headerLogo, isHomePage = fals
                 <span className="nav-link-text">{t.nav.about}</span>
               </a>
             ) : (
-              <Link href={`/${locale}/about-us`} onClick={closeMenu} className="nav-link">
+              <Link href={`/${locale}/home#about`} onClick={closeMenu} className="nav-link">
                 <span className="nav-link-text">{t.nav.about}</span>
               </Link>
             )
