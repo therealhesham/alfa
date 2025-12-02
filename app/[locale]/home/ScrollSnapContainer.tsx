@@ -11,6 +11,7 @@ export function ScrollSnapContainer({ children }: ScrollSnapContainerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isScrolling, setIsScrolling] = useState(false);
   const [currentSection, setCurrentSection] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
   const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
   
   const { scrollYProgress } = useScroll({
@@ -32,6 +33,18 @@ export function ScrollSnapContainer({ children }: ScrollSnapContainerProps) {
   // Convert children to array
   const childrenArray = Children.toArray(children);
 
+  // Detect if device is mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   // Handle scroll events to detect current section
   useEffect(() => {
     const container = containerRef.current;
@@ -49,29 +62,32 @@ export function ScrollSnapContainer({ children }: ScrollSnapContainerProps) {
       scrollTimeoutRef.current = setTimeout(() => {
         setIsScrolling(false);
         
-        // Snap to nearest section when scrolling stops
-        const sections = container.querySelectorAll('.scroll-snap-section, section');
-        let nearestIdx = 0;
-        let minDistance = Infinity;
+        // Only snap on desktop
+        if (!isMobile) {
+          // Snap to nearest section when scrolling stops
+          const sections = container.querySelectorAll('.scroll-snap-section, section');
+          let nearestIdx = 0;
+          let minDistance = Infinity;
 
-        sections.forEach((section, index) => {
-          const rect = section.getBoundingClientRect();
-          const containerRect = container.getBoundingClientRect();
-          
-          // Calculate distance from section top to container top
-          const distance = Math.abs(rect.top - containerRect.top);
-          
-          if (distance < minDistance) {
-            minDistance = distance;
-            nearestIdx = index;
-          }
-        });
+          sections.forEach((section, index) => {
+            const rect = section.getBoundingClientRect();
+            const containerRect = container.getBoundingClientRect();
+            
+            // Calculate distance from section top to container top
+            const distance = Math.abs(rect.top - containerRect.top);
+            
+            if (distance < minDistance) {
+              minDistance = distance;
+              nearestIdx = index;
+            }
+          });
 
-        // If not perfectly aligned, snap to nearest section
-        if (minDistance > 5) {
-          const targetSection = sections[nearestIdx] as HTMLElement;
-          if (targetSection) {
-            targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          // If not perfectly aligned, snap to nearest section
+          if (minDistance > 5) {
+            const targetSection = sections[nearestIdx] as HTMLElement;
+            if (targetSection) {
+              targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
           }
         }
       }, 150);
@@ -109,12 +125,12 @@ export function ScrollSnapContainer({ children }: ScrollSnapContainerProps) {
         clearTimeout(scrollTimeoutRef.current);
       }
     };
-  }, []);
+  }, [isMobile]);
 
-  // Improved wheel event handling for better snap behavior
+  // Improved wheel event handling for better snap behavior (desktop only)
   useEffect(() => {
     const container = containerRef.current;
-    if (!container) return;
+    if (!container || isMobile) return; // Skip on mobile
 
     let isThrottled = false;
     let lastScrollTime = 0;
@@ -152,12 +168,12 @@ export function ScrollSnapContainer({ children }: ScrollSnapContainerProps) {
     return () => {
       container.removeEventListener('wheel', handleWheel);
     };
-  }, []);
+  }, [isMobile]);
 
-  // Keyboard navigation
+  // Keyboard navigation (desktop only)
   useEffect(() => {
     const container = containerRef.current;
-    if (!container) return;
+    if (!container || isMobile) return; // Skip on mobile
 
     const handleKeyDown = (e: KeyboardEvent) => {
       const sections = container.querySelectorAll('.scroll-snap-section, section');
@@ -196,7 +212,7 @@ export function ScrollSnapContainer({ children }: ScrollSnapContainerProps) {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [currentSection, childrenArray.length]);
+  }, [currentSection, childrenArray.length, isMobile]);
 
   return (
     <div
@@ -208,7 +224,7 @@ export function ScrollSnapContainer({ children }: ScrollSnapContainerProps) {
         height: '100vh',
         overflowY: 'auto',
         overflowX: 'hidden',
-        scrollSnapType: 'y mandatory',
+        scrollSnapType: isMobile ? 'none' : 'y mandatory', // Disable snap on mobile
         scrollBehavior: 'smooth',
         WebkitOverflowScrolling: 'touch',
         direction: 'ltr', // Force scrollbar to right side
@@ -246,7 +262,8 @@ export function ScrollSnapContainer({ children }: ScrollSnapContainerProps) {
         }}
       />
       
-      {/* Scroll Progress Indicator */}
+      {/* Scroll Progress Indicator - Hide on mobile */}
+      {!isMobile && (
       <div
         style={{
           position: 'fixed',
@@ -274,6 +291,7 @@ export function ScrollSnapContainer({ children }: ScrollSnapContainerProps) {
           />
         ))}
       </div>
+      )}
 
       {/* Content wrapper - ensures all mouse interactions work */}
       <div
@@ -289,10 +307,10 @@ export function ScrollSnapContainer({ children }: ScrollSnapContainerProps) {
             key={index}
             style={{
               width: '100%',
-              minHeight: '100vh',
+              minHeight: isMobile ? 'auto' : '100vh', // Auto height on mobile for natural scroll
               flexShrink: 0,
-              scrollSnapAlign: 'start',
-              scrollSnapStop: 'always',
+              scrollSnapAlign: isMobile ? 'none' : 'start', // Disable snap align on mobile
+              scrollSnapStop: isMobile ? 'normal' : 'always', // Normal stop on mobile
               pointerEvents: 'auto', // Ensure mouse interactions work
               position: 'relative',
               scrollMarginTop: '0px',

@@ -120,7 +120,7 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
             </p>
           </div>
 
-          <div className="home-contact-grid">
+          <div className="home-contact-grid top-0">
             <div className="home-contact-form-wrapper">
               {success && (
                 <div className="home-success-message">
@@ -206,7 +206,7 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
                     name="message"
                     value={formData.message}
                     onChange={handleChange}
-                    rows={4}
+                    rows={3}
                     className={errors.message ? "error" : ""}
                     style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}
                   />
@@ -369,9 +369,9 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
 
         .home-contact-grid {
           display: grid;
-          grid-template-columns: 1.6fr 1fr;
+          grid-template-columns: 1.3fr 1fr;
           gap: clamp(30px, 4vw, 50px);
-          align-items: start;
+          align-items: stretch;
         }
 
         .home-contact-form-wrapper,
@@ -385,6 +385,9 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
             0 20px 60px rgba(0, 0, 0, 0.5),
             0 8px 25px rgba(0, 0, 0, 0.3);
           transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+          height: 100%;
+          display: flex;
+          flex-direction: column;
         }
 
         .home-contact-form-wrapper:hover,
@@ -416,14 +419,25 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
         }
 
         .home-contact-form {
-          display: flex;
-          flex-direction: column;
-          gap: 1rem;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 0.875rem;
+          column-gap: 1.25rem;
         }
 
         .home-form-group {
           display: flex;
           flex-direction: column;
+        }
+        
+        /* Make message field span full width */
+        .home-form-group:has(textarea) {
+          grid-column: 1 / -1;
+        }
+        
+        /* Make submit button span full width */
+        .home-submit-button {
+          grid-column: 1 / -1;
         }
 
         .home-form-group label {
@@ -440,7 +454,7 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
         .home-form-group input,
         .home-form-group textarea {
           width: 100%;
-          padding: 0.65rem;
+          padding: 0.6rem 0.75rem;
           border: 2px solid rgba(255, 255, 255, 0.1);
           border-radius: 8px;
           font-size: 0.95rem;
@@ -521,6 +535,8 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
           display: flex;
           flex-direction: column;
           gap: 1.25rem;
+          flex-grow: 1;
+          justify-content: center;
         }
 
         .home-info-item {
@@ -565,12 +581,21 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
           .home-contact-info {
             padding: 30px;
           }
+          
+          .home-contact-form {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+          }
         }
 
         @media (max-width: 768px) {
           .home-contact-form-wrapper,
           .home-contact-info {
             padding: 25px;
+          }
+          
+          .home-contact-form {
+            grid-template-columns: 1fr;
           }
         }
 

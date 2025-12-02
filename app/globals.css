@@ -863,6 +863,17 @@ section {
   justify-content: center;
   padding-top: clamp(40px, 5vw, 60px);
   padding-bottom: clamp(40px, 5vw, 60px);
+  overflow: hidden; /* Hide any scrollbar */
+}
+
+/* Hide scrollbar in contact section completely */
+#contact::-webkit-scrollbar {
+  display: none;
+}
+
+#contact {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
 @media (max-width: 768px) {
