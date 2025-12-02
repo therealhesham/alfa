@@ -11,7 +11,7 @@ export function ScrollSnapContainer({ children }: ScrollSnapContainerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isScrolling, setIsScrolling] = useState(false);
   const [currentSection, setCurrentSection] = useState(0);
-  const scrollTimeoutRef = useRef<NodeJS.Timeout>();
+  const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
   
   const { scrollYProgress } = useScroll({
     target: containerRef,
