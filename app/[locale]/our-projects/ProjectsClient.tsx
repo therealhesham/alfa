@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { Globe, Award, Building2, Home, BookOpen } from "lucide-react";
@@ -27,7 +28,39 @@ interface ProjectsClientProps {
 }
 
 export default function ProjectsClient({ projects, locale, settings, pageContent }: ProjectsClientProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+
+  // Initialize selected project from URL parameter on mount
+  useEffect(() => {
+    const projectId = searchParams.get('project');
+    if (projectId) {
+      const project = projects.find(p => p.id === projectId);
+      if (project) {
+        setSelectedProject(project);
+      }
+    }
+  }, [searchParams, projects]);
+
+  // Update URL when project is selected or closed
+  const handleProjectSelect = (project: Project | null) => {
+    setSelectedProject(project);
+    
+    const params = new URLSearchParams(searchParams.toString());
+    if (project) {
+      params.set('project', project.id);
+    } else {
+      params.delete('project');
+    }
+    
+    const newUrl = params.toString() 
+      ? `${pathname}?${params.toString()}` 
+      : pathname;
+    
+    router.replace(newUrl, { scroll: false });
+  };
 
   // Categorize projects by projectType
   const categorizedProjects = useMemo(() => {
@@ -65,7 +98,7 @@ export default function ProjectsClient({ projects, locale, settings, pageContent
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-50px" }}
-      onClick={() => setSelectedProject(project)}
+      onClick={() => handleProjectSelect(project)}
       whileHover={{ 
         y: -10, 
         scale: 1.02,
@@ -325,7 +358,7 @@ export default function ProjectsClient({ projects, locale, settings, pageContent
         <ProjectBookViewer
           project={selectedProject}
           locale={locale}
-          onClose={() => setSelectedProject(null)}
+          onClose={() => handleProjectSelect(null)}
         />
       )}
 

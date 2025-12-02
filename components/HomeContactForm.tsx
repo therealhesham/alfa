@@ -206,7 +206,7 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
                     name="message"
                     value={formData.message}
                     onChange={handleChange}
-                    rows={6}
+                    rows={4}
                     className={errors.message ? "error" : ""}
                     style={{ fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}
                   />
@@ -296,8 +296,8 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
 
       <style jsx>{`
         .home-contact-section {
-          padding: clamp(100px, 12vw, 150px) clamp(1.5rem, 5vw, 8%);
-          padding-top: clamp(180px, 20vw, 250px);
+          padding: clamp(40px, 6vw, 60px) clamp(1.5rem, 5vw, 8%);
+          padding-top: clamp(60px, 8vw, 80px);
           background: #000000;
           position: relative;
           z-index: 1;
@@ -345,13 +345,13 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
 
         .home-contact-header {
           text-align: center;
-          margin-bottom: clamp(40px, 6vw, 70px);
+          margin-bottom: clamp(25px, 4vw, 40px);
         }
 
         .home-contact-header h2 {
-          font-size: clamp(2.2rem, 7vw, 4rem);
+          font-size: clamp(2rem, 6vw, 3.5rem);
           color: var(--gold);
-          margin-bottom: 1.5rem;
+          margin-bottom: 1rem;
           font-weight: 800;
           line-height: 1.2;
           letter-spacing: -0.02em;
@@ -370,7 +370,7 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
         .home-contact-grid {
           display: grid;
           grid-template-columns: 1.6fr 1fr;
-          gap: 60px;
+          gap: clamp(30px, 4vw, 50px);
           align-items: start;
         }
 
@@ -378,7 +378,7 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
         .home-contact-info {
           background: rgba(255, 255, 255, 0.05);
           backdrop-filter: blur(10px);
-          padding: clamp(30px, 5vw, 50px);
+          padding: clamp(20px, 4vw, 35px);
           border-radius: 24px;
           border: 1px solid rgba(255, 255, 255, 0.1);
           box-shadow: 
@@ -418,7 +418,7 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
         .home-contact-form {
           display: flex;
           flex-direction: column;
-          gap: 1.5rem;
+          gap: 1rem;
         }
 
         .home-form-group {
@@ -440,10 +440,10 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
         .home-form-group input,
         .home-form-group textarea {
           width: 100%;
-          padding: 0.875rem;
+          padding: 0.65rem;
           border: 2px solid rgba(255, 255, 255, 0.1);
           border-radius: 8px;
-          font-size: 1rem;
+          font-size: 0.95rem;
           background: rgba(255, 255, 255, 0.05);
           color: rgba(212, 193, 157, 0.9);
           transition: all 0.3s ease;
@@ -502,9 +502,9 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
         }
 
         .home-contact-info h3 {
-          font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+          font-size: clamp(1.4rem, 3vw, 2rem);
           color: var(--gold);
-          margin-bottom: 1rem;
+          margin-bottom: 0.75rem;
           font-weight: 800;
           letter-spacing: -0.01em;
         }
@@ -512,20 +512,20 @@ export default function HomeContactForm({ locale, settings, content }: HomeConta
         .home-contact-info > p {
           color: rgba(212, 193, 157, 0.85);
           opacity: 0.9;
-          line-height: 1.8;
-          margin-bottom: 2rem;
-          font-size: 1.1rem;
+          line-height: 1.6;
+          margin-bottom: 1.5rem;
+          font-size: 1rem;
         }
 
         .home-info-items {
           display: flex;
           flex-direction: column;
-          gap: 2rem;
+          gap: 1.25rem;
         }
 
         .home-info-item {
           display: flex;
-          gap: 1.5rem;
+          gap: 1rem;
           align-items: flex-start;
         }
 

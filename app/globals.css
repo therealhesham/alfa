@@ -34,6 +34,9 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 100px;
+  /* Improve touch scrolling on iOS */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: pan-y;
 }
 
 body {
@@ -45,7 +48,7 @@ body {
   position: relative;
 }
 
-/* Scroll Snap Container */
+/* Scroll Snap Container - Improved */
 .scroll-snap-container {
   position: relative;
   width: 100%;
@@ -57,6 +60,30 @@ body {
   -webkit-overflow-scrolling: touch;
   direction: ltr; /* Force scrollbar to right side */
   pointer-events: auto; /* Ensure mouse interactions work */
+  scroll-padding: 0;
+  scroll-padding-top: 0;
+  scroll-padding-bottom: 0;
+  overscroll-behavior-y: contain; /* Prevent scroll chaining */
+}
+
+/* Custom scrollbar styling for better UX */
+.scroll-snap-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scroll-snap-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.scroll-snap-container::-webkit-scrollbar-thumb {
+  background: var(--gold, #D4C19D);
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+.scroll-snap-container::-webkit-scrollbar-thumb:hover {
+  background: var(--gold-dark, #B8A67D);
 }
 
 .scroll-snap-container > div {
@@ -66,12 +93,16 @@ body {
 .scroll-snap-section {
   scroll-snap-align: start;
   scroll-snap-stop: always;
+  scroll-margin-top: 0;
+  scroll-margin-bottom: 0;
   min-height: 100vh;
+  height: 100vh; /* Force exact viewport height */
   display: flex;
   flex-direction: column;
   justify-content: center;
   position: relative;
   pointer-events: auto; /* Ensure mouse interactions work */
+  overflow: hidden; /* Prevent content overflow affecting snap */
 }
 
 /* Enhanced scroll snap for better UX */
@@ -90,12 +121,76 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .scroll-snap-container {
     scroll-snap-type: none;
+    scroll-behavior: auto;
   }
   
   .scroll-snap-section {
     scroll-snap-align: none;
     scroll-snap-stop: normal;
   }
+}
+
+/* Mobile optimizations for scroll snap */
+@media (max-width: 768px) {
+  .scroll-snap-container {
+    scroll-snap-type: y proximity; /* Less strict on mobile */
+    height: 100dvh; /* Use dynamic viewport height */
+  }
+  
+  .scroll-snap-section {
+    scroll-snap-stop: normal; /* Allow smoother scrolling on mobile */
+    min-height: 100dvh; /* Use dynamic viewport height on mobile */
+    height: auto; /* Allow flexible height on mobile */
+  }
+}
+
+/* Tablet optimizations */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .scroll-snap-container {
+    scroll-snap-type: y mandatory;
+  }
+}
+
+/* Performance optimizations for scroll snap */
+.scroll-snap-container * {
+  /* Improve rendering performance */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Smooth scroll behavior with GPU acceleration */
+.scroll-snap-section > * {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Ensure precise snap alignment */
+.scroll-snap-container > div > div {
+  scroll-snap-align: start;
+  position: relative;
+}
+
+/* Force sections to start at top of viewport */
+section.scroll-snap-section,
+.scroll-snap-section {
+  scroll-snap-align: start !important;
+  margin-top: 0 !important;
+  padding-top: 0;
+  box-sizing: border-box;
+}
+
+/* Exception for sections with custom padding */
+.scroll-snap-section.hero,
+.scroll-snap-section.about,
+.scroll-snap-section.vision,
+.scroll-snap-section.services,
+.scroll-snap-section.projects,
+.scroll-snap-section.stats {
+  padding-top: clamp(70px, 12vw, 150px);
+}
+
+.scroll-snap-section.hero {
+  padding-top: 160px;
 }
 
 /* Ensure content inside maintains RTL direction */
@@ -719,18 +814,26 @@ section {
   position: relative;
 }
 
-/* Scroll Snap Sections - Ensure proper height */
+/* Scroll Snap Sections - Ensure proper height and smooth transitions */
 .scroll-snap-section {
   min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   position: relative;
+  overflow: hidden;
+  will-change: transform; /* Optimize for animations */
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  scroll-margin-top: 0;
+  scroll-margin-bottom: 0;
 }
 
 /* Override for sections that need different padding */
 .scroll-snap-section.hero {
   min-height: 100vh;
+  height: 100vh;
   padding: 160px 5% 100px;
 }
 
@@ -740,7 +843,62 @@ section {
 .scroll-snap-section.projects,
 .scroll-snap-section.stats {
   min-height: 100vh;
+  height: 100vh;
   padding: clamp(70px, 12vw, 150px) clamp(1.5rem, 5vw, 8%);
+}
+
+/* Flexible sections that can be taller than viewport */
+.scroll-snap-section-flexible {
+  height: auto !important;
+  min-height: 100vh;
+  overflow: visible !important;
+  padding-top: clamp(30px, 4vw, 50px);
+  padding-bottom: clamp(30px, 4vw, 50px);
+}
+
+/* Ensure contact section displays properly */
+#contact {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: clamp(40px, 5vw, 60px);
+  padding-bottom: clamp(40px, 5vw, 60px);
+}
+
+@media (max-width: 768px) {
+  .scroll-snap-section-flexible {
+    padding-top: clamp(20px, 3vw, 40px);
+    padding-bottom: clamp(20px, 3vw, 40px);
+  }
+  
+  #contact {
+    padding-top: clamp(30px, 4vw, 50px);
+    padding-bottom: clamp(30px, 4vw, 50px);
+  }
+}
+
+/* Mobile adjustments for scroll snap sections */
+@media (max-width: 768px) {
+  .scroll-snap-section {
+    min-height: 100dvh;
+    height: auto;
+    overflow: visible;
+  }
+  
+  .scroll-snap-section.hero {
+    min-height: 100dvh;
+    height: auto;
+  }
+  
+  .scroll-snap-section.about,
+  .scroll-snap-section.vision,
+  .scroll-snap-section.services,
+  .scroll-snap-section.projects,
+  .scroll-snap-section.stats {
+    min-height: 100dvh;
+    height: auto;
+    padding: clamp(50px, 10vw, 100px) clamp(1rem, 4vw, 6%);
+  }
 }
 
 
@@ -2832,8 +2990,9 @@ footer p {
 }
 
 .quote-content {
-  max-width: 900px;
+  max-width: 1400px;
   margin: 0 auto;
+  /* padding: 0 2rem; */
   text-align: center;
   position: relative;
   z-index: 2;

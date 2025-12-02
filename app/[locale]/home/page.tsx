@@ -276,13 +276,16 @@ export default async function HomePage({ params }: HomePageProps) {
 
       <section 
         id="contact"
-        className="scroll-snap-section"
+        className="scroll-snap-section scroll-snap-section-flexible"
         style={{ 
           scrollSnapAlign: 'start',
           scrollSnapStop: 'always',
+          scrollMarginTop: '0px',
           minHeight: '100vh',
+          height: 'auto',
           display: 'flex',
           alignItems: 'center',
+          overflow: 'visible',
         }}
       >
         <HomeContactForm
@@ -293,10 +296,14 @@ export default async function HomePage({ params }: HomePageProps) {
       </section>
 
       <section 
-        className="scroll-snap-section"
+        className="scroll-snap-section scroll-snap-section-flexible"
         style={{ 
           scrollSnapAlign: 'start',
           scrollSnapStop: 'always',
+          scrollMarginTop: '0px',
+          minHeight: '100vh',
+          height: 'auto',
+          overflow: 'visible',
         }}
       >
         <Footer
