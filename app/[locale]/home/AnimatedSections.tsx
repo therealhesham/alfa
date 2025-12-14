@@ -664,7 +664,7 @@ export function AnimatedServices({
                 <IconComponent size={48} strokeWidth={1.5} />
               </motion.div>
               <h3 style={{ fontFamily: headingFont || primaryFont }}>{service.title}</h3>
-              <p style={{ fontFamily: bodyFont }}>{service.description}</p>
+              {/* <p style={{ fontFamily: bodyFont }}>{service.description}</p> */}
             </motion.div>
           );
         })}
