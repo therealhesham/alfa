@@ -7,6 +7,7 @@ import { Home, Layers, Activity, HelpCircle, Calendar, MapPin, Sparkles, Target,
 import { useRef, useState, useEffect } from 'react';
 import type { Locale } from '@/i18n';
 import DustParticles from '@/components/DustParticles';
+import ProjectBookViewer from '../our-projects/ProjectBookViewer';
 
 const iconMap: { [key: string]: any } = {
   Home,
@@ -77,7 +78,7 @@ export function AnimatedHero({ heroLogo, heroTitle, heroSubtitle, logoAlt, bodyF
       ref={sectionRef}
       id="hero"
       className="hero scroll-snap-section"
-      style={{ 
+      style={{
         fontFamily: bodyFont,
         scrollSnapAlign: 'start',
         scrollSnapStop: 'always',
@@ -183,7 +184,7 @@ export function AnimatedAbout({
       ref={sectionRef}
       id="about"
       className="about scroll-snap-section"
-      style={{ 
+      style={{
         fontFamily: bodyFont,
         scrollSnapAlign: 'start',
         scrollSnapStop: 'always',
@@ -279,11 +280,11 @@ export function AnimatedVision({
   };
 
   const cardVariants = {
-    hidden: (i: number) => ({ 
-      opacity: 0, 
-      x: i % 2 === 0 ? -100 : 100, 
-      y: 50, 
-      scale: 0.9 
+    hidden: (i: number) => ({
+      opacity: 0,
+      x: i % 2 === 0 ? -100 : 100,
+      y: 50,
+      scale: 0.9
     }),
     visible: (i: number) => ({
       opacity: 1,
@@ -303,7 +304,7 @@ export function AnimatedVision({
     <motion.section
       id="vision"
       className="vision scroll-snap-section"
-      style={{ 
+      style={{
         fontFamily: bodyFont,
         scrollSnapAlign: 'start',
         scrollSnapStop: 'always',
@@ -427,7 +428,7 @@ export function AnimatedPillars({ title, pillars, bodyFont, headingFont, primary
   return (
     <motion.section
       id="pillars"
-      className="pillars-section"
+      className="pillars-section scroll-snap-section"
       style={{ fontFamily: bodyFont }}
       initial="hidden"
       whileInView="visible"
@@ -505,7 +506,7 @@ export function AnimatedQuote({ title, text, author, bodyFont, headingFont, prim
     <motion.section
       id="quote"
       className="quote-section scroll-snap-section"
-      style={{ 
+      style={{
         fontFamily: bodyFont,
         scrollSnapAlign: 'start',
         scrollSnapStop: 'always',
@@ -591,11 +592,11 @@ export function AnimatedServices({
   };
 
   const cardVariants = {
-    hidden: (i: number) => ({ 
-      opacity: 0, 
-      x: i % 2 === 0 ? -100 : 100, 
-      y: 50, 
-      scale: 0.9 
+    hidden: (i: number) => ({
+      opacity: 0,
+      x: i % 2 === 0 ? -100 : 100,
+      y: 50,
+      scale: 0.9
     }),
     visible: (i: number) => ({
       opacity: 1,
@@ -615,7 +616,7 @@ export function AnimatedServices({
     <motion.section
       id="services"
       className="services scroll-snap-section"
-      style={{ 
+      style={{
         fontFamily: bodyFont,
         scrollSnapAlign: 'start',
         scrollSnapStop: 'always',
@@ -681,6 +682,7 @@ interface Project {
   location?: string | null;
   category?: string | null;
   year?: string | null;
+  images?: string[];
 }
 
 interface AnimatedProjectsProps {
@@ -689,6 +691,7 @@ interface AnimatedProjectsProps {
   projects: Project[];
   viewMoreText: string;
   viewMoreLink: string;
+  locale: Locale;
   bodyFont?: string;
   headingFont?: string;
   primaryFont?: string;
@@ -700,10 +703,13 @@ export function AnimatedProjects({
   projects,
   viewMoreText,
   viewMoreLink,
+  locale,
   bodyFont,
   headingFont,
   primaryFont,
 }: AnimatedProjectsProps) {
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -730,11 +736,11 @@ export function AnimatedProjects({
   };
 
   const cardVariants = {
-    hidden: (i: number) => ({ 
-      opacity: 0, 
-      x: i % 2 === 0 ? -100 : 100, 
-      y: 50, 
-      scale: 0.9 
+    hidden: (i: number) => ({
+      opacity: 0,
+      x: i % 2 === 0 ? -100 : 100,
+      y: 50,
+      scale: 0.9
     }),
     visible: (i: number) => ({
       opacity: 1,
@@ -754,7 +760,7 @@ export function AnimatedProjects({
     <motion.section
       id="projects"
       className="projects scroll-snap-section"
-      style={{ 
+      style={{
         fontFamily: bodyFont,
         scrollSnapAlign: 'start',
         scrollSnapStop: 'always',
@@ -766,19 +772,37 @@ export function AnimatedProjects({
       variants={containerVariants}
     >
       <DustParticles id="projects-dust" />
-      <motion.h2
-        variants={itemVariants}
-        style={{ fontFamily: headingFont || primaryFont }}
-      >
-        {title}
-      </motion.h2>
+      <motion.div className="section-header-row" variants={itemVariants}>
+        <motion.h2
+          style={{ fontFamily: headingFont || primaryFont, textAlign: 'inherit', margin: 0 }}
+        >
+          {title}
+        </motion.h2>
+
+        <motion.div
+          className="view-more-container"
+          style={{ fontFamily: bodyFont, marginTop: 0, marginBottom: 0 }}
+        >
+          <motion.a
+            href={viewMoreLink}
+            className="view-more-btn"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            style={{ fontFamily: bodyFont, padding: '0.8rem 1.5rem', fontSize: '1rem' }}
+          >
+            {viewMoreText} →
+          </motion.a>
+        </motion.div>
+      </motion.div>
+
       <motion.p
         className="section-subtitle"
         variants={itemVariants}
-        style={{ fontFamily: bodyFont }}
+        style={{ fontFamily: bodyFont, textAlign: 'inherit' }}
       >
         {subtitle}
       </motion.p>
+
       <motion.div
         className="projects-grid"
         style={{ fontFamily: bodyFont }}
@@ -791,7 +815,8 @@ export function AnimatedProjects({
             custom={index}
             variants={cardVariants}
             whileHover={{ y: -10, scale: 1.02 }}
-            style={{ fontFamily: bodyFont }}
+            style={{ fontFamily: bodyFont, cursor: 'pointer' }}
+            onClick={() => setSelectedProject(project)}
           >
             <div className="project-image">
               <Image
@@ -850,21 +875,14 @@ export function AnimatedProjects({
           </motion.div>
         ))}
       </motion.div>
-      <motion.div
-        className="view-more-container"
-        variants={itemVariants}
-        style={{ fontFamily: bodyFont }}
-      >
-        <motion.a
-          href={viewMoreLink}
-          className="view-more-btn"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          style={{ fontFamily: bodyFont }}
-        >
-          {viewMoreText} →
-        </motion.a>
-      </motion.div>
+
+      {selectedProject && (
+        <ProjectBookViewer
+          project={selectedProject as any}
+          locale={locale}
+          onClose={() => setSelectedProject(null)}
+        />
+      )}
     </motion.section>
   );
 }
@@ -907,11 +925,11 @@ export function AnimatedStats({ title, stats, bodyFont, headingFont, primaryFont
   };
 
   const statVariants = {
-    hidden: (i: number) => ({ 
-      opacity: 0, 
-      x: i % 2 === 0 ? -100 : 100, 
-      scale: 0.8, 
-      y: 30 
+    hidden: (i: number) => ({
+      opacity: 0,
+      x: i % 2 === 0 ? -100 : 100,
+      scale: 0.8,
+      y: 30
     }),
     visible: (i: number) => ({
       opacity: 1,
@@ -931,7 +949,7 @@ export function AnimatedStats({ title, stats, bodyFont, headingFont, primaryFont
     <motion.section
       id="stats"
       className="stats scroll-snap-section"
-      style={{ 
+      style={{
         fontFamily: bodyFont,
         scrollSnapAlign: 'start',
         scrollSnapStop: 'always',

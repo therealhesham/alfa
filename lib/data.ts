@@ -142,7 +142,7 @@ export interface SiteSettings {
 export async function getHomeContent(locale: Locale): Promise<HomeContent | null> {
   try {
     let content = await prisma.homeContent.findFirst();
-    
+
     if (!content) {
       content = await prisma.homeContent.create({
         data: {
@@ -173,7 +173,7 @@ export async function getHomeContent(locale: Locale): Promise<HomeContent | null
         },
       });
     }
-    
+
     if (locale === 'en') {
       const contentAny = content as any;
       return {
@@ -230,7 +230,7 @@ export async function getHomeContent(locale: Locale): Promise<HomeContent | null
         headerLogo: content.headerLogo || '',
       };
     }
-    
+
     const contentAny = content as any;
     return {
       id: content.id,
@@ -294,7 +294,7 @@ export async function getHomeContent(locale: Locale): Promise<HomeContent | null
 export async function getAboutUsContent(locale: Locale): Promise<AboutUsContent | null> {
   try {
     let content = await prisma.aboutUs.findFirst();
-    
+
     if (!content) {
       content = await prisma.aboutUs.create({
         data: {
@@ -320,7 +320,7 @@ export async function getAboutUsContent(locale: Locale): Promise<AboutUsContent 
         },
       });
     }
-    
+
     if (locale === 'en') {
       const contentAny = content as any;
       return {
@@ -365,7 +365,7 @@ export async function getAboutUsContent(locale: Locale): Promise<AboutUsContent 
         founder2Bio: contentAny.founder2BioEn || '',
       };
     }
-    
+
     const contentAny = content as any;
     return {
       id: content.id,
@@ -417,7 +417,7 @@ export async function getAboutUsContent(locale: Locale): Promise<AboutUsContent 
 export async function getContactUsContent(locale: Locale): Promise<ContactUsContent | null> {
   try {
     let content = await prisma.contactUs.findFirst();
-    
+
     if (!content) {
       content = await prisma.contactUs.create({
         data: {
@@ -426,7 +426,7 @@ export async function getContactUsContent(locale: Locale): Promise<ContactUsCont
         },
       });
     }
-    
+
     if (locale === 'en') {
       const contentAny = content as any;
       return {
@@ -457,7 +457,7 @@ export async function getContactUsContent(locale: Locale): Promise<ContactUsCont
         invalidEmail: contentAny.invalidEmailEn || '',
       };
     }
-    
+
     const contentAny = content as any;
     return {
       id: content.id,
@@ -510,13 +510,13 @@ export interface FooterContent {
 export async function getFooterContent(locale: Locale): Promise<FooterContent | null> {
   try {
     let content = await prisma.footer.findFirst();
-    
+
     if (!content) {
       content = await prisma.footer.create({
         data: {},
       });
     }
-    
+
     if (locale === 'en') {
       const contentAny = content as any;
       return {
@@ -534,7 +534,7 @@ export async function getFooterContent(locale: Locale): Promise<FooterContent | 
         xLink: contentAny.xLink || 'https://www.x.com',
       };
     }
-    
+
     const contentAny = content as any;
     return {
       id: content.id,
@@ -559,13 +559,13 @@ export async function getFooterContent(locale: Locale): Promise<FooterContent | 
 export async function getSiteSettings(): Promise<SiteSettings | null> {
   try {
     let settings = await prisma.siteSettings.findFirst();
-    
+
     if (!settings) {
       settings = await prisma.siteSettings.create({
         data: {},
       });
     }
-    
+
     return {
       id: settings.id,
       primaryFont: settings.primaryFont || '',
@@ -593,6 +593,7 @@ export interface Project {
   location?: string | null;
   category?: string | null;
   year?: string | null;
+  images?: string[];
 }
 
 export async function getProjects(locale: Locale, limit?: number): Promise<Project[]> {
@@ -606,26 +607,41 @@ export async function getProjects(locale: Locale, limit?: number): Promise<Proje
       },
       take: limit,
     });
-    
+
     // Map projects based on locale
     return projects.map((project) => {
+      // Parse images JSON array if exists
+      let images: string[] = [];
+      if (project.images) {
+        try {
+          images = JSON.parse(project.images);
+          if (!Array.isArray(images)) {
+            images = [];
+          }
+        } catch (e) {
+          images = [];
+        }
+      }
+
       if (locale === 'en') {
         return {
           id: project.id,
           title: (project as any).titleEn || project.title,
           description: (project as any).descriptionEn || project.description,
           image: project.image,
+          images: images,
           location: (project as any).locationEn || project.location,
           category: (project as any).categoryEn || project.category,
           year: project.year,
         };
       }
-      
+
       return {
         id: project.id,
         title: project.title,
         description: project.description,
         image: project.image,
+        images: images,
         location: project.location,
         category: project.category,
         year: project.year,

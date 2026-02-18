@@ -84,7 +84,7 @@ export default async function HomePage({ params }: HomePageProps) {
     visionValues: t.vision.values,
     visionValuesText: t.vision.valuesText,
     quoteTitle: validLocale === "ar" ? "في ظلال المدينة" : "At City Shadows",
-    quoteText: validLocale === "ar" 
+    quoteText: validLocale === "ar"
       ? "نؤمن أن العقارات هي أكثر بكثير من المباني والمساحات. إنها فن تشكيل أنماط الحياة المكررة وبناء مجتمعات تعكس الأناقة الخالدة والعيش الراقي."
       : "We believe that real estate is far more than structures and spaces. It's the art of shaping refined lifestyles and cultivating communities that reflect timeless elegance and elevated living.",
     quoteAuthor: validLocale === "ar" ? "المدير التنفيذي" : "Managing Director",
@@ -155,173 +155,174 @@ export default async function HomePage({ params }: HomePageProps) {
 
   return (
     <FontsProvider settings={settings}>
-      <Header 
-        locale={validLocale} 
-        settings={settings} 
+      <Header
+        locale={validLocale}
+        settings={settings}
         headerLogo={displayContent.headerLogo}
         isHomePage={true}
       />
 
       <ScrollSnapContainer>
         <AnimatedHero
-        heroLogo={displayContent.heroLogo || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
-        heroTitle={displayContent.heroTitle}
-        heroSubtitle={displayContent.heroSubtitle}
-        logoAlt={t.common.logoAlt}
-        bodyFont={settings?.bodyFont}
-        headingFont={settings?.headingFont}
-        primaryFont={settings?.primaryFont}
-      />
-
-      <AnimatedAbout
-        aboutTitle={displayContent.aboutTitle}
-        aboutP1={displayContent.aboutP1}
-        aboutP2={displayContent.aboutP2}
-        readMoreText={t.about.readMore}
-        readMoreLink={`/${validLocale}/about-us`}
-        bodyFont={settings?.bodyFont}
-        headingFont={settings?.headingFont}
-        primaryFont={settings?.primaryFont}
-      />
-
-      <AnimatedVision
-        visionTitle={displayContent.visionTitle}
-        visionVision={displayContent.visionVision}
-        visionVisionText={displayContent.visionVisionText}
-        visionMission={displayContent.visionMission}
-        visionMissionText={displayContent.visionMissionText}
-        visionValues={displayContent.visionValues}
-        visionValuesText={displayContent.visionValuesText}
-        bodyFont={settings?.bodyFont}
-        headingFont={settings?.headingFont}
-        primaryFont={settings?.primaryFont}
-      />
-
-      <AnimatedQuote
-        title={displayContent.quoteTitle || (validLocale === "ar" ? "في ظلال المدينة" : "At City Shadows")}
-        text={displayContent.quoteText || (validLocale === "ar" 
-          ? "نؤمن أن العقارات هي أكثر بكثير من المباني والمساحات. إنها فن تشكيل أنماط الحياة المكررة وبناء مجتمعات تعكس الأناقة الخالدة والعيش الراقي."
-          : "We believe that real estate is far more than structures and spaces. It's the art of shaping refined lifestyles and cultivating communities that reflect timeless elegance and elevated living.")}
-        author={displayContent.quoteAuthor && displayContent.quoteAuthor.trim() !== '' 
-          ? displayContent.quoteAuthor 
-          : (validLocale === "ar" ? "المدير التنفيذي" : "Managing Director")}
-        bodyFont={settings?.bodyFont}
-        headingFont={settings?.headingFont}
-        primaryFont={settings?.primaryFont}
-      />
-
-      <AnimatedServices
-        title={displayContent.servicesTitle || t.services.title}
-        subtitle={displayContent.servicesSubtitle || t.services.subtitle}
-        services={[
-          {
-            icon: 'Home',
-            title: displayContent.service1Title || t.services.service1,
-            description: displayContent.service1Desc || t.services.service1Desc,
-          },
-          {
-            icon: 'Layers',
-            title: displayContent.service2Title || t.services.service2,
-            description: displayContent.service2Desc || t.services.service2Desc,
-          },
-          {
-            icon: 'Activity',
-            title: displayContent.service3Title || t.services.service3,
-            description: displayContent.service3Desc || t.services.service3Desc,
-          },
-          {
-            icon: 'HelpCircle',
-            title: displayContent.service4Title || t.services.service4,
-            description: displayContent.service4Desc || t.services.service4Desc,
-          },
-        ]}
-        bodyFont={settings?.bodyFont}
-        headingFont={settings?.headingFont}
-        primaryFont={settings?.primaryFont}
-      />
-
-      {projects.length > 0 && (
-        <AnimatedProjects
-          title={displayContent.projectsTitle || t.projectsSection.title}
-          subtitle={displayContent.projectsSubtitle || t.projectsSection.subtitle}
-          projects={projects}
-          viewMoreText={displayContent.projectsViewMore || t.projectsSection.viewMore}
-          viewMoreLink={`/${validLocale}/our-projects`}
+          heroLogo={displayContent.heroLogo || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
+          heroTitle={displayContent.heroTitle}
+          heroSubtitle={displayContent.heroSubtitle}
+          logoAlt={t.common.logoAlt}
           bodyFont={settings?.bodyFont}
           headingFont={settings?.headingFont}
           primaryFont={settings?.primaryFont}
         />
-      )}
 
-      <AnimatedStats
-        title={displayContent.statsTitle}
-        stats={[
-          {
-            number: displayContent.statsProjectsNum,
-            label: displayContent.statsProjects,
-          },
-          {
-            number: displayContent.statsYearsNum,
-            label: displayContent.statsYears,
-          },
-          {
-            number: displayContent.statsCountriesNum,
-            label: displayContent.statsCountries,
-          },
-        ]}
-        bodyFont={settings?.bodyFont}
-        headingFont={settings?.headingFont}
-        primaryFont={settings?.primaryFont}
-      />
-
-      <section 
-        id="contact"
-        className="scroll-snap-section scroll-snap-section-flexible"
-        style={{ 
-          scrollSnapAlign: 'start',
-          scrollSnapStop: 'always',
-          scrollMarginTop: '0px',
-          minHeight: '100vh',
-          height: 'auto',
-          display: 'flex',
-          alignItems: 'center',
-          overflow: 'visible',
-        }}
-      >
-        <HomeContactForm
-          locale={validLocale}
-          settings={settings}
-          content={displayContactContent}
+        <AnimatedAbout
+          aboutTitle={displayContent.aboutTitle}
+          aboutP1={displayContent.aboutP1}
+          aboutP2={displayContent.aboutP2}
+          readMoreText={t.about.readMore}
+          readMoreLink={`/${validLocale}/about-us`}
+          bodyFont={settings?.bodyFont}
+          headingFont={settings?.headingFont}
+          primaryFont={settings?.primaryFont}
         />
-      </section>
 
-      <section 
-        className="scroll-snap-section scroll-snap-section-flexible"
-        style={{ 
-          scrollSnapAlign: 'start',
-          scrollSnapStop: 'always',
-          scrollMarginTop: '0px',
-          minHeight: '100vh',
-          height: 'auto',
-          overflow: 'visible',
-        }}
-      >
-        <Footer
-          locale={validLocale}
-          settings={settings}
-          footerLogo={footerContent?.footerLogo || displayContent.footerLogo}
-          footerCopyright={footerContent?.footerCopyright || displayContent.footerCopyright}
-          companyName={footerContent?.companyName}
-          addressLabel={footerContent?.addressLabel}
-          addressValue={footerContent?.addressValue}
-          phoneLabelInfo={footerContent?.phoneLabelInfo}
-          phoneValue={footerContent?.phoneValue}
-          showSocialMedia={footerContent?.showSocialMedia}
-          instagramLink={footerContent?.instagramLink}
-          facebookLink={footerContent?.facebookLink}
-          xLink={footerContent?.xLink}
+        <AnimatedVision
+          visionTitle={displayContent.visionTitle}
+          visionVision={displayContent.visionVision}
+          visionVisionText={displayContent.visionVisionText}
+          visionMission={displayContent.visionMission}
+          visionMissionText={displayContent.visionMissionText}
+          visionValues={displayContent.visionValues}
+          visionValuesText={displayContent.visionValuesText}
+          bodyFont={settings?.bodyFont}
+          headingFont={settings?.headingFont}
+          primaryFont={settings?.primaryFont}
         />
-      </section>
+
+        <AnimatedQuote
+          title={displayContent.quoteTitle || (validLocale === "ar" ? "في ظلال المدينة" : "At City Shadows")}
+          text={displayContent.quoteText || (validLocale === "ar"
+            ? "نؤمن أن العقارات هي أكثر بكثير من المباني والمساحات. إنها فن تشكيل أنماط الحياة المكررة وبناء مجتمعات تعكس الأناقة الخالدة والعيش الراقي."
+            : "We believe that real estate is far more than structures and spaces. It's the art of shaping refined lifestyles and cultivating communities that reflect timeless elegance and elevated living.")}
+          author={displayContent.quoteAuthor && displayContent.quoteAuthor.trim() !== ''
+            ? displayContent.quoteAuthor
+            : (validLocale === "ar" ? "المدير التنفيذي" : "Managing Director")}
+          bodyFont={settings?.bodyFont}
+          headingFont={settings?.headingFont}
+          primaryFont={settings?.primaryFont}
+        />
+
+        <AnimatedServices
+          title={displayContent.servicesTitle || t.services.title}
+          subtitle={displayContent.servicesSubtitle || t.services.subtitle}
+          services={[
+            {
+              icon: 'Home',
+              title: displayContent.service1Title || t.services.service1,
+              description: displayContent.service1Desc || t.services.service1Desc,
+            },
+            {
+              icon: 'Layers',
+              title: displayContent.service2Title || t.services.service2,
+              description: displayContent.service2Desc || t.services.service2Desc,
+            },
+            {
+              icon: 'Activity',
+              title: displayContent.service3Title || t.services.service3,
+              description: displayContent.service3Desc || t.services.service3Desc,
+            },
+            {
+              icon: 'HelpCircle',
+              title: displayContent.service4Title || t.services.service4,
+              description: displayContent.service4Desc || t.services.service4Desc,
+            },
+          ]}
+          bodyFont={settings?.bodyFont}
+          headingFont={settings?.headingFont}
+          primaryFont={settings?.primaryFont}
+        />
+
+        {projects.length > 0 && (
+          <AnimatedProjects
+            title={displayContent.projectsTitle || t.projectsSection.title}
+            subtitle={displayContent.projectsSubtitle || t.projectsSection.subtitle}
+            projects={projects}
+            viewMoreText={displayContent.projectsViewMore || t.projectsSection.viewMore}
+            viewMoreLink={`/${validLocale}/our-projects`}
+            locale={validLocale}
+            bodyFont={settings?.bodyFont}
+            headingFont={settings?.headingFont}
+            primaryFont={settings?.primaryFont}
+          />
+        )}
+
+        <AnimatedStats
+          title={displayContent.statsTitle}
+          stats={[
+            {
+              number: displayContent.statsProjectsNum,
+              label: displayContent.statsProjects,
+            },
+            {
+              number: displayContent.statsYearsNum,
+              label: displayContent.statsYears,
+            },
+            {
+              number: displayContent.statsCountriesNum,
+              label: displayContent.statsCountries,
+            },
+          ]}
+          bodyFont={settings?.bodyFont}
+          headingFont={settings?.headingFont}
+          primaryFont={settings?.primaryFont}
+        />
+
+        <section
+          id="contact"
+          className="scroll-snap-section scroll-snap-section-flexible"
+          style={{
+            scrollSnapAlign: 'start',
+            scrollSnapStop: 'always',
+            scrollMarginTop: '0px',
+            minHeight: '100vh',
+            height: 'auto',
+            display: 'flex',
+            alignItems: 'center',
+            overflow: 'visible',
+          }}
+        >
+          <HomeContactForm
+            locale={validLocale}
+            settings={settings}
+            content={displayContactContent}
+          />
+        </section>
+
+        <section
+          className="scroll-snap-section scroll-snap-section-flexible"
+          style={{
+            scrollSnapAlign: 'start',
+            scrollSnapStop: 'always',
+            scrollMarginTop: '0px',
+            minHeight: '100vh',
+            height: 'auto',
+            overflow: 'visible',
+          }}
+        >
+          <Footer
+            locale={validLocale}
+            settings={settings}
+            footerLogo={footerContent?.footerLogo || displayContent.footerLogo}
+            footerCopyright={footerContent?.footerCopyright || displayContent.footerCopyright}
+            companyName={footerContent?.companyName}
+            addressLabel={footerContent?.addressLabel}
+            addressValue={footerContent?.addressValue}
+            phoneLabelInfo={footerContent?.phoneLabelInfo}
+            phoneValue={footerContent?.phoneValue}
+            showSocialMedia={footerContent?.showSocialMedia}
+            instagramLink={footerContent?.instagramLink}
+            facebookLink={footerContent?.facebookLink}
+            xLink={footerContent?.xLink}
+          />
+        </section>
       </ScrollSnapContainer>
     </FontsProvider>
   );

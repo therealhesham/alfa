@@ -13,7 +13,7 @@ export function ScrollSnapContainer({ children }: ScrollSnapContainerProps) {
   const [currentSection, setCurrentSection] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
   const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
-  
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ['start start', 'end end'],
@@ -38,10 +38,10 @@ export function ScrollSnapContainer({ children }: ScrollSnapContainerProps) {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    
+
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
@@ -52,7 +52,7 @@ export function ScrollSnapContainer({ children }: ScrollSnapContainerProps) {
 
     const handleScroll = () => {
       setIsScrolling(true);
-      
+
       // Clear existing timeout
       if (scrollTimeoutRef.current) {
         clearTimeout(scrollTimeoutRef.current);
@@ -61,7 +61,7 @@ export function ScrollSnapContainer({ children }: ScrollSnapContainerProps) {
       // Set timeout to detect when scrolling stops
       scrollTimeoutRef.current = setTimeout(() => {
         setIsScrolling(false);
-        
+
         // Only snap on desktop
         if (!isMobile) {
           // Snap to nearest section when scrolling stops
@@ -72,10 +72,10 @@ export function ScrollSnapContainer({ children }: ScrollSnapContainerProps) {
           sections.forEach((section, index) => {
             const rect = section.getBoundingClientRect();
             const containerRect = container.getBoundingClientRect();
-            
+
             // Calculate distance from section top to container top
             const distance = Math.abs(rect.top - containerRect.top);
-            
+
             if (distance < minDistance) {
               minDistance = distance;
               nearestIdx = index;
@@ -101,7 +101,7 @@ export function ScrollSnapContainer({ children }: ScrollSnapContainerProps) {
       sections.forEach((section, index) => {
         const rect = section.getBoundingClientRect();
         const containerRect = container.getBoundingClientRect();
-        
+
         // Calculate how much of the section is visible
         const visibleTop = Math.max(rect.top, containerRect.top);
         const visibleBottom = Math.min(rect.bottom, containerRect.bottom);
@@ -118,7 +118,7 @@ export function ScrollSnapContainer({ children }: ScrollSnapContainerProps) {
     };
 
     container.addEventListener('scroll', handleScroll, { passive: true });
-    
+
     return () => {
       container.removeEventListener('scroll', handleScroll);
       if (scrollTimeoutRef.current) {
@@ -177,7 +177,7 @@ export function ScrollSnapContainer({ children }: ScrollSnapContainerProps) {
 
     const handleKeyDown = (e: KeyboardEvent) => {
       const sections = container.querySelectorAll('.scroll-snap-section, section');
-      
+
       if (e.key === 'ArrowDown' || e.key === 'PageDown') {
         e.preventDefault();
         const nextSection = Math.min(currentSection + 1, sections.length - 1);
@@ -261,36 +261,36 @@ export function ScrollSnapContainer({ children }: ScrollSnapContainerProps) {
           pointerEvents: 'none',
         }}
       />
-      
+
       {/* Scroll Progress Indicator - Hide on mobile */}
       {!isMobile && (
-      <div
-        style={{
-          position: 'fixed',
-          right: '20px',
-          top: '50%',
-          transform: 'translateY(-50%)',
-          zIndex: 100,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '12px',
-          pointerEvents: 'none',
-        }}
-      >
-        {childrenArray.map((_, index) => (
-          <motion.div
-            key={index}
-            style={{
-              width: currentSection === index ? '12px' : '8px',
-              height: currentSection === index ? '12px' : '8px',
-              borderRadius: '50%',
-              backgroundColor: currentSection === index ? 'var(--gold, #D4C19D)' : 'rgba(212, 193, 157, 0.3)',
-              transition: 'all 0.3s ease',
-              border: currentSection === index ? '2px solid var(--gold, #D4C19D)' : '1px solid rgba(212, 193, 157, 0.3)',
-            }}
-          />
-        ))}
-      </div>
+        <div
+          style={{
+            position: 'fixed',
+            right: '20px',
+            top: '50%',
+            transform: 'translateY(-50%)',
+            zIndex: 100,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '12px',
+            pointerEvents: 'none',
+          }}
+        >
+          {childrenArray.map((_, index) => (
+            <motion.div
+              key={index}
+              style={{
+                width: currentSection === index ? '12px' : '8px',
+                height: currentSection === index ? '12px' : '8px',
+                borderRadius: '50%',
+                backgroundColor: currentSection === index ? 'var(--gold, #D4C19D)' : 'rgba(212, 193, 157, 0.3)',
+                transition: 'all 0.3s ease',
+                border: currentSection === index ? '2px solid var(--gold, #D4C19D)' : '1px solid rgba(212, 193, 157, 0.3)',
+              }}
+            />
+          ))}
+        </div>
       )}
 
       {/* Content wrapper - ensures all mouse interactions work */}

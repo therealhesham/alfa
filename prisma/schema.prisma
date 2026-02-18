@@ -8,7 +8,8 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = "mysql://user:userpass@185.97.144.19:3307/city_shadows"
+  url      = "mysql://fulladmin:F@llAdmin_2026!@185.97.144.19:3306/city_shadows"
+  // url      = "mysql://user:userpass@185.97.144.19:3307/city_shadows"
 }
 
 model HomeContent {
