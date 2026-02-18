@@ -134,6 +134,7 @@ export interface SiteSettings {
   showAbout: boolean;
   showServices: boolean;
   showProjects: boolean;
+  showEntertainment: boolean;
   showContact: boolean;
   showLanguageSwitcher: boolean;
   whatsappNumber: string | null;
@@ -575,6 +576,7 @@ export async function getSiteSettings(): Promise<SiteSettings | null> {
       showAbout: settings.showAbout ?? true,
       showServices: settings.showServices ?? true,
       showProjects: settings.showProjects ?? true,
+      showEntertainment: (settings as any).showEntertainment ?? true,
       showContact: settings.showContact ?? true,
       showLanguageSwitcher: settings.showLanguageSwitcher ?? true,
       whatsappNumber: settings.whatsappNumber || null,
