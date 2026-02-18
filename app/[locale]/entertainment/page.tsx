@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { getTranslations } from "@/lib/i18n";
-import { getSiteSettings, getFooterContent } from "@/lib/data";
+import { getSiteSettings, getFooterContent, getHomeContent } from "@/lib/data";
 import { generateSEOMetadata } from "@/lib/seo";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -178,10 +178,13 @@ export default async function EntertainmentPage({
     const t = getTranslations(validLocale);
     const c = content[validLocale];
 
-    const [settings, footerContent] = await Promise.all([
+    const [settings, footerContent, homeContent] = await Promise.all([
         getSiteSettings(),
         getFooterContent(validLocale),
+        getHomeContent(validLocale),
     ]);
+
+    const headerLogo = homeContent?.headerLogo || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png";
 
     const categoryCards = [
         {
@@ -203,7 +206,7 @@ export default async function EntertainmentPage({
 
     return (
         <FontsProvider settings={settings}>
-            <Header locale={validLocale} settings={settings} />
+            <Header locale={validLocale} settings={settings} headerLogo={headerLogo} />
 
             <div className="entertainment-page">
                 {/* ════════ HERO ════════ */}
