@@ -138,7 +138,7 @@ export default function Header({ locale, settings, headerLogo, isHomePage = fals
             </Link>
           )
         )}
-        {
+        {/* {
 
           locale === "ar" ? (
             <Link href={`/${locale}/entertainment`}>
@@ -149,7 +149,7 @@ export default function Header({ locale, settings, headerLogo, isHomePage = fals
               Entertainment
             </Link>
           )
-        }
+        } */}
         {settings?.showContact !== false && (
           isHomePage ? (
             <a href="#contact" onClick={(e) => handleSmoothScroll(e, 'contact')}>

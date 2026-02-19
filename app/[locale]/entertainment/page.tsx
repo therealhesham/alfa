@@ -6,6 +6,7 @@ import { getSiteSettings, getFooterContent, getHomeContent } from "@/lib/data";
 import { generateSEOMetadata } from "@/lib/seo";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import HeroCarousel from "@/components/HeroCarousel";
 import FontsProvider from "@/components/FontsProvider";
 import {
     Shield,
@@ -51,7 +52,7 @@ const content = {
             { icon: "Star", label: "مرافق عالمية" },
             { icon: "Heart", label: "صديق للعائلة" },
         ],
-        galleryTitle: "من أجواء مشاريعنا",
+        galleryTitle: "مشروعاتنا",
         ctaTitle: "ابدأ مشروعك الترفيهي معنا",
         ctaSubtitle:
             "تواصل مع فريقنا لتحويل رؤيتك إلى واقع ترفيهي استثنائي",
@@ -83,7 +84,7 @@ const content = {
             { icon: "Star", label: "World-Class Facilities" },
             { icon: "Heart", label: "Family Friendly" },
         ],
-        galleryTitle: "From Our Projects",
+        galleryTitle: "Our Projects",
         ctaTitle: "Start Your Entertainment Project With Us",
         ctaSubtitle:
             "Contact our team to turn your vision into an exceptional entertainment reality",
@@ -93,19 +94,19 @@ const content = {
 
 // ─── Images (Unsplash) ──────────────────────────────────────────────
 const images = {
-    hero: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1920&q=80&auto=format",
-    clubs:
-        "https://images.unsplash.com/photo-1566417713940-fe7c737a9ef2?w=800&q=80&auto=format",
-    parks:
-        "https://images.unsplash.com/photo-1513889961551-628c1e5e2ee9?w=800&q=80&auto=format",
-    kids: "https://images.unsplash.com/photo-1566140967404-b8b3932483f5?w=800&q=80&auto=format",
+    hero:
+        "/padelgo.png",
+    // "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1920&q=80&auto=format",
+    clubs: "/padelgo.png",
+
+    // "https://images.unsplash.com/photo-1566417713940-fe7c737a9ef2?w=800&q=80&auto=format",
+    parks: "/padelgoevents.png",
+    // "https://images.unsplash.com/photo-1513889961551-628c1e5e2ee9?w=800&q=80&auto=format",
+    kids: "/bombomhero.png",
+    // "https://images.unsplash.com/photo-1566140967404-b8b3932483f5?w=800&q=80&auto=format",
     gallery: [
-        "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=600&q=80&auto=format",
-        "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=600&q=80&auto=format",
-        "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=600&q=80&auto=format",
-        "https://images.unsplash.com/photo-1560419015-7c427e8ae5ba?w=600&q=80&auto=format",
-        "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=600&q=80&auto=format",
-        "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&q=80&auto=format",
+        "/padelgoevents.png",
+        "/padelgo.png",
     ],
 };
 
@@ -204,6 +205,15 @@ export default async function EntertainmentPage({
         },
     ];
 
+    const heroImages = [
+        images.hero,
+        images.clubs,
+        images.parks,
+        images.kids,
+        images.gallery[0],
+        images.gallery[1],
+    ];
+
     return (
         <FontsProvider settings={settings}>
             <Header locale={validLocale} settings={settings} headerLogo={headerLogo} />
@@ -211,14 +221,7 @@ export default async function EntertainmentPage({
             <div className="entertainment-page">
                 {/* ════════ HERO ════════ */}
                 <div className="entertainment-hero">
-                    <Image
-                        src={images.hero}
-                        alt={c.heroTitle}
-                        fill
-                        style={{ objectFit: "cover" }}
-                        priority
-                        unoptimized
-                    />
+                    <HeroCarousel images={heroImages} alt={c.heroTitle} />
                     <div className="entertainment-hero-overlay" />
                     <div className="entertainment-hero-content">
                         <div className="entertainment-hero-badge">
