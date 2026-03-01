@@ -434,6 +434,66 @@ model OurProjectsContent {
   createdAt DateTime @default(now())
 }
 
+model EntertainmentContent {
+  id String @id @default(cuid())
+
+  heroTitle      String @default("عالم الترفيه")
+  heroTitleEn    String @default("Entertainment World")
+  heroSubtitle   String @default("نبتكر تجارب ترفيهية استثنائية تجمع بين أحدث التقنيات والتصاميم الفاخرة لصناعة ذكريات لا تُنسى")
+  heroSubtitleEn String @default("We create exceptional entertainment experiences combining cutting-edge technology with luxury designs to craft unforgettable memories")
+  heroImages     String? @db.Text
+
+  showStats    Boolean @default(true)
+  stat1Icon    String  @default("Sparkles")
+  stat1Number  String  @default("4+")
+  stat1Label   String  @default("مشاريع ترفيهية")
+  stat1LabelEn String  @default("Entertainment Projects")
+
+  stat2Icon    String @default("Star")
+  stat2Number  String @default("3")
+  stat2Label   String @default("دول")
+  stat2LabelEn String @default("Countries")
+
+  stat3Icon    String @default("Clapperboard")
+  stat3Number  String @default("100K+")
+  stat3Label   String @default("زائر متوقع")
+  stat3LabelEn String @default("Expected Visitors")
+
+  sectionTitle      String @default("مشاريعنا الترفيهية")
+  sectionTitleEn    String @default("Our Entertainment Projects")
+  sectionSubtitle   String @default("اكتشف مجموعة مشاريعنا الترفيهية المتنوعة التي تلبي جميع الأذواق")
+  sectionSubtitleEn String @default("Explore our diverse entertainment projects that cater to all tastes")
+
+  emptyMessage   String @default("لا توجد مشاريع ترفيهية متاحة حالياً")
+  emptyMessageEn String @default("No entertainment projects available at the moment")
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+}
+
+model EntertainmentProject {
+  id                String   @id @default(cuid())
+  title             String   @default("")
+  titleEn           String   @default("")
+  description       String   @db.Text
+  descriptionEn     String   @db.Text
+  fullDescription   String   @db.Text
+  fullDescriptionEn String   @db.Text
+  image             String   @default("https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png")
+  gallery           String?  @db.Text
+  category          String?  @default("")
+  categoryEn        String?  @default("")
+  location          String?  @default("")
+  locationEn        String?  @default("")
+  year              String?  @default("")
+  status            String?  @default("")
+  statusEn          String?  @default("")
+  order             Int      @default(0)
+  isPublished       Boolean  @default(true)
+  updatedAt         DateTime @updatedAt
+  createdAt         DateTime @default(now())
+}
+
 model OurClientsContent {
   id String @id @default(cuid())
 

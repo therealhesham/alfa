@@ -138,18 +138,11 @@ export default function Header({ locale, settings, headerLogo, isHomePage = fals
             </Link>
           )
         )}
-        {/* {
-
-          locale === "ar" ? (
-            <Link href={`/${locale}/entertainment`}>
-              عالم الترفيه
-            </Link>
-          ) : (
-            <Link href={`/${locale}/entertainment`}>
-              Entertainment
-            </Link>
-          )
-        } */}
+        {settings?.showEntertainment !== false && (
+          <Link href={`/${locale}/entertainment`}>
+            {locale === "ar" ? "عالم الترفيه" : "Entertainment"}
+          </Link>
+        )}
         {settings?.showContact !== false && (
           isHomePage ? (
             <a href="#contact" onClick={(e) => handleSmoothScroll(e, 'contact')}>
@@ -227,6 +220,11 @@ export default function Header({ locale, settings, headerLogo, isHomePage = fals
                 <span className="nav-link-text">{t.nav.projects}</span>
               </Link>
             )
+          )}
+          {settings?.showEntertainment !== false && (
+            <Link href={`/${locale}/entertainment`} onClick={closeMenu} className="nav-link">
+              <span className="nav-link-text">{locale === "ar" ? "عالم الترفيه" : "Entertainment"}</span>
+            </Link>
           )}
           {settings?.showContact !== false && (
             isHomePage ? (

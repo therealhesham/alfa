@@ -138,19 +138,21 @@ function EditableImage({
           unoptimized
         />
       )}
-      {isHovered && !isUploading && (
+      {!isUploading && (
         <div
           style={{
             position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            background: "rgba(0, 112, 243, 0.9)",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            background: isHovered ? "rgba(0, 112, 243, 0.95)" : "rgba(0, 0, 0, 0.65)",
             color: "white",
-            padding: "0.5rem 1rem",
-            borderRadius: "4px",
-            fontSize: "0.9rem",
+            padding: "0.5rem 0.75rem",
+            borderRadius: "0 0 8px 8px",
+            fontSize: "0.85rem",
             pointerEvents: "none",
+            textAlign: "center",
+            transition: "background 0.2s ease",
           }}
         >
           {currentLocale === "ar" ? "انقر لتغيير الصورة" : "Click to change image"}
@@ -598,6 +600,11 @@ export default function AdminOurProjectsPage() {
               <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "bold" }}>
                 {currentLocaleState === "ar" ? "صورة الغلاف" : "Cover Image"}
               </label>
+              <p style={{ fontSize: "0.875rem", color: "#666", marginBottom: "0.5rem" }}>
+                {currentLocaleState === "ar"
+                  ? "انقر على الصورة لاختيار صورة جديدة من جهازك (JPG, PNG)"
+                  : "Click on the image to choose a new image from your device (JPG, PNG)"}
+              </p>
               <EditableImage
                 src={editingProject?.image || formData.image}
                 alt="Cover"

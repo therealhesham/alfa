@@ -1,351 +1,118 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
-import { getTranslations } from "@/lib/i18n";
 import { getSiteSettings, getFooterContent, getHomeContent } from "@/lib/data";
+import { getTranslations } from "@/lib/i18n";
 import { generateSEOMetadata } from "@/lib/seo";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import HeroCarousel from "@/components/HeroCarousel";
 import FontsProvider from "@/components/FontsProvider";
-import {
-    Shield,
-    Star,
-    Crown,
-    Heart,
-    Sparkles,
-    Music,
-    Gamepad2,
-    Palette,
-    Users,
-} from "lucide-react";
+import EntertainmentHero from "./EntertainmentHero";
+import EntertainmentClient from "./EntertainmentClient";
 import type { Locale } from "@/i18n";
+import { getAllEntertainmentProjectsLocalized, getEntertainmentContent } from "@/lib/entertainment-data";
 
-// ISR: Revalidate every 60 seconds
 export const revalidate = 60;
 
-// ─── Bilingual Content ───────────────────────────────────────────────
-const content = {
-    ar: {
-        heroTitle: "عالم الترفيه",
-        heroSubtitle:
-            "نقدّم تجارب ترفيهية استثنائية تجمع بين الفخامة والمتعة لجميع أفراد العائلة",
-        categoriesTitle: "قطاعاتنا الترفيهية",
-        categoriesSubtitle:
-            "نوادٍ راقية، مدن ملاهٍ عالمية، ومناطق ترفيهية مخصصة للأطفال",
-        clubs: {
-            title: "النوادي والصالات",
-            desc: "أجواء فاخرة وتجارب اجتماعية راقية في فضاءات مصممة بأعلى المعايير",
-        },
-        parks: {
-            title: "مدن الملاهي",
-            desc: "مغامرات مثيرة وعوالم خيالية لكل الأعمار مع أحدث الألعاب العالمية",
-        },
-        kids: {
-            title: "منطقة الأطفال",
-            desc: "بيئة آمنة وممتعة تنمّي إبداع الأطفال وتمنحهم ذكريات لا تُنسى",
-        },
-        featuresTitle: "لماذا نتميّز",
-        features: [
-            { icon: "Crown", label: "تجربة VIP" },
-            { icon: "Shield", label: "أعلى معايير السلامة" },
-            { icon: "Star", label: "مرافق عالمية" },
-            { icon: "Heart", label: "صديق للعائلة" },
-        ],
-        galleryTitle: "مشروعاتنا",
-        ctaTitle: "ابدأ مشروعك الترفيهي معنا",
-        ctaSubtitle:
-            "تواصل مع فريقنا لتحويل رؤيتك إلى واقع ترفيهي استثنائي",
-        ctaButton: "تواصل معنا",
-    },
-    en: {
-        heroTitle: "Entertainment World",
-        heroSubtitle:
-            "We deliver exceptional entertainment experiences that combine luxury and fun for the whole family",
-        categoriesTitle: "Our Entertainment Sectors",
-        categoriesSubtitle:
-            "Premium clubs, world-class amusement parks, and dedicated kids' zones",
-        clubs: {
-            title: "Clubs & Lounges",
-            desc: "Luxurious ambiance and premium social experiences in spaces designed to the highest standards",
-        },
-        parks: {
-            title: "Amusement Parks",
-            desc: "Thrilling adventures and fantasy worlds for all ages with state-of-the-art rides",
-        },
-        kids: {
-            title: "Kids Zone",
-            desc: "A safe and fun environment that nurtures children's creativity and gives them unforgettable memories",
-        },
-        featuresTitle: "Why We Stand Out",
-        features: [
-            { icon: "Crown", label: "VIP Experience" },
-            { icon: "Shield", label: "Top Safety Standards" },
-            { icon: "Star", label: "World-Class Facilities" },
-            { icon: "Heart", label: "Family Friendly" },
-        ],
-        galleryTitle: "Our Projects",
-        ctaTitle: "Start Your Entertainment Project With Us",
-        ctaSubtitle:
-            "Contact our team to turn your vision into an exceptional entertainment reality",
-        ctaButton: "Contact Us",
-    },
-};
-
-// ─── Images (Unsplash) ──────────────────────────────────────────────
-const images = {
-    hero:
-        "/padelgo.png",
-    // "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=1920&q=80&auto=format",
-    clubs: "/padelgo.png",
-
-    // "https://images.unsplash.com/photo-1566417713940-fe7c737a9ef2?w=800&q=80&auto=format",
-    parks: "/padelgoevents.png",
-    // "https://images.unsplash.com/photo-1513889961551-628c1e5e2ee9?w=800&q=80&auto=format",
-    kids: "/bombomhero.png",
-    // "https://images.unsplash.com/photo-1566140967404-b8b3932483f5?w=800&q=80&auto=format",
-    gallery: [
-        "/padelgoevents.png",
-        "/padelgo.png",
-    ],
-};
-
-// ─── Icon Map ────────────────────────────────────────────────────────
-const iconMap: Record<string, React.ReactNode> = {
-    Crown: <Crown size={32} />,
-    Shield: <Shield size={32} />,
-    Star: <Star size={32} />,
-    Heart: <Heart size={32} />,
-};
-
-// ─── SEO Metadata ────────────────────────────────────────────────────
 export async function generateMetadata({
-    params,
+  params,
 }: {
-    params: Promise<{ locale: string }>;
+  params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
-    const { locale } = await params;
-    const validLocale = (
-        locale === "ar" || locale === "en" ? locale : "ar"
-    ) as Locale;
+  const { locale } = await params;
+  const validLocale = (locale === "ar" || locale === "en" ? locale : "ar") as Locale;
 
-    const title =
-        validLocale === "ar"
-            ? "الترفيه - ظلال المدينة | عالم الترفيه"
-            : "Entertainment - City Shadows | Entertainment World";
+  const title = validLocale === "ar"
+    ? "عالم الترفيه - ظلال المدينة | مشاريع ترفيهية متميزة"
+    : "Entertainment World - City Shadows | Distinguished Entertainment Projects";
 
-    const description =
-        validLocale === "ar"
-            ? "قطاع الترفيه في شركة ظلال المدينة: نوادٍ راقية، مدن ملاهٍ عالمية، ومناطق ترفيه مخصصة للأطفال. فخامة وترفيه لكل العائلة."
-            : "City Shadows entertainment sector: premium clubs, world-class amusement parks, and dedicated kids zones. Luxury and fun for the whole family.";
+  const description = validLocale === "ar"
+    ? "اكتشف مشاريعنا الترفيهية المتميزة التي تجمع بين الابتكار والفخامة. مدن ترفيهية، منتجعات، مراكز رقمية وحدائق عائلية."
+    : "Discover our distinguished entertainment projects combining innovation and luxury. Entertainment cities, resorts, digital centers, and family parks.";
 
-    return generateSEOMetadata({
-        title,
-        description,
-        locale: validLocale,
-        path: "/entertainment",
-        keywords:
-            validLocale === "ar"
-                ? [
-                    "ترفيه",
-                    "نوادي",
-                    "ملاهي",
-                    "أطفال",
-                    "ظلال المدينة",
-                    "مدن ترفيهية",
-                ]
-                : [
-                    "Entertainment",
-                    "Clubs",
-                    "Amusement Parks",
-                    "Kids",
-                    "City Shadows",
-                ],
-    });
+  return generateSEOMetadata({
+    title,
+    description,
+    locale: validLocale,
+    path: "/entertainment",
+    keywords: validLocale === "ar"
+      ? ["مشاريع ترفيهية", "مدن ترفيهية", "منتجعات", "ألعاب رقمية", "حدائق ترفيهية", "ظلال المدينة"]
+      : ["Entertainment Projects", "Entertainment Cities", "Resorts", "Digital Gaming", "Entertainment Parks", "City Shadows"],
+    type: "website",
+  });
 }
 
-// ─── Page Component ──────────────────────────────────────────────────
 interface EntertainmentPageProps {
-    params: Promise<{ locale: string }>;
+  params: Promise<{ locale: string }>;
 }
 
-export default async function EntertainmentPage({
-    params,
-}: EntertainmentPageProps) {
-    const { locale } = await params;
-    const validLocale = (
-        locale === "ar" || locale === "en" ? locale : "ar"
-    ) as Locale;
-    const t = getTranslations(validLocale);
-    const c = content[validLocale];
+export default async function EntertainmentPage({ params }: EntertainmentPageProps) {
+  const { locale } = await params;
+  const validLocale = (locale === "ar" || locale === "en" ? locale : "ar") as Locale;
+  const t = getTranslations(validLocale);
 
-    const [settings, footerContent, homeContent] = await Promise.all([
-        getSiteSettings(),
-        getFooterContent(validLocale),
-        getHomeContent(validLocale),
-    ]);
+  const [settings, footerContent, homeContent, projects, pageContent] = await Promise.all([
+    getSiteSettings(),
+    getFooterContent(validLocale),
+    getHomeContent(validLocale),
+    getAllEntertainmentProjectsLocalized(validLocale),
+    getEntertainmentContent(validLocale),
+  ]);
 
-    const headerLogo = homeContent?.headerLogo || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png";
+  return (
+    <FontsProvider settings={settings}>
+      <Header
+        locale={validLocale}
+        settings={settings}
+        headerLogo={homeContent?.headerLogo || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
+        isHomePage={false}
+      />
 
-    const categoryCards = [
-        {
-            ...c.clubs,
-            image: images.clubs,
-            icon: <Music size={36} />,
-        },
-        {
-            ...c.parks,
-            image: images.parks,
-            icon: <Gamepad2 size={36} />,
-        },
-        {
-            ...c.kids,
-            image: images.kids,
-            icon: <Palette size={36} />,
-        },
-    ];
+      <EntertainmentHero
+        locale={validLocale}
+        heroTitle={pageContent.heroTitle}
+        heroSubtitle={pageContent.heroSubtitle}
+        heroImages={pageContent.heroImages}
+        showStats={pageContent.showStats}
+        stat1Icon={pageContent.stat1Icon}
+        stat1Number={pageContent.stat1Number}
+        stat1Label={pageContent.stat1Label}
+        stat2Icon={pageContent.stat2Icon}
+        stat2Number={pageContent.stat2Number}
+        stat2Label={pageContent.stat2Label}
+        stat3Icon={pageContent.stat3Icon}
+        stat3Number={pageContent.stat3Number}
+        stat3Label={pageContent.stat3Label}
+      />
 
-    const heroImages = [
-        images.hero,
-        images.clubs,
-        images.parks,
-        images.kids,
-        images.gallery[0],
-        images.gallery[1],
-    ];
+      <section style={{
+        padding: '5rem 2rem',
+        fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif',
+        background: 'radial-gradient(ellipse at center top, rgba(212, 193, 157, 0.15) 0%, transparent 60%), radial-gradient(ellipse at center bottom, rgba(232, 217, 192, 0.12) 0%, transparent 60%), #000000',
+        position: 'relative'
+      }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+          <EntertainmentClient
+            projects={projects}
+            locale={validLocale}
+            pageContent={pageContent}
+          />
+        </div>
+      </section>
 
-    return (
-        <FontsProvider settings={settings}>
-            <Header locale={validLocale} settings={settings} headerLogo={headerLogo} />
-
-            <div className="entertainment-page">
-                {/* ════════ HERO ════════ */}
-                <div className="entertainment-hero">
-                    <HeroCarousel images={heroImages} alt={c.heroTitle} />
-                    <div className="entertainment-hero-overlay" />
-                    <div className="entertainment-hero-content">
-                        <div className="entertainment-hero-badge">
-                            {/* <Sparkles size={18} /> */}
-                            <span>
-                                {validLocale === "ar"
-                                    ? "قطاع الترفيه"
-                                    : "Entertainment Sector"}
-                            </span>
-                        </div>
-                        <h1>{c.heroTitle}</h1>
-                        <p>{c.heroSubtitle}</p>
-                    </div>
-                </div>
-
-                {/* ════════ CATEGORIES ════════ */}
-                <div className="entertainment-categories">
-                    <div className="entertainment-section-header">
-                        <h2>{c.categoriesTitle}</h2>
-                        <p>{c.categoriesSubtitle}</p>
-                    </div>
-                    <div className="entertainment-cards-grid">
-                        {categoryCards.map((card, i) => (
-                            <div key={i} className="entertainment-card">
-                                <div className="entertainment-card-image">
-                                    <Image
-                                        src={card.image}
-                                        alt={card.title}
-                                        fill
-                                        style={{ objectFit: "cover" }}
-                                        unoptimized
-                                    />
-                                    <div className="entertainment-card-image-overlay" />
-                                </div>
-                                <div className="entertainment-card-body">
-                                    <div className="entertainment-card-icon">{card.icon}</div>
-                                    <h3>{card.title}</h3>
-                                    <p>{card.desc}</p>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* ════════ FEATURES ════════ */}
-                <div className="entertainment-features">
-                    <h2>{c.featuresTitle}</h2>
-                    <div className="entertainment-features-grid">
-                        {c.features.map((f, i) => (
-                            <div key={i} className="entertainment-feature-item">
-                                <div className="entertainment-feature-icon">
-                                    {iconMap[f.icon]}
-                                </div>
-                                <span>{f.label}</span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* ════════ GALLERY ════════ */}
-                <div className="entertainment-gallery">
-                    <div className="entertainment-section-header">
-                        <h2>{c.galleryTitle}</h2>
-                    </div>
-                    <div className="entertainment-gallery-grid">
-                        {images.gallery.map((src, i) => (
-                            <div
-                                key={i}
-                                className={`entertainment-gallery-item ${i === 0 || i === 3
-                                    ? "entertainment-gallery-item-large"
-                                    : ""
-                                    }`}
-                            >
-                                <Image
-                                    src={src}
-                                    alt={`${c.galleryTitle} ${i + 1}`}
-                                    fill
-                                    style={{ objectFit: "cover" }}
-                                    unoptimized
-                                />
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* ════════ CTA ════════ */}
-                <div className="entertainment-cta">
-                    <div className="entertainment-cta-inner">
-                        <Users size={48} className="entertainment-cta-icon" />
-                        <h2>{c.ctaTitle}</h2>
-                        <p>{c.ctaSubtitle}</p>
-                        <Link
-                            href={`/${validLocale}/contact-us`}
-                            className="entertainment-cta-button"
-                        >
-                            {c.ctaButton}
-                        </Link>
-                    </div>
-                </div>
-            </div>
-
-            <Footer
-                locale={validLocale}
-                settings={settings}
-                footerLogo={
-                    footerContent?.footerLogo ||
-                    "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"
-                }
-                footerCopyright={
-                    footerContent?.footerCopyright ||
-                    (validLocale === "ar"
-                        ? "© 2025 اسم الشركة – جميع الحقوق محفوظة"
-                        : "© 2025 Company Name – All Rights Reserved")
-                }
-                companyName={footerContent?.companyName}
-                addressLabel={footerContent?.addressLabel}
-                addressValue={footerContent?.addressValue}
-                phoneLabelInfo={footerContent?.phoneLabelInfo}
-                phoneValue={footerContent?.phoneValue}
-                showSocialMedia={footerContent?.showSocialMedia}
-                instagramLink={footerContent?.instagramLink}
-                facebookLink={footerContent?.facebookLink}
-                xLink={footerContent?.xLink}
-            />
-        </FontsProvider>
-    );
+      <Footer
+        locale={validLocale}
+        settings={settings}
+        footerLogo={footerContent?.footerLogo || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
+        footerCopyright={footerContent?.footerCopyright || (validLocale === "ar" ? "© 2025 اسم الشركة – جميع الحقوق محفوظة" : "© 2025 Company Name – All Rights Reserved")}
+        companyName={footerContent?.companyName}
+        addressLabel={footerContent?.addressLabel}
+        addressValue={footerContent?.addressValue}
+        phoneLabelInfo={footerContent?.phoneLabelInfo}
+        phoneValue={footerContent?.phoneValue}
+        showSocialMedia={footerContent?.showSocialMedia}
+        instagramLink={footerContent?.instagramLink}
+        facebookLink={footerContent?.facebookLink}
+        xLink={footerContent?.xLink}
+      />
+    </FontsProvider>
+  );
 }

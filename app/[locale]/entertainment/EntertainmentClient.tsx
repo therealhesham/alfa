@@ -1,0 +1,346 @@
+'use client';
+
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
+import Link from 'next/link';
+import { MapPin, Calendar, ArrowRight, ArrowLeft, Sparkles, X, ChevronLeft, ChevronRight } from 'lucide-react';
+
+interface GalleryImage {
+  image: string;
+  caption: string;
+}
+
+interface Project {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  category: string;
+  location: string;
+  year: string;
+  status: string;
+  gallery: GalleryImage[];
+}
+
+interface PageContent {
+  sectionTitle: string;
+  sectionSubtitle: string;
+  emptyMessage: string;
+}
+
+interface EntertainmentClientProps {
+  projects: Project[];
+  locale: string;
+  pageContent?: PageContent;
+}
+
+export default function EntertainmentClient({ projects, locale, pageContent }: EntertainmentClientProps) {
+  const isAr = locale === 'ar';
+  const [lightbox, setLightbox] = useState<{ projectId: string; imageIndex: number } | null>(null);
+
+  const ArrowIcon = isAr ? ArrowLeft : ArrowRight;
+
+  const openLightbox = (projectId: string, imageIndex: number) => {
+    setLightbox({ projectId, imageIndex });
+    document.body.style.overflow = 'hidden';
+  };
+
+  const closeLightbox = () => {
+    setLightbox(null);
+    document.body.style.overflow = '';
+  };
+
+  const navigateLightbox = (direction: number) => {
+    if (!lightbox) return;
+    const project = projects.find(p => p.id === lightbox.projectId);
+    if (!project) return;
+    const allImages = [{ image: project.image, caption: project.title }, ...project.gallery];
+    const newIndex = (lightbox.imageIndex + direction + allImages.length) % allImages.length;
+    setLightbox({ ...lightbox, imageIndex: newIndex });
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 50, scale: 0.95 },
+    visible: (i: number) => ({
+      opacity: 1, y: 0, scale: 1,
+      transition: { delay: i * 0.15, duration: 0.6, ease: [0.4, 0, 0.2, 1] as [number, number, number, number] },
+    }),
+  };
+
+  const currentProject = lightbox ? projects.find(p => p.id === lightbox.projectId) : null;
+  const currentAllImages = currentProject
+    ? [{ image: currentProject.image, caption: currentProject.title }, ...currentProject.gallery]
+    : [];
+
+  return (
+    <>
+      {/* Section Header */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        style={{ textAlign: 'center', marginBottom: '4rem' }}
+      >
+        <div style={{
+          display: 'inline-flex', alignItems: 'center', gap: '0.75rem',
+          background: 'rgba(212, 193, 157, 0.1)', border: '1px solid rgba(212, 193, 157, 0.2)',
+          padding: '0.5rem 1.5rem', borderRadius: '50px', marginBottom: '1.5rem'
+        }}>
+          <Sparkles size={18} style={{ color: 'var(--gold)' }} />
+          <span style={{
+            color: 'var(--gold)', fontSize: '0.9rem',
+            fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif'
+          }}>
+            {pageContent?.sectionTitle || (isAr ? 'مشاريعنا الترفيهية' : 'Our Entertainment Projects')}
+          </span>
+        </div>
+        <h2 style={{
+          fontSize: 'clamp(1.8rem, 4vw, 2.8rem)',
+          fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif',
+          fontWeight: 700, color: 'var(--gold)', marginBottom: '1rem',
+          textShadow: '0 2px 20px rgba(212, 193, 157, 0.3)'
+        }}>
+          {pageContent?.sectionTitle || (isAr ? 'تجارب ترفيهية لا تُنسى' : 'Unforgettable Entertainment Experiences')}
+        </h2>
+        <p style={{
+          fontSize: '1.1rem', color: 'rgba(212, 193, 157, 0.7)',
+          fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif',
+          maxWidth: '600px', margin: '0 auto', lineHeight: 1.8
+        }}>
+          {pageContent?.sectionSubtitle || (isAr
+            ? 'اكتشف مجموعة مشاريعنا الترفيهية المتنوعة التي تلبي جميع الأذواق'
+            : 'Explore our diverse entertainment projects that cater to all tastes')}
+        </p>
+      </motion.div>
+
+      {/* Projects Grid */}
+      <div className="entertainment-grid">
+        {projects.map((project, index) => (
+          <motion.div
+            key={project.id}
+            custom={index}
+            variants={cardVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            className="entertainment-card"
+          >
+            {/* Main Image */}
+            <div className="entertainment-card-image" onClick={() => openLightbox(project.id, 0)}>
+              <Image
+                src={project.image}
+                alt={project.title}
+                fill
+                style={{ objectFit: 'cover', transition: 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)' }}
+                unoptimized
+              />
+              <div className="entertainment-card-overlay" />
+              <div className="entertainment-card-status">
+                {project.status}
+              </div>
+            </div>
+
+            {/* Content */}
+            <div style={{ padding: '1.5rem 2rem 1rem' }}>
+              <div style={{
+                fontSize: '0.75rem', color: 'var(--gold)', fontWeight: 700,
+                marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '2px',
+                fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif'
+              }}>
+                {project.category}
+              </div>
+              <h3 style={{
+                fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif',
+                fontSize: 'clamp(1.3rem, 3vw, 1.7rem)', fontWeight: 700,
+                color: 'var(--gold)', marginBottom: '0.75rem', lineHeight: 1.3
+              }}>
+                {project.title}
+              </h3>
+              <p style={{
+                fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif',
+                fontSize: '0.95rem', lineHeight: 1.7,
+                color: 'rgba(212, 193, 157, 0.75)', marginBottom: '1rem',
+                display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden'
+              }}>
+                {project.description}
+              </p>
+              <div style={{
+                display: 'flex', gap: '1.5rem', flexWrap: 'wrap', alignItems: 'center',
+                marginBottom: '1.25rem', fontSize: '0.85rem', color: 'rgba(212, 193, 157, 0.7)',
+                fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <MapPin size={14} style={{ color: 'var(--gold)' }} />
+                  <span>{project.location}</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <Calendar size={14} style={{ color: 'var(--gold)' }} />
+                  <span>{project.year}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Mini Gallery */}
+            {project.gallery.length > 0 && (
+              <div style={{ padding: '0 2rem 1.25rem' }}>
+                <div className="entertainment-mini-gallery">
+                  {project.gallery.slice(0, 4).map((img, imgIndex) => (
+                    <motion.div
+                      key={imgIndex}
+                      className="entertainment-mini-thumb"
+                      whileHover={{ scale: 1.05 }}
+                      onClick={() => openLightbox(project.id, imgIndex + 1)}
+                    >
+                      <Image
+                        src={img.image}
+                        alt={img.caption}
+                        fill
+                        style={{ objectFit: 'cover' }}
+                        unoptimized
+                      />
+                      {imgIndex === 3 && project.gallery.length > 4 && (
+                        <div style={{
+                          position: 'absolute', inset: 0,
+                          background: 'rgba(0,0,0,0.6)',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          color: 'var(--gold)', fontSize: '0.9rem', fontWeight: 700
+                        }}>
+                          +{project.gallery.length - 4}
+                        </div>
+                      )}
+                      <div className="entertainment-thumb-caption">
+                        {img.caption}
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* View Details Button */}
+            <div style={{ padding: '0 2rem 2rem' }}>
+              <Link
+                href={`/${locale}/entertainment/${project.id}`}
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
+                  width: '100%', padding: '0.9rem 1.5rem',
+                  background: 'linear-gradient(135deg, var(--gold) 0%, rgba(212, 193, 157, 0.85) 100%)',
+                  color: 'var(--dark)', fontWeight: 700, fontSize: '0.95rem',
+                  borderRadius: '10px', textDecoration: 'none',
+                  fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif',
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 4px 15px rgba(212, 193, 157, 0.3)'
+                }}
+                className="entertainment-details-btn"
+              >
+                {isAr ? 'عرض التفاصيل' : 'View Details'}
+                <ArrowIcon size={18} />
+              </Link>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Lightbox */}
+      <AnimatePresence>
+        {lightbox && currentProject && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={closeLightbox}
+            style={{
+              position: 'fixed', inset: 0, zIndex: 9999,
+              background: 'rgba(0, 0, 0, 0.95)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              flexDirection: 'column', padding: '2rem'
+            }}
+          >
+            <button
+              onClick={closeLightbox}
+              style={{
+                position: 'absolute', top: '1.5rem', right: '1.5rem',
+                background: 'rgba(212, 193, 157, 0.2)', border: '1px solid rgba(212, 193, 157, 0.3)',
+                borderRadius: '50%', width: '48px', height: '48px',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                cursor: 'pointer', zIndex: 10, color: 'var(--gold)'
+              }}
+            >
+              <X size={24} />
+            </button>
+
+            <div
+              onClick={(e) => e.stopPropagation()}
+              style={{ position: 'relative', width: '100%', maxWidth: '900px', aspectRatio: '16/10' }}
+            >
+              <motion.div
+                key={lightbox.imageIndex}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3 }}
+                style={{ position: 'relative', width: '100%', height: '100%', borderRadius: '12px', overflow: 'hidden' }}
+              >
+                <Image
+                  src={currentAllImages[lightbox.imageIndex]?.image || ''}
+                  alt={currentAllImages[lightbox.imageIndex]?.caption || ''}
+                  fill
+                  style={{ objectFit: 'contain' }}
+                  unoptimized
+                />
+              </motion.div>
+
+              {/* Nav Buttons */}
+              <button
+                onClick={(e) => { e.stopPropagation(); navigateLightbox(-1); }}
+                style={{
+                  position: 'absolute', left: '-60px', top: '50%', transform: 'translateY(-50%)',
+                  background: 'rgba(212, 193, 157, 0.2)', border: '1px solid rgba(212, 193, 157, 0.3)',
+                  borderRadius: '50%', width: '48px', height: '48px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  cursor: 'pointer', color: 'var(--gold)'
+                }}
+              >
+                <ChevronLeft size={24} />
+              </button>
+              <button
+                onClick={(e) => { e.stopPropagation(); navigateLightbox(1); }}
+                style={{
+                  position: 'absolute', right: '-60px', top: '50%', transform: 'translateY(-50%)',
+                  background: 'rgba(212, 193, 157, 0.2)', border: '1px solid rgba(212, 193, 157, 0.3)',
+                  borderRadius: '50%', width: '48px', height: '48px',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  cursor: 'pointer', color: 'var(--gold)'
+                }}
+              >
+                <ChevronRight size={24} />
+              </button>
+            </div>
+
+            {/* Caption */}
+            <motion.p
+              key={`caption-${lightbox.imageIndex}`}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              style={{
+                color: 'rgba(212, 193, 157, 0.9)', fontSize: '1rem',
+                fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif',
+                textAlign: 'center', marginTop: '1.5rem', maxWidth: '700px', lineHeight: 1.6
+              }}
+            >
+              {currentAllImages[lightbox.imageIndex]?.caption}
+            </motion.p>
+
+            {/* Counter */}
+            <p style={{
+              color: 'rgba(212, 193, 157, 0.5)', fontSize: '0.85rem', marginTop: '0.5rem'
+            }}>
+              {lightbox.imageIndex + 1} / {currentAllImages.length}
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}

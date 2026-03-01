@@ -56,6 +56,20 @@ const adminRoutes: AdminRoute[] = [
     },
   },
   {
+    slug: "entertainment",
+    labels: {
+      ar: "الترفيه",
+      en: "Entertainment",
+    },
+  },
+  {
+    slug: "entertainment-content",
+    labels: {
+      ar: "محتوى الترفيه",
+      en: "Entertainment Content",
+    },
+  },
+  {
     slug: "footer",
     labels: {
       ar: "الـ Footer",
