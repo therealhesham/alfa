@@ -69,7 +69,7 @@ export default function Header({ locale, settings, headerLogo, isHomePage = fals
 
   return (
     <header className={isMenuOpen ? "menu-active" : ""}>
-      <Link href={`/${locale}/home`} onClick={closeMenu}>
+      <Link href={`/${locale}/home`} onClick={closeMenu} className="logo-link">
         <Image
           src={headerLogo || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
           alt={t.common.logoAlt}

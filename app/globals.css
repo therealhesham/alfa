@@ -480,9 +480,18 @@ header:hover {
   filter: drop-shadow(0 4px 12px rgba(212, 193, 157, 0.4));
 }
 
+.logo-link {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
 .logo {
   height: 65px;
   width: auto;
+  min-width: 65px;
+  flex-shrink: 0;
+  object-fit: contain;
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   filter: drop-shadow(0 2px 8px rgba(15, 28, 42, 0.1));
 }
@@ -2317,6 +2326,7 @@ footer p {
 
   .logo {
     height: 50px;
+    min-width: 50px;
   }
 
 
