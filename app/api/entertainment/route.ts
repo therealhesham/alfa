@@ -51,6 +51,8 @@ export async function GET(request: NextRequest) {
         isPublished: project.isPublished,
         createdAt: project.createdAt,
         updatedAt: project.updatedAt,
+        ctaLabel: project.ctaLabel,
+        ctaLabelEn: project.ctaLabelEn,
       };
     });
 
@@ -85,6 +87,8 @@ export async function POST(request: NextRequest) {
         year: body.year || null,
         status: body.status || null,
         statusEn: body.statusEn || null,
+        ctaLabel: body.ctaLabel || null,
+        ctaLabelEn: body.ctaLabelEn || null,
         order: body.order || 0,
         isPublished: body.isPublished !== undefined ? body.isPublished : true,
       },
@@ -113,7 +117,8 @@ export async function PUT(request: NextRequest) {
       'title', 'titleEn', 'description', 'descriptionEn',
       'fullDescription', 'fullDescriptionEn', 'image',
       'category', 'categoryEn', 'location', 'locationEn',
-      'year', 'status', 'statusEn', 'order', 'isPublished',
+      'year', 'status', 'statusEn', 'ctaLabel', 'ctaLabelEn',
+      'order', 'isPublished',
     ];
 
     for (const field of fields) {

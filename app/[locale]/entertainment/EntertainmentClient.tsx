@@ -24,6 +24,7 @@ interface Project {
   year: string;
   status: string;
   gallery: GalleryImage[];
+   detailsLabel?: string;
 }
 
 interface PageContent {
@@ -31,6 +32,7 @@ interface PageContent {
   sectionSubtitle: string;
   emptyMessage: string;
   showBombom?: boolean;
+  detailsButtonLabel?: string;
 }
 
 interface EntertainmentClientProps {
@@ -282,7 +284,9 @@ export default function EntertainmentClient({ projects, locale, pageContent }: E
                     }}
                     className="entertainment-details-btn"
                   >
-                    {isAr ? 'عرض التفاصيل' : 'View Details'}
+                    {project.detailsLabel
+                      || pageContent?.detailsButtonLabel
+                      || (isAr ? 'عرض التفاصيل' : 'View Details')}
                     <ArrowIcon size={18} />
                   </Link>
                 </div>

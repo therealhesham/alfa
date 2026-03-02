@@ -490,6 +490,8 @@ model EntertainmentProject {
   year              String?  @default("")
   status            String?  @default("")
   statusEn          String?  @default("")
+  ctaLabel          String?  @default("")
+  ctaLabelEn        String?  @default("")
   order             Int      @default(0)
   isPublished       Boolean  @default(true)
   updatedAt         DateTime @updatedAt

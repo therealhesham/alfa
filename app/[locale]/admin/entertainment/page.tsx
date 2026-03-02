@@ -28,6 +28,7 @@ interface EntProject {
   category: string | null; categoryEn: string | null;
   location: string | null; locationEn: string | null;
   year: string | null; status: string | null; statusEn: string | null;
+  ctaLabel: string | null; ctaLabelEn: string | null;
   order: number; isPublished: boolean;
 }
 
@@ -103,7 +104,7 @@ const emptyProject: Omit<EntProject, "id"> = {
   fullDescription: "", fullDescriptionEn: "",
   image: "", gallery: [],
   category: "", categoryEn: "", location: "", locationEn: "",
-  year: "", status: "", statusEn: "", order: 0, isPublished: true,
+  year: "", status: "", statusEn: "", ctaLabel: "", ctaLabelEn: "", order: 0, isPublished: true,
 };
 
 function SectionEditButton({ onClick, label }: { onClick: () => void; label: string }) {
@@ -883,6 +884,28 @@ function ProjectModal({ open, mode, data, onClose, onSave, saving, isAr }: {
           <input type="text" value={form.status || ""} onChange={e => setForm({ ...form, status: e.target.value })} style={inputStyle} /></div>
         <div><label style={labelStyle}>{isAr ? "الحالة (إنجليزي)" : "Status (English)"}</label>
           <input type="text" value={form.statusEn || ""} onChange={e => setForm({ ...form, statusEn: e.target.value })} style={inputStyle} /></div>
+      </div>
+
+      {/* Details button text */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "1.25rem" }}>
+        <div>
+          <label style={labelStyle}>{isAr ? "نص زر التفاصيل (عربي)" : "Details Button (Arabic)"}</label>
+          <input
+            type="text"
+            value={form.ctaLabel || ""}
+            onChange={e => setForm({ ...form, ctaLabel: e.target.value })}
+            style={inputStyle}
+          />
+        </div>
+        <div>
+          <label style={labelStyle}>{isAr ? "نص زر التفاصيل (إنجليزي)" : "Details Button (English)"}</label>
+          <input
+            type="text"
+            value={form.ctaLabelEn || ""}
+            onChange={e => setForm({ ...form, ctaLabelEn: e.target.value })}
+            style={inputStyle}
+          />
+        </div>
       </div>
 
       {/* Order & Published */}

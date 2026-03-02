@@ -18,6 +18,7 @@ export interface EntertainmentContent {
   sectionSubtitle: string;
   emptyMessage: string;
   showBombom: boolean;
+  detailsButtonLabel: string;
 }
 
 function parseHeroImages(json: string | null | undefined): string[] {
@@ -47,6 +48,7 @@ export async function getEntertainmentContent(locale: string): Promise<Entertain
       : 'Explore our diverse entertainment projects that cater to all tastes',
     emptyMessage: locale === 'ar' ? 'لا توجد مشاريع ترفيهية متاحة حالياً' : 'No entertainment projects available at the moment',
     showBombom: true,
+    detailsButtonLabel: locale === 'ar' ? 'عرض التفاصيل' : 'View Details',
   };
 
   try {
@@ -74,6 +76,7 @@ export async function getEntertainmentContent(locale: string): Promise<Entertain
       sectionSubtitle: isEn ? (content.sectionSubtitleEn || defaults.sectionSubtitle) : (content.sectionSubtitle || defaults.sectionSubtitle),
       emptyMessage: isEn ? (content.emptyMessageEn || defaults.emptyMessage) : (content.emptyMessage || defaults.emptyMessage),
       showBombom: content.showBombom ?? true,
+      detailsButtonLabel: defaults.detailsButtonLabel,
     };
   } catch (error) {
     console.error('Error fetching entertainment content:', error);
@@ -106,6 +109,8 @@ export interface EntertainmentProjectRaw {
   statusEn: string | null;
   order: number;
   isPublished: boolean;
+  ctaLabel: string | null;
+  ctaLabelEn: string | null;
 }
 
 function parseGallery(galleryJson: string | null): GalleryImage[] {
@@ -144,6 +149,8 @@ export async function getEntertainmentProjects(): Promise<EntertainmentProjectRa
       statusEn: p.statusEn,
       order: p.order,
       isPublished: p.isPublished,
+      ctaLabel: p.ctaLabel,
+      ctaLabelEn: p.ctaLabelEn,
     }));
   } catch (error) {
     console.error('Error fetching entertainment projects:', error);
@@ -178,6 +185,8 @@ export async function getEntertainmentProjectById(id: string): Promise<Entertain
       statusEn: p.statusEn,
       order: p.order,
       isPublished: p.isPublished,
+      ctaLabel: p.ctaLabel,
+      ctaLabelEn: p.ctaLabelEn,
     };
   } catch (error) {
     console.error('Error fetching entertainment project:', error);
@@ -186,20 +195,26 @@ export async function getEntertainmentProjectById(id: string): Promise<Entertain
 }
 
 export function localizeProject(project: EntertainmentProjectRaw, locale: string) {
+  const isEn = locale === 'en';
+  const defaultLabel = isEn ? 'View Details' : 'عرض التفاصيل';
+
   return {
     id: project.id,
-    title: locale === 'en' ? (project.titleEn || project.title) : project.title,
-    description: locale === 'en' ? (project.descriptionEn || project.description) : project.description,
-    fullDescription: locale === 'en' ? (project.fullDescriptionEn || project.fullDescription) : project.fullDescription,
+    title: isEn ? (project.titleEn || project.title) : project.title,
+    description: isEn ? (project.descriptionEn || project.description) : project.description,
+    fullDescription: isEn ? (project.fullDescriptionEn || project.fullDescription) : project.fullDescription,
     image: project.image,
-    category: locale === 'en' ? (project.categoryEn || project.category || '') : (project.category || ''),
-    location: locale === 'en' ? (project.locationEn || project.location || '') : (project.location || ''),
+    category: isEn ? (project.categoryEn || project.category || '') : (project.category || ''),
+    location: isEn ? (project.locationEn || project.location || '') : (project.location || ''),
     year: project.year || '',
-    status: locale === 'en' ? (project.statusEn || project.status || '') : (project.status || ''),
+    status: isEn ? (project.statusEn || project.status || '') : (project.status || ''),
     gallery: project.gallery.map(g => ({
       image: g.image,
-      caption: locale === 'en' ? (g.captionEn || g.caption) : g.caption,
+      caption: isEn ? (g.captionEn || g.caption) : g.caption,
     })),
+    detailsLabel: isEn
+      ? (project.ctaLabelEn || project.ctaLabel || defaultLabel)
+      : (project.ctaLabel || project.ctaLabelEn || defaultLabel),
   };
 }
 
