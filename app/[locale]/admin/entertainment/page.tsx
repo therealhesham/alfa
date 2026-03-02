@@ -440,61 +440,6 @@ export default function AdminEntertainmentPage() {
             </p>
           </div>
 
-          {/* Bom Bom Toggle Banner */}
-          <div style={{
-            marginBottom: "2rem", padding: "1.25rem 1.5rem",
-            background: content.showBombom ? "rgba(0,191,255,0.08)" : "rgba(244,67,54,0.06)",
-            border: `2px solid ${content.showBombom ? "rgba(0,191,255,0.3)" : "rgba(244,67,54,0.25)"}`,
-            borderRadius: "16px", display: "flex", alignItems: "center", justifyContent: "space-between",
-            flexWrap: "wrap", gap: "1rem",
-          }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-              <div style={{
-                width: "48px", height: "48px", borderRadius: "12px",
-                background: content.showBombom ? "linear-gradient(135deg, #00BFFF, #FF1493)" : "rgba(212,193,157,0.1)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-              }}>
-                {content.showBombom
-                  ? <Eye size={22} color="#fff" />
-                  : <EyeOff size={22} style={{ color: "rgba(212,193,157,0.4)" }} />}
-              </div>
-              <div>
-                <div style={{ fontWeight: 700, color: "var(--gold)", fontSize: "1.05rem" }}>
-                  {isAr ? "صفحة بوم بوم بلاي كيد" : "Bom Bom Play Kid Page"}
-                </div>
-                <div style={{ fontSize: "0.8rem", color: "rgba(212,193,157,0.55)", marginTop: "0.15rem" }}>
-                  {content.showBombom
-                    ? (isAr ? "ظاهرة حالياً ضمن مشاريع الترفيه" : "Currently visible in entertainment projects")
-                    : (isAr ? "مخفية عن المستخدمين" : "Hidden from users")}
-                </div>
-              </div>
-            </div>
-            <button onClick={async () => {
-              const next = !content.showBombom;
-              setContent({ ...content, showBombom: next });
-              setSaving(true);
-              try {
-                await fetch("/api/entertainment-content", {
-                  method: "PUT", headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ ...content, showBombom: next }),
-                });
-                setSaved(true); setTimeout(() => setSaved(false), 3000);
-              } catch { /* noop */ }
-              finally { setSaving(false); }
-            }} style={{
-              padding: "0.6rem 1.5rem",
-              background: content.showBombom ? "rgba(244,67,54,0.9)" : "linear-gradient(135deg, #00BFFF, #FF1493)",
-              color: "#fff", border: "none", borderRadius: "10px", cursor: "pointer",
-              fontWeight: 700, fontSize: "0.9rem", fontFamily: "inherit",
-              display: "flex", alignItems: "center", gap: "0.5rem",
-              boxShadow: content.showBombom ? "0 4px 15px rgba(244,67,54,0.3)" : "0 4px 15px rgba(0,191,255,0.3)",
-            }}>
-              {content.showBombom
-                ? <><EyeOff size={16} /> {isAr ? "إخفاء الصفحة" : "Hide Page"}</>
-                : <><Eye size={16} /> {isAr ? "إظهار الصفحة" : "Show Page"}</>}
-            </button>
-          </div>
-
           {/* Projects Grid */}
           <div className="entertainment-grid">
             {projects.map((project) => {
@@ -579,6 +524,87 @@ export default function AdminEntertainmentPage() {
                 </div>
               );
             })}
+
+            {/* Bom Bom Play Kid Card */}
+            <div className="entertainment-card" style={{
+              position: "relative",
+              opacity: content.showBombom ? 1 : 0.5,
+              transition: "opacity 0.3s",
+            }}>
+              {/* Admin controls */}
+              <div style={{
+                position: "absolute", top: "0.75rem", right: "0.75rem", zIndex: 5,
+                display: "flex", gap: "0.4rem",
+              }}>
+                {!content.showBombom && (
+                  <span style={{ padding: "0.3rem 0.6rem", background: "rgba(244,67,54,0.9)", color: "#fff",
+                    borderRadius: "6px", fontSize: "0.7rem", fontWeight: 700, display: "flex", alignItems: "center", gap: "0.3rem" }}>
+                    <EyeOff size={12} /> {isAr ? "مخفي" : "Hidden"}
+                  </span>
+                )}
+                <button onClick={async () => {
+                  const next = !content.showBombom;
+                  setContent({ ...content, showBombom: next });
+                  setSaving(true);
+                  try {
+                    await fetch("/api/entertainment-content", {
+                      method: "PUT", headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({ ...content, showBombom: next }),
+                    });
+                    setSaved(true); setTimeout(() => setSaved(false), 3000);
+                  } catch { /* noop */ }
+                  finally { setSaving(false); }
+                }} title={content.showBombom ? (isAr ? "إخفاء" : "Hide") : (isAr ? "إظهار" : "Show")} style={{
+                  width: "32px", height: "32px",
+                  background: content.showBombom ? "rgba(76,175,80,0.9)" : "rgba(244,67,54,0.9)",
+                  color: "#fff", border: "none", borderRadius: "8px", cursor: "pointer",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                }}>
+                  {content.showBombom ? <Eye size={14} /> : <EyeOff size={14} />}
+                </button>
+              </div>
+
+              {/* Card Image */}
+              <div className="entertainment-card-image" style={{
+                background: "linear-gradient(135deg, #00BFFF 0%, #FF1493 50%, #FFD700 100%)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+              }}>
+                <div style={{ textAlign: "center", zIndex: 2, position: "relative" }}>
+                  <span style={{ fontSize: "3rem", display: "block", lineHeight: 1 }}>🎈</span>
+                  <span style={{ color: "#fff", fontWeight: 800, fontSize: "1.2rem", display: "block", marginTop: "0.5rem", textShadow: "0 2px 8px rgba(0,0,0,0.3)" }}>Bom Bom</span>
+                </div>
+              </div>
+
+              {/* Card Content */}
+              <div style={{ padding: "1.5rem 2rem 1rem" }}>
+                <div style={{ fontSize: "0.75rem", color: "var(--gold)", fontWeight: 700, marginBottom: "0.75rem",
+                  textTransform: "uppercase", letterSpacing: "2px" }}>
+                  {isAr ? "صفحة ثابتة" : "STATIC PAGE"}
+                </div>
+                <h3 style={{ fontSize: "clamp(1.3rem, 3vw, 1.7rem)", fontWeight: 700, color: "var(--gold)", marginBottom: "0.75rem", lineHeight: 1.3 }}>
+                  {isAr ? "بوم بوم بلاي كيد" : "Bom Bom Play Kid"}
+                </h3>
+                <p style={{ fontSize: "0.95rem", lineHeight: 1.7, color: "rgba(212,193,157,0.75)", marginBottom: "1rem",
+                  display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                  {isAr
+                    ? "عالم من المرح والمغامرة للأطفال! مناطق لعب متنوعة، قلاع قفز، تزحلق، وركن الأذكياء."
+                    : "A world of fun and adventure for kids! Play zones, jump castles, skating, and smart corners."}
+                </p>
+                <div style={{ display: "flex", gap: "1.5rem", flexWrap: "wrap", fontSize: "0.85rem", color: "rgba(212,193,157,0.7)", marginBottom: "1.25rem" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                    <MapPin size={14} style={{ color: "var(--gold)" }} />
+                    {isAr ? "المملكة العربية السعودية" : "Saudi Arabia"}
+                  </div>
+                </div>
+              </div>
+
+              {/* Static page badge */}
+              <div style={{ position: "absolute", bottom: "0.75rem", left: "0.75rem", zIndex: 5,
+                padding: "0.2rem 0.6rem", background: "rgba(0,191,255,0.15)", border: "1px solid rgba(0,191,255,0.3)",
+                borderRadius: "6px", fontSize: "0.7rem", color: "#00BFFF", fontWeight: 600 }}>
+                {isAr ? "صفحة ثابتة" : "Static"}
+              </div>
+            </div>
 
             {/* Add Project Card */}
             <div
