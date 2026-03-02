@@ -62,13 +62,7 @@ const adminRoutes: AdminRoute[] = [
       en: "Entertainment",
     },
   },
-  {
-    slug: "entertainment-content",
-    labels: {
-      ar: "محتوى الترفيه",
-      en: "Entertainment Content",
-    },
-  },
+  // entertainment-content is now integrated into the entertainment admin page
   {
     slug: "footer",
     labels: {
