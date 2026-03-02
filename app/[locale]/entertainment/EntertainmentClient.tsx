@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { MapPin, Calendar, ArrowRight, ArrowLeft, Sparkles, X, ChevronLeft, ChevronRight, Sliders } from 'lucide-react';
+import { MapPin, Calendar, ArrowRight, ArrowLeft, Sparkles, X, ChevronLeft, ChevronRight, PartyPopper, Sliders } from 'lucide-react';
 
 interface GalleryImage {
   image: string;
@@ -27,6 +27,7 @@ interface PageContent {
   sectionTitle: string;
   sectionSubtitle: string;
   emptyMessage: string;
+  showBombom?: boolean;
 }
 
 interface EntertainmentClientProps {
@@ -241,6 +242,80 @@ export default function EntertainmentClient({ projects, locale, pageContent }: E
             </div>
           </motion.div>
         ))}
+
+        {/* Bom Bom Play Kid — static page card */}
+        {pageContent?.showBombom && (
+          <motion.div
+            custom={projects.length}
+            variants={cardVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            className="entertainment-card"
+          >
+            <div className="entertainment-card-image" style={{ background: 'linear-gradient(135deg, #00BFFF 0%, #FF1493 50%, #FFD700 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <PartyPopper size={80} color="#fff" strokeWidth={1.5} style={{ opacity: 0.9 }} />
+              <div className="entertainment-card-overlay" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 60%)' }} />
+            </div>
+
+            <div style={{ padding: '1.5rem 2rem 1rem' }}>
+              <div style={{
+                fontSize: '0.75rem', color: 'var(--gold)', fontWeight: 700,
+                marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '2px',
+                fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif'
+              }}>
+                {isAr ? 'مركز ترفيهي' : 'Entertainment Center'}
+              </div>
+              <h3 style={{
+                fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif',
+                fontSize: 'clamp(1.3rem, 3vw, 1.7rem)', fontWeight: 700,
+                color: 'var(--gold)', marginBottom: '0.75rem', lineHeight: 1.3
+              }}>
+                {isAr ? 'بوم بوم بلاي كيد' : 'Bom Bom Play Kid'}
+              </h3>
+              <p style={{
+                fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif',
+                fontSize: '0.95rem', lineHeight: 1.7,
+                color: 'rgba(212, 193, 157, 0.75)', marginBottom: '1rem',
+                display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden'
+              }}>
+                {isAr
+                  ? 'عالم من المرح والمغامرة للأطفال! مناطق لعب متنوعة، قلاع قفز، تزحلق، وركن الأذكياء مع باقات أعياد ميلاد مميزة.'
+                  : 'A world of fun and adventure for kids! Diverse play zones, jump castles, skating, smart corners, and special birthday packages.'}
+              </p>
+              <div style={{
+                display: 'flex', gap: '1.5rem', flexWrap: 'wrap', alignItems: 'center',
+                marginBottom: '1.25rem', fontSize: '0.85rem', color: 'rgba(212, 193, 157, 0.7)',
+                fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <MapPin size={14} style={{ color: 'var(--gold)' }} />
+                  <span>{isAr ? 'المملكة العربية السعودية' : 'Saudi Arabia'}</span>
+                </div>
+              </div>
+            </div>
+
+            <div style={{ padding: '0 2rem 2rem' }}>
+              <Link
+                href={`/${locale}/entertainment/bombom`}
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
+                  width: '100%', padding: '0.9rem 1.5rem',
+                  background: 'linear-gradient(135deg, #FF1493 0%, #00BFFF 100%)',
+                  color: '#fff', fontWeight: 700, fontSize: '0.95rem',
+                  borderRadius: '10px', textDecoration: 'none',
+                  fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif',
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 4px 15px rgba(255, 20, 147, 0.3)'
+                }}
+                className="entertainment-details-btn"
+              >
+                {isAr ? 'اكتشف عالم بوم بوم' : 'Explore Bom Bom World'}
+                <ArrowIcon size={18} />
+              </Link>
+            </div>
+          </motion.div>
+        )}
       </div>
 
       {/* Lightbox */}

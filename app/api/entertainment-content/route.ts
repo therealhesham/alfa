@@ -60,6 +60,7 @@ export async function PUT(request: NextRequest) {
         sectionSubtitleEn: body.sectionSubtitleEn,
         emptyMessage: body.emptyMessage,
         emptyMessageEn: body.emptyMessageEn,
+        ...(body.showBombom !== undefined && { showBombom: body.showBombom }),
       },
     });
 

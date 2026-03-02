@@ -42,6 +42,7 @@ interface ContentState {
   sectionTitle: string; sectionTitleEn: string;
   sectionSubtitle: string; sectionSubtitleEn: string;
   emptyMessage: string; emptyMessageEn: string;
+  showBombom: boolean;
 }
 
 let currentLocale: Locale = "ar";
@@ -174,6 +175,7 @@ export default function AdminEntertainmentPage() {
     stat3Icon: "Clapperboard", stat3Number: "100K+", stat3Label: "", stat3LabelEn: "",
     sectionTitle: "", sectionTitleEn: "", sectionSubtitle: "", sectionSubtitleEn: "",
     emptyMessage: "", emptyMessageEn: "",
+    showBombom: true,
   });
 
   const [projects, setProjects] = useState<EntProject[]>([]);
@@ -213,6 +215,7 @@ export default function AdminEntertainmentPage() {
           sectionTitle: data.sectionTitle || "", sectionTitleEn: data.sectionTitleEn || "",
           sectionSubtitle: data.sectionSubtitle || "", sectionSubtitleEn: data.sectionSubtitleEn || "",
           emptyMessage: data.emptyMessage || "", emptyMessageEn: data.emptyMessageEn || "",
+          showBombom: data.showBombom ?? true,
         });
       }
     } catch (err) { console.error("Error fetching content:", err); }
@@ -437,6 +440,61 @@ export default function AdminEntertainmentPage() {
             </p>
           </div>
 
+          {/* Bom Bom Toggle Banner */}
+          <div style={{
+            marginBottom: "2rem", padding: "1.25rem 1.5rem",
+            background: content.showBombom ? "rgba(0,191,255,0.08)" : "rgba(244,67,54,0.06)",
+            border: `2px solid ${content.showBombom ? "rgba(0,191,255,0.3)" : "rgba(244,67,54,0.25)"}`,
+            borderRadius: "16px", display: "flex", alignItems: "center", justifyContent: "space-between",
+            flexWrap: "wrap", gap: "1rem",
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+              <div style={{
+                width: "48px", height: "48px", borderRadius: "12px",
+                background: content.showBombom ? "linear-gradient(135deg, #00BFFF, #FF1493)" : "rgba(212,193,157,0.1)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+              }}>
+                {content.showBombom
+                  ? <Eye size={22} color="#fff" />
+                  : <EyeOff size={22} style={{ color: "rgba(212,193,157,0.4)" }} />}
+              </div>
+              <div>
+                <div style={{ fontWeight: 700, color: "var(--gold)", fontSize: "1.05rem" }}>
+                  {isAr ? "صفحة بوم بوم بلاي كيد" : "Bom Bom Play Kid Page"}
+                </div>
+                <div style={{ fontSize: "0.8rem", color: "rgba(212,193,157,0.55)", marginTop: "0.15rem" }}>
+                  {content.showBombom
+                    ? (isAr ? "ظاهرة حالياً ضمن مشاريع الترفيه" : "Currently visible in entertainment projects")
+                    : (isAr ? "مخفية عن المستخدمين" : "Hidden from users")}
+                </div>
+              </div>
+            </div>
+            <button onClick={async () => {
+              const next = !content.showBombom;
+              setContent({ ...content, showBombom: next });
+              setSaving(true);
+              try {
+                await fetch("/api/entertainment-content", {
+                  method: "PUT", headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ ...content, showBombom: next }),
+                });
+                setSaved(true); setTimeout(() => setSaved(false), 3000);
+              } catch { /* noop */ }
+              finally { setSaving(false); }
+            }} style={{
+              padding: "0.6rem 1.5rem",
+              background: content.showBombom ? "rgba(244,67,54,0.9)" : "linear-gradient(135deg, #00BFFF, #FF1493)",
+              color: "#fff", border: "none", borderRadius: "10px", cursor: "pointer",
+              fontWeight: 700, fontSize: "0.9rem", fontFamily: "inherit",
+              display: "flex", alignItems: "center", gap: "0.5rem",
+              boxShadow: content.showBombom ? "0 4px 15px rgba(244,67,54,0.3)" : "0 4px 15px rgba(0,191,255,0.3)",
+            }}>
+              {content.showBombom
+                ? <><EyeOff size={16} /> {isAr ? "إخفاء الصفحة" : "Hide Page"}</>
+                : <><Eye size={16} /> {isAr ? "إظهار الصفحة" : "Show Page"}</>}
+            </button>
+          </div>
+
           {/* Projects Grid */}
           <div className="entertainment-grid">
             {projects.map((project) => {
@@ -649,6 +707,39 @@ export default function AdminEntertainmentPage() {
           <div><label style={labelStyle}>{isAr ? "رسالة الحالة الفارغة (إنجليزي)" : "Empty Message (English)"}</label>
             <input type="text" value={content.emptyMessageEn} onChange={e => setContent({ ...content, emptyMessageEn: e.target.value })} style={inputStyle} /></div>
         </div>
+
+        {/* Bombom Static Page Toggle */}
+        <div style={{
+          marginBottom: "1.5rem", padding: "1rem 1.25rem",
+          background: content.showBombom ? "rgba(76,175,80,0.08)" : "rgba(244,67,54,0.08)",
+          border: `1px solid ${content.showBombom ? "rgba(76,175,80,0.3)" : "rgba(244,67,54,0.3)"}`,
+          borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "space-between",
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+            {content.showBombom
+              ? <Eye size={20} style={{ color: "rgba(76,175,80,0.9)" }} />
+              : <EyeOff size={20} style={{ color: "rgba(244,67,54,0.9)" }} />}
+            <div>
+              <div style={{ fontWeight: 700, color: "var(--gold)", fontSize: "0.95rem" }}>
+                {isAr ? "صفحة بوم بوم بلاي كيد" : "Bom Bom Play Kid Page"}
+              </div>
+              <div style={{ fontSize: "0.8rem", color: "rgba(212,193,157,0.6)" }}>
+                {isAr ? "إظهار كارت بوم بوم ضمن مشاريع الترفيه" : "Show Bom Bom card in entertainment projects"}
+              </div>
+            </div>
+          </div>
+          <button onClick={() => setContent({ ...content, showBombom: !content.showBombom })} style={{
+            padding: "0.5rem 1.25rem",
+            background: content.showBombom ? "rgba(244,67,54,0.9)" : "rgba(76,175,80,0.9)",
+            color: "#fff", border: "none", borderRadius: "8px", cursor: "pointer",
+            fontWeight: 700, fontSize: "0.85rem", fontFamily: "inherit",
+          }}>
+            {content.showBombom
+              ? (isAr ? "إخفاء" : "Hide")
+              : (isAr ? "إظهار" : "Show")}
+          </button>
+        </div>
+
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
           <button onClick={saveContent} disabled={saving} style={{
             display: "flex", alignItems: "center", gap: "0.5rem",
