@@ -1,10 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { MapPin, Calendar, ArrowRight, ArrowLeft, Sparkles, X, ChevronLeft, ChevronRight, PartyPopper, Sliders } from 'lucide-react';
+
+const BOMBOM_CARD_IMAGE =
+  "/logo.jpg";
 
 interface GalleryImage {
   image: string;
@@ -39,6 +42,7 @@ interface EntertainmentClientProps {
 export default function EntertainmentClient({ projects, locale, pageContent }: EntertainmentClientProps) {
   const isAr = locale === 'ar';
   const [lightbox, setLightbox] = useState<{ projectId: string; imageIndex: number } | null>(null);
+  const [carouselIndex, setCarouselIndex] = useState<Record<string, number>>({});
 
   const ArrowIcon = isAr ? ArrowLeft : ArrowRight;
 
@@ -60,6 +64,31 @@ export default function EntertainmentClient({ projects, locale, pageContent }: E
     const newIndex = (lightbox.imageIndex + direction + allImages.length) % allImages.length;
     setLightbox({ ...lightbox, imageIndex: newIndex });
   };
+
+  // Auto-rotate project images (mini carousel inside each card)
+  useEffect(() => {
+    if (!projects.length) return;
+
+    const interval = setInterval(() => {
+      setCarouselIndex((prev) => {
+        const next: Record<string, number> = { ...prev };
+
+        projects.forEach((project) => {
+          const total = 1 + (project.gallery?.length || 0);
+          if (total <= 1) {
+            next[project.id] = 0;
+            return;
+          }
+          const current = prev[project.id] ?? 0;
+          next[project.id] = (current + 1) % total;
+        });
+
+        return next;
+      });
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [projects]);
 
   const cardVariants = {
     hidden: { opacity: 0, y: 50, scale: 0.95 },
@@ -118,130 +147,149 @@ export default function EntertainmentClient({ projects, locale, pageContent }: E
 
       {/* Projects Grid */}
       <div className="entertainment-grid">
-        {projects.map((project, index) => (
-          <motion.div
-            key={project.id}
-            custom={index}
-            variants={cardVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-50px" }}
-            className="entertainment-card"
-          >
-            {/* Main Image */}
-            <div className="entertainment-card-image" onClick={() => openLightbox(project.id, 0)}>
-              <Image
-                src={project.image}
-                alt={project.title}
-                fill
-                style={{ objectFit: 'cover', transition: 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)' }}
-                unoptimized
-              />
-              <div className="entertainment-card-overlay" />
-              {/* <div className="entertainment-card-status">
-                {project.status}
-              </div> */}
-            </div>
+        {projects.map((project, index) => {
+          const allImages = [{ image: project.image, caption: project.title }, ...(project.gallery || [])];
+          const activeIndex = carouselIndex[project.id] ?? 0;
+          const activeImage = allImages[activeIndex] || allImages[0];
 
-            {/* Content */}
-            <div style={{ padding: '1.5rem 2rem 1rem' }}>
-              <div style={{
-                fontSize: '0.75rem', color: 'var(--gold)', fontWeight: 700,
-                marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '2px',
-                fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif'
-              }}>
-                {project.category}
-              </div>
-              <h3 style={{
-                fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif',
-                fontSize: 'clamp(1.3rem, 3vw, 1.7rem)', fontWeight: 700,
-                color: 'var(--gold)', marginBottom: '0.75rem', lineHeight: 1.3
-              }}>
-                {project.title}
-              </h3>
-              <p style={{
-                fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif',
-                fontSize: '0.95rem', lineHeight: 1.7,
-                color: 'rgba(212, 193, 157, 0.75)', marginBottom: '1rem',
-                display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden'
-              }}>
-                {project.description}
-              </p>
-              <div style={{
-                display: 'flex', gap: '1.5rem', flexWrap: 'wrap', alignItems: 'center',
-                marginBottom: '1.25rem', fontSize: '0.85rem', color: 'rgba(212, 193, 157, 0.7)',
-                fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                  <MapPin size={14} style={{ color: 'var(--gold)' }} />
-                  <span>{project.location}</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                  <Calendar size={14} style={{ color: 'var(--gold)' }} />
-                  <span>{project.year}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Mini Gallery */}
-            {project.gallery.length > 0 && (
-              <div style={{ padding: '0 2rem 1.25rem' }}>
-                <div className="entertainment-mini-gallery">
-                  {project.gallery.slice(0, 4).map((img, imgIndex) => (
-                    <motion.div
-                      key={imgIndex}
-                      className="entertainment-mini-thumb"
-                      whileHover={{ scale: 1.05 }}
-                      onClick={() => openLightbox(project.id, imgIndex + 1)}
-                    >
-                      <Image
-                        src={img.image}
-                        alt={img.caption}
-                        fill
-                        style={{ objectFit: 'cover' }}
-                        unoptimized
-                      />
-                      {imgIndex === 3 && project.gallery.length > 4 && (
-                        <div style={{
-                          position: 'absolute', inset: 0,
-                          background: 'rgba(0,0,0,0.6)',
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          color: 'var(--gold)', fontSize: '0.9rem', fontWeight: 700
-                        }}>
-                          +{project.gallery.length - 4}
-                        </div>
-                      )}
-                      <div className="entertainment-thumb-caption">
-                        {img.caption}
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* View Details Button */}
-            <div style={{ padding: '0 2rem 2rem' }}>
-              <Link
-                href={`/${locale}/entertainment/${project.id}`}
-                style={{
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
-                  width: '100%', padding: '0.9rem 1.5rem',
-                  background: 'linear-gradient(135deg, var(--gold) 0%, rgba(212, 193, 157, 0.85) 100%)',
-                  color: 'var(--dark)', fontWeight: 700, fontSize: '0.95rem',
-                  borderRadius: '10px', textDecoration: 'none',
-                  fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif',
-                  transition: 'all 0.3s ease',
-                  boxShadow: '0 4px 15px rgba(212, 193, 157, 0.3)'
-                }}
-                className="entertainment-details-btn"
+          return (
+            <motion.div
+              key={project.id}
+              custom={index}
+              variants={cardVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-50px" }}
+              className="entertainment-card"
+              style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
+            >
+              {/* Main Image as auto carousel */}
+              <div
+                className="entertainment-card-image"
+                onClick={() => openLightbox(project.id, activeIndex)}
+                style={{ cursor: 'pointer' }}
               >
-                {isAr ? 'عرض التفاصيل' : 'View Details'}
-                <ArrowIcon size={18} />
-              </Link>
-            </div>
-          </motion.div>
-        ))}
+                <motion.div
+                  key={activeIndex}
+                  initial={{ opacity: 0, scale: 1.02 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.6 }}
+                  style={{ position: 'relative', width: '100%', height: '100%' }}
+                >
+                  <Image
+                    src={activeImage?.image || project.image}
+                    alt={activeImage?.caption || project.title}
+                    fill
+                    style={{ objectFit: 'cover', transition: 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)' }}
+                    unoptimized
+                  />
+                  <div className="entertainment-card-overlay" />
+                </motion.div>
+
+                {/* Small position dots */}
+                {allImages.length > 1 && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      bottom: '0.9rem',
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      display: 'flex',
+                      gap: '0.35rem',
+                      zIndex: 3,
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {allImages.map((_, dotIndex) => (
+                      <button
+                        key={dotIndex}
+                        type="button"
+                        onClick={() => {
+                          setCarouselIndex((prev) => ({
+                            ...prev,
+                            [project.id]: dotIndex,
+                          }));
+                        }}
+                        style={{
+                          width: dotIndex === activeIndex ? 10 : 7,
+                          height: dotIndex === activeIndex ? 10 : 7,
+                          borderRadius: '999px',
+                          border: 'none',
+                          padding: 0,
+                          cursor: 'pointer',
+                          background:
+                            dotIndex === activeIndex ? 'var(--gold)' : 'rgba(212, 193, 157, 0.4)',
+                          opacity: dotIndex === activeIndex ? 1 : 0.7,
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Content + button area, fills height */}
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '1.5rem 2rem 2rem' }}>
+                <div style={{
+                  fontSize: '0.75rem', color: 'var(--gold)', fontWeight: 700,
+                  marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '2px',
+                  fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif'
+                }}>
+                  {project.category}
+                </div>
+                <h3 style={{
+                  fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif',
+                  fontSize: 'clamp(1.3rem, 3vw, 1.7rem)', fontWeight: 700,
+                  color: 'var(--gold)', marginBottom: '0.75rem', lineHeight: 1.3
+                }}>
+                  {project.title}
+                </h3>
+                <p style={{
+                  fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif',
+                  fontSize: '0.95rem', lineHeight: 1.7,
+                  color: 'rgba(212, 193, 157, 0.75)', marginBottom: '1rem',
+                  display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden'
+                }}>
+                  {project.description}
+                </p>
+                <div style={{
+                  display: 'flex', gap: '1.5rem', flexWrap: 'wrap', alignItems: 'center',
+                  marginBottom: '1.25rem', fontSize: '0.85rem', color: 'rgba(212, 193, 157, 0.7)',
+                  fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                    <MapPin size={14} style={{ color: 'var(--gold)' }} />
+                    <span>{project.location}</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                    <Calendar size={14} style={{ color: 'var(--gold)' }} />
+                    <span>{project.year}</span>
+                  </div>
+                </div>
+
+                {/* View Details Button pinned to bottom */}
+                <div style={{ marginTop: 'auto' }}>
+                  <Link
+                    href={`/${locale}/entertainment/${project.id}`}
+                    style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
+                      width: '100%', padding: '0.9rem 1.5rem',
+                      background: 'linear-gradient(135deg, var(--gold) 0%, rgba(212, 193, 157, 0.85) 100%)',
+                      color: 'var(--dark)', fontWeight: 700, fontSize: '0.95rem',
+                      borderRadius: '10px', textDecoration: 'none',
+                      fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif',
+                      transition: 'all 0.3s ease',
+                      boxShadow: '0 4px 15px rgba(212, 193, 157, 0.3)'
+                    }}
+                    className="entertainment-details-btn"
+                  >
+                    {isAr ? 'عرض التفاصيل' : 'View Details'}
+                    <ArrowIcon size={18} />
+                  </Link>
+                </div>
+              </div>
+            </motion.div>
+          );
+        })}
 
         {/* Bom Bom Play Kid — static page card */}
         {pageContent?.showBombom && (
@@ -252,13 +300,26 @@ export default function EntertainmentClient({ projects, locale, pageContent }: E
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}
             className="entertainment-card"
+            style={{ display: 'flex', flexDirection: 'column', height: '100%' }}
           >
-            <div className="entertainment-card-image" style={{ background: 'linear-gradient(135deg, #00BFFF 0%, #FF1493 50%, #FFD700 100%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <PartyPopper size={80} color="#fff" strokeWidth={1.5} style={{ opacity: 0.9 }} />
-              <div className="entertainment-card-overlay" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 60%)' }} />
+            <div
+              className="entertainment-card-image"
+              style={{ cursor: 'pointer' }}
+            >
+              <Image
+                src={BOMBOM_CARD_IMAGE}
+                alt={isAr ? 'بوم بوم بلاي كيد' : 'Bom Bom Play Kid'}
+                fill
+                style={{ objectFit: 'cover', transform: 'scale(1.02)' }}
+                unoptimized
+              />
+              <div
+                className="entertainment-card-overlay"
+                style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%)' }}
+              />
             </div>
 
-            <div style={{ padding: '1.5rem 2rem 1rem' }}>
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', padding: '1.5rem 2rem 2rem' }}>
               <div style={{
                 fontSize: '0.75rem', color: 'var(--gold)', fontWeight: 700,
                 marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '2px',
@@ -293,26 +354,27 @@ export default function EntertainmentClient({ projects, locale, pageContent }: E
                   <span>{isAr ? 'المملكة العربية السعودية' : 'Saudi Arabia'}</span>
                 </div>
               </div>
-            </div>
 
-            <div style={{ padding: '0 2rem 2rem' }}>
-              <Link
-                href={`/${locale}/entertainment/bombom`}
-                style={{
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
-                  width: '100%', padding: '0.9rem 1.5rem',
-                  background: 'linear-gradient(135deg, #FF1493 0%, #00BFFF 100%)',
-                  color: '#fff', fontWeight: 700, fontSize: '0.95rem',
-                  borderRadius: '10px', textDecoration: 'none',
-                  fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif',
-                  transition: 'all 0.3s ease',
-                  boxShadow: '0 4px 15px rgba(255, 20, 147, 0.3)'
-                }}
-                className="entertainment-details-btn"
-              >
-                {isAr ? 'اكتشف عالم بوم بوم' : 'Explore Bom Bom World'}
-                <ArrowIcon size={18} />
-              </Link>
+              {/* Bom Bom button aligned with others */}
+              <div style={{ marginTop: 'auto' }}>
+                <Link
+                  href={`/${locale}/entertainment/bombom`}
+                  style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
+                    width: '100%', padding: '0.9rem 1.5rem',
+                    background: 'linear-gradient(135deg, #FF1493 0%, #00BFFF 100%)',
+                    color: '#fff', fontWeight: 700, fontSize: '0.95rem',
+                    borderRadius: '10px', textDecoration: 'none',
+                    fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif',
+                    transition: 'all 0.3s ease',
+                    boxShadow: '0 4px 15px rgba(255, 20, 147, 0.3)'
+                  }}
+                  className="entertainment-details-btn"
+                >
+                  {isAr ? 'اكتشف عالم بوم بوم' : 'Explore Bom Bom World'}
+                  <ArrowIcon size={18} />
+                </Link>
+              </div>
             </div>
           </motion.div>
         )}
