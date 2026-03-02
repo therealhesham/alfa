@@ -38,7 +38,7 @@ export async function getEntertainmentContent(locale: string): Promise<Entertain
     heroImages: [],
     showStats: true,
     stat1Icon: 'Sparkles', stat1Number: '4+', stat1Label: locale === 'ar' ? 'مشاريع ترفيهية' : 'Entertainment Projects',
-    stat2Icon: 'Star', stat2Number: '3', stat2Label: locale === 'ar' ? 'دول' : 'Countries',
+    stat2Icon: 'Star', stat2Number: '4', stat2Label: locale === 'ar' ? 'محافظات' : 'Governorates',
     stat3Icon: 'Clapperboard', stat3Number: '100K+', stat3Label: locale === 'ar' ? 'زائر متوقع' : 'Expected Visitors',
     sectionTitle: locale === 'ar' ? 'مشاريعنا الترفيهية' : 'Our Entertainment Projects',
     sectionSubtitle: locale === 'ar'

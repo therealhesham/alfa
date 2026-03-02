@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { MapPin, Calendar, ArrowRight, ArrowLeft, Sparkles, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { MapPin, Calendar, ArrowRight, ArrowLeft, Sparkles, X, ChevronLeft, ChevronRight, Sliders } from 'lucide-react';
 
 interface GalleryImage {
   image: string;
@@ -88,7 +88,7 @@ export default function EntertainmentClient({ projects, locale, pageContent }: E
           background: 'rgba(212, 193, 157, 0.1)', border: '1px solid rgba(212, 193, 157, 0.2)',
           padding: '0.5rem 1.5rem', borderRadius: '50px', marginBottom: '1.5rem'
         }}>
-          <Sparkles size={18} style={{ color: 'var(--gold)' }} />
+          <Sliders size={18} style={{ color: 'var(--gold)' }} />
           <span style={{
             color: 'var(--gold)', fontSize: '0.9rem',
             fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif'
@@ -137,9 +137,9 @@ export default function EntertainmentClient({ projects, locale, pageContent }: E
                 unoptimized
               />
               <div className="entertainment-card-overlay" />
-              <div className="entertainment-card-status">
+              {/* <div className="entertainment-card-status">
                 {project.status}
-              </div>
+              </div> */}
             </div>
 
             {/* Content */}
