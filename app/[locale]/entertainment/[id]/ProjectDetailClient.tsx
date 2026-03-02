@@ -6,7 +6,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import {
   MapPin, Calendar, ArrowRight, ArrowLeft, X,
-  ChevronLeft, ChevronRight, Sparkles, Tag, Clock
+  ChevronLeft, ChevronRight, Sparkles, Tag, Clock,
+  Sliders,
+  SlidersHorizontal
 } from 'lucide-react';
 
 interface GalleryImage {
@@ -164,7 +166,8 @@ export default function ProjectDetailClient({ project, locale }: ProjectDetailCl
           <div style={{
             display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '2rem'
           }}>
-            <Sparkles size={24} style={{ color: 'var(--gold)' }} />
+<SlidersHorizontal size={24} style={{ color: 'var(--gold)' }} />
+            {/* <Sparkles size={24} style={{ color: 'var(--gold)' }} /> */}
             <h2 style={{
               fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 700,
               color: 'var(--gold)', margin: 0
