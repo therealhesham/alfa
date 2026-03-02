@@ -1,6 +1,21 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import {
+  Sun,
+  ToyBrick,
+  MountainSnow,
+  FerrisWheel,
+  Castle,
+  Brain,
+  CheckCircle2,
+  ThumbsUp,
+  Camera,
+  Sparkles,
+  PartyPopper,
+  Ticket,
+  Phone,
+} from "lucide-react";
 import { generateSEOMetadata } from "@/lib/seo";
 import type { Locale } from "@/i18n";
 
@@ -57,15 +72,15 @@ export default async function BombomPage({ params }: BombomPageProps) {
     home: isAr ? "الرئيسية" : "Home",
     zones: isAr ? "مناطق اللعب" : "Play Zones",
     bookNow: isAr ? "احجز الآن!" : "Book Now!",
-    tagline: isAr ? "مرح لا ينتهي! ✨" : "Endless Fun! ✨",
+    tagline: isAr ? "مرح لا ينتهي!" : "Endless Fun!",
     heroTitle1: isAr ? "عالم" : "",
     heroBrand: isAr ? "بوم بوم" : "Bom Bom",
     heroTitle2: isAr ? "للمرح واللعب!" : "World of Fun & Play!",
     heroDesc: isAr
       ? "أهلاً بكم في أسعد مكان على الأرض! حيث تتحول الأحلام إلى حقيقة واللعب هو لغتنا الوحيدة."
       : "Welcome to the happiest place on earth! Where dreams come true and play is our only language.",
-    playBtn: isAr ? "هيا نلعب! 🎈" : "Let's Play! 🎈",
-    exploreBtn: isAr ? "اكتشف الزوايا ✨" : "Explore Zones ✨",
+    playBtn: isAr ? "هيا نلعب!" : "Let's Play!",
+    exploreBtn: isAr ? "اكتشف الزوايا" : "Explore Zones",
     zonesTitle: isAr ? "مناطق اللعب والمغامرة" : "Play & Adventure Zones",
     zonesSub: isAr ? "اختر مغامرتك المفضلة اليوم" : "Choose your favorite adventure today",
     zone1Name: isAr ? "منطقة التزحلق" : "Skating Zone",
@@ -86,10 +101,10 @@ export default async function BombomPage({ params }: BombomPageProps) {
     feat3: isAr ? "هدايا ووجبات شهية للأطفال" : "Gifts and delicious meals for kids",
     eventBadge1: isAr ? "حفلات ممتعة!" : "Fun Parties!",
     eventBadge2: isAr ? "باقات أعياد الميلاد" : "Birthday Packages",
-    ctaTitle: isAr ? "جاهز للعب؟ 🎈" : "Ready to Play? 🎈",
+    ctaTitle: isAr ? "جاهز للعب؟" : "Ready to Play?",
     ctaDesc: isAr ? "احجز مكان طفلك الآن في بوم بوم بلاي كيد واستعد ليوم مليء بالبهجة!" : "Book your child's spot now at Bom Bom Play Kid and get ready for a day full of joy!",
-    ctaBtn1: isAr ? "احجز تذكرتك 🎟️" : "Book Your Ticket 🎟️",
-    ctaBtn2: isAr ? "تواصل معنا 📱" : "Contact Us 📱",
+    ctaBtn1: isAr ? "احجز تذكرتك" : "Book Your Ticket",
+    ctaBtn2: isAr ? "تواصل معنا" : "Contact Us",
     footerAbout: isAr ? "عن مركزنا" : "About Us",
     footerZones: isAr ? "مناطق اللعب" : "Play Zones",
     footerPrices: isAr ? "الأسعار والباقات" : "Prices & Packages",
@@ -202,12 +217,13 @@ export default async function BombomPage({ params }: BombomPageProps) {
         {/* ── HERO ── */}
         <section style={{ position: "relative", minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", paddingTop: "7rem", paddingLeft: "1.5rem", paddingRight: "1.5rem", overflow: "hidden" }}>
           <div className="bb-icon-spin" style={{ position: "absolute", top: "10rem", right: "8%", opacity: 0.6 }}>
-            <span style={{ fontFamily: '"Material Symbols Outlined"', fontVariationSettings: '"FILL" 1,"wght" 400', fontSize: "10rem", color: BB_YELLOW, display: "block" }}>wb_sunny</span>
+            <Sun size={160} color={BB_YELLOW} strokeWidth={2.5} />
           </div>
 
           <div style={{ position: "relative", zIndex: 1, textAlign: "center", maxWidth: "56rem" }}>
-            <div style={{ display: "inline-block", background: BB_YELLOW, color: BB_PINK, padding: "0.5rem 2rem", borderRadius: "999px", fontFamily: BASE_FONT, fontWeight: 900, fontSize: "1.3rem", marginBottom: "2rem", transform: "rotate(-2deg)", border: "4px solid #fff", boxShadow: "0 4px 16px rgba(0,0,0,0.1)" }}>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: BB_YELLOW, color: BB_PINK, padding: "0.5rem 2rem", borderRadius: "999px", fontFamily: BASE_FONT, fontWeight: 900, fontSize: "1.3rem", marginBottom: "2rem", transform: "rotate(-2deg)", border: "4px solid #fff", boxShadow: "0 4px 16px rgba(0,0,0,0.1)" }}>
               {t.tagline}
+              <Sparkles size={22} strokeWidth={2.5} style={{ flexShrink: 0 }} />
             </div>
             <h1 className="bb-hero-title" style={{ fontFamily: BASE_FONT, fontWeight: 900, fontSize: "6rem", color: BB_BLUE, lineHeight: 1.1, marginBottom: "1.5rem" }}>
               {isAr ? (
@@ -220,20 +236,22 @@ export default async function BombomPage({ params }: BombomPageProps) {
               {t.heroDesc}
             </p>
             <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "1.5rem" }}>
-              <button type="button" className="bb-jelly" style={{ ...jellyBtnBase, background: BB_PINK, color: "#fff", padding: "1.25rem 3rem", fontSize: "1.5rem", borderRadius: "1.5rem", border: "4px solid #fff", boxShadow: "0 8px 0 rgba(0,0,0,0.1)" }}>
+              <button type="button" className="bb-jelly" style={{ ...jellyBtnBase, background: BB_PINK, color: "#fff", padding: "1.25rem 3rem", fontSize: "1.5rem", borderRadius: "1.5rem", border: "4px solid #fff", boxShadow: "0 8px 0 rgba(0,0,0,0.1)", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
                 {t.playBtn}
+                <PartyPopper size={26} strokeWidth={2.5} style={{ flexShrink: 0 }} />
               </button>
-              <a href="#zones" className="bb-jelly" style={{ ...jellyBtnBase, background: BB_YELLOW, color: BB_PINK, padding: "1.25rem 3rem", fontSize: "1.5rem", borderRadius: "1.5rem", border: "4px solid #fff", boxShadow: "0 8px 0 rgba(0,0,0,0.1)", textDecoration: "none" }}>
+              <a href="#zones" className="bb-jelly" style={{ ...jellyBtnBase, background: BB_YELLOW, color: BB_PINK, padding: "1.25rem 3rem", fontSize: "1.5rem", borderRadius: "1.5rem", border: "4px solid #fff", boxShadow: "0 8px 0 rgba(0,0,0,0.1)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
                 {t.exploreBtn}
+                <Sparkles size={26} strokeWidth={2.5} style={{ flexShrink: 0 }} />
               </a>
             </div>
           </div>
 
           <div style={{ position: "absolute", left: "-5%", bottom: "2.5rem", opacity: 0.15, pointerEvents: "none" }}>
-            <span style={{ fontFamily: '"Material Symbols Outlined"', fontVariationSettings: '"FILL" 1,"wght" 400', fontSize: "18rem", color: BB_BLUE, display: "block" }}>toys</span>
+            <ToyBrick size={260} color={BB_BLUE} strokeWidth={1.5} />
           </div>
           <div style={{ position: "absolute", right: "-5%", bottom: "5rem", opacity: 0.15, pointerEvents: "none" }}>
-            <span style={{ fontFamily: '"Material Symbols Outlined"', fontVariationSettings: '"FILL" 1,"wght" 400', fontSize: "14rem", color: BB_PINK, display: "block" }}>downhill_skiing</span>
+            <MountainSnow size={220} color={BB_PINK} strokeWidth={1.5} />
           </div>
         </section>
 
@@ -249,7 +267,7 @@ export default async function BombomPage({ params }: BombomPageProps) {
               {/* Zone 1 */}
               <div className="bb-card" style={cardStyle}>
                 <div style={{ width: 112, height: 112, background: BB_LIGHT_BLUE, borderRadius: "50%", margin: "0 auto 2rem", display: "flex", alignItems: "center", justifyContent: "center", border: `4px solid ${BB_BLUE}` }}>
-                  <span style={{ fontFamily: '"Material Symbols Outlined"', fontVariationSettings: '"FILL" 1,"wght" 400', fontSize: "3.5rem", color: BB_BLUE }}>roller_skating</span>
+                  <FerrisWheel size={56} color={BB_BLUE} strokeWidth={2.5} />
                 </div>
                 <h3 style={{ fontFamily: BASE_FONT, fontWeight: 900, fontSize: "2rem", color: BB_BLUE, marginBottom: "1rem" }}>{t.zone1Name}</h3>
                 <p style={{ fontFamily: BASE_FONT, fontWeight: 700, fontSize: "1rem", color: "#6b7280", marginBottom: "2rem", lineHeight: 1.6 }}>{t.zone1Desc}</p>
@@ -259,7 +277,7 @@ export default async function BombomPage({ params }: BombomPageProps) {
               {/* Zone 2 — elevated */}
               <div className="bb-card bb-card-mid" style={{ ...cardStyle, boxShadow: "0 20px 50px rgba(255,20,147,0.12)" }}>
                 <div style={{ width: 112, height: 112, background: "#fff", borderRadius: "50%", margin: "0 auto 2rem", display: "flex", alignItems: "center", justifyContent: "center", border: `4px solid ${BB_PINK}`, boxShadow: "inset 0 2px 8px rgba(0,0,0,0.06)" }}>
-                  <span style={{ fontFamily: '"Material Symbols Outlined"', fontVariationSettings: '"FILL" 1,"wght" 400', fontSize: "3.5rem", color: BB_PINK }}>festival</span>
+                  <Castle size={56} color={BB_PINK} strokeWidth={2.5} />
                 </div>
                 <h3 style={{ fontFamily: BASE_FONT, fontWeight: 900, fontSize: "2rem", color: BB_PINK, marginBottom: "1rem" }}>{t.zone2Name}</h3>
                 <p style={{ fontFamily: BASE_FONT, fontWeight: 700, fontSize: "1rem", color: "#6b7280", marginBottom: "2rem", lineHeight: 1.6 }}>{t.zone2Desc}</p>
@@ -269,7 +287,7 @@ export default async function BombomPage({ params }: BombomPageProps) {
               {/* Zone 3 */}
               <div className="bb-card" style={cardStyle}>
                 <div style={{ width: 112, height: 112, background: "#fff", borderRadius: "50%", margin: "0 auto 2rem", display: "flex", alignItems: "center", justifyContent: "center", border: `4px solid ${BB_YELLOW}` }}>
-                  <span style={{ fontFamily: '"Material Symbols Outlined"', fontVariationSettings: '"FILL" 1,"wght" 400', fontSize: "3.5rem", color: BB_YELLOW }}>smart_toy</span>
+                  <Brain size={56} color={BB_YELLOW} strokeWidth={2.5} />
                 </div>
                 <h3 style={{ fontFamily: BASE_FONT, fontWeight: 900, fontSize: "2rem", color: BB_YELLOW, marginBottom: "1rem" }}>{t.zone3Name}</h3>
                 <p style={{ fontFamily: BASE_FONT, fontWeight: 700, fontSize: "1rem", color: "#6b7280", marginBottom: "2rem", lineHeight: 1.6 }}>{t.zone3Desc}</p>
@@ -310,7 +328,7 @@ export default async function BombomPage({ params }: BombomPageProps) {
                 <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "1rem" }}>
                   {[t.feat1, t.feat2, t.feat3].map((feat, i) => (
                     <li key={i} style={{ display: "flex", alignItems: "center", gap: "1rem", fontFamily: BASE_FONT, fontWeight: 900, fontSize: "1.1rem", color: "#374151" }}>
-                      <span style={{ fontFamily: '"Material Symbols Outlined"', fontVariationSettings: '"FILL" 1,"wght" 400', fontSize: "2rem", color: BB_PINK, flexShrink: 0 }}>check_circle</span>
+                      <CheckCircle2 size={28} color={BB_PINK} strokeWidth={2.5} style={{ flexShrink: 0 }} />
                       {feat}
                     </li>
                   ))}
@@ -324,11 +342,20 @@ export default async function BombomPage({ params }: BombomPageProps) {
         <section style={{ padding: "8rem 1.5rem", background: BB_BLUE, textAlign: "center", position: "relative", overflow: "hidden" }}>
           <div style={{ position: "absolute", inset: 0, opacity: 0.08, backgroundImage: `url("${CLOUD_SVG}")`, backgroundSize: "100px 100px", pointerEvents: "none" }} />
           <div style={{ maxWidth: "56rem", margin: "0 auto", position: "relative", zIndex: 1 }}>
-            <h2 style={{ fontFamily: BASE_FONT, fontWeight: 900, fontSize: "5rem", color: "#fff", marginBottom: "1.5rem", lineHeight: 1.1 }}>{t.ctaTitle}</h2>
+            <h2 style={{ fontFamily: BASE_FONT, fontWeight: 900, fontSize: "5rem", color: "#fff", marginBottom: "1.5rem", lineHeight: 1.1, display: "inline-flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap", justifyContent: "center" }}>
+              {t.ctaTitle}
+              <PartyPopper size={56} color="#fff" strokeWidth={2.5} style={{ flexShrink: 0 }} />
+            </h2>
             <p style={{ fontFamily: BASE_FONT, fontWeight: 700, fontSize: "1.5rem", color: "rgba(255,255,255,0.9)", marginBottom: "3rem", lineHeight: 1.6 }}>{t.ctaDesc}</p>
             <div className="bb-cta-btns" style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "1.5rem" }}>
-              <button type="button" className="bb-jelly" style={{ ...jellyBtnBase, background: BB_YELLOW, color: BB_PINK, padding: "1.5rem 4rem", fontSize: "1.8rem", borderRadius: "2rem", border: "4px solid #fff", boxShadow: "0 8px 0 rgba(0,0,0,0.1)" }}>{t.ctaBtn1}</button>
-              <button type="button" className="bb-jelly" style={{ ...jellyBtnBase, background: "#fff", color: BB_BLUE, padding: "1.5rem 4rem", fontSize: "1.8rem", borderRadius: "2rem", border: `4px solid ${BB_BLUE}`, boxShadow: "0 8px 0 rgba(0,0,0,0.1)" }}>{t.ctaBtn2}</button>
+              <button type="button" className="bb-jelly" style={{ ...jellyBtnBase, background: BB_YELLOW, color: BB_PINK, padding: "1.5rem 4rem", fontSize: "1.8rem", borderRadius: "2rem", border: "4px solid #fff", boxShadow: "0 8px 0 rgba(0,0,0,0.1)", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+              {t.ctaBtn1}
+              <Ticket size={28} strokeWidth={2.5} style={{ flexShrink: 0 }} />
+            </button>
+              <button type="button" className="bb-jelly" style={{ ...jellyBtnBase, background: "#fff", color: BB_BLUE, padding: "1.5rem 4rem", fontSize: "1.8rem", borderRadius: "2rem", border: `4px solid ${BB_BLUE}`, boxShadow: "0 8px 0 rgba(0,0,0,0.1)", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+              {t.ctaBtn2}
+              <Phone size={28} strokeWidth={2.5} style={{ flexShrink: 0 }} />
+            </button>
             </div>
           </div>
         </section>
@@ -356,11 +383,12 @@ export default async function BombomPage({ params }: BombomPageProps) {
             <div>
               <h5 style={{ fontFamily: BASE_FONT, fontWeight: 900, fontSize: "1.3rem", color: BB_YELLOW, marginBottom: "1.5rem" }}>{t.footerFollow}</h5>
               <div style={{ display: "flex", gap: "0.75rem" }}>
-                {["thumb_up", "photo_camera"].map((icon) => (
-                  <a key={icon} href="#" style={{ width: 52, height: 52, background: BB_LIGHT_BLUE, borderRadius: "0.75rem", display: "flex", alignItems: "center", justifyContent: "center", color: BB_BLUE, textDecoration: "none" }}>
-                    <span style={{ fontFamily: '"Material Symbols Outlined"', fontVariationSettings: '"FILL" 1,"wght" 400', fontSize: "1.4rem" }}>{icon}</span>
-                  </a>
-                ))}
+                <a href="#" style={{ width: 52, height: 52, background: BB_LIGHT_BLUE, borderRadius: "0.75rem", display: "flex", alignItems: "center", justifyContent: "center", color: BB_BLUE, textDecoration: "none" }}>
+                  <ThumbsUp size={22} color={BB_BLUE} strokeWidth={2.5} />
+                </a>
+                <a href="#" style={{ width: 52, height: 52, background: BB_LIGHT_BLUE, borderRadius: "0.75rem", display: "flex", alignItems: "center", justifyContent: "center", color: BB_BLUE, textDecoration: "none" }}>
+                  <Camera size={22} color={BB_BLUE} strokeWidth={2.5} />
+                </a>
               </div>
             </div>
           </div>
