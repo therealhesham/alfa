@@ -170,6 +170,9 @@ export default async function BombomPage({ params }: BombomPageProps) {
               <Link href={`/${validLocale}/home`} style={{ fontFamily: BASE_FONT, fontWeight: 900, fontSize: "1.1rem", color: BB_BLUE, textDecoration: "none" }}>
                 {t.homeLabel}
               </Link>
+              <Link href={`/${validLocale}/entertainment`} style={{ fontFamily: BASE_FONT, fontWeight: 900, fontSize: "1.1rem", color: BB_BLUE, textDecoration: "none" }}>
+                {isAr ? "الترفيه" : "Entertainment"}
+              </Link>
               <a href="#zones" style={{ fontFamily: BASE_FONT, fontWeight: 900, fontSize: "1.1rem", color: BB_BLUE, textDecoration: "none" }}>
                 {t.zonesLabel}
               </a>
