@@ -10,6 +10,16 @@ const BB_BLUE = '#00BFFF';
 const BB_YELLOW = '#FFD700';
 const BASE_FONT = '"Changa", "Almarai", sans-serif';
 
+const MODAL_STYLE = `
+  @media (max-width: 480px) {
+    .bb-modal-box { padding: 2rem 1.5rem !important; border-radius: 2rem !important; margin: 0.75rem !important; }
+    .bb-modal-title { font-size: 1.4rem !important; }
+    .bb-modal-msg { font-size: 0.95rem !important; }
+    .bb-modal-icon-wrap { width: 72px !important; height: 72px !important; margin-bottom: 1.5rem !important; }
+    .bb-modal-close-btn { font-size: 1rem !important; padding: 0.75rem 2rem !important; }
+  }
+`;
+
 interface BookingModalTriggerProps {
     children: React.ReactNode;
     className?: string;
@@ -37,11 +47,13 @@ export default function BookingModalTrigger({ children, className, style, locale
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    padding: '1.5rem',
+                    padding: '1rem',
                     direction: isAr ? 'rtl' : 'ltr',
                 }}
             >
+                <style>{MODAL_STYLE}</style>
                 <motion.div
+                    className="bb-modal-box"
                     initial={{ opacity: 0, scale: 0.8, y: 40 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.8, y: 40 }}
@@ -100,6 +112,7 @@ export default function BookingModalTrigger({ children, className, style, locale
 
                     {/* Icon */}
                     <motion.div
+                        className="bb-modal-icon-wrap"
                         animate={{ rotate: [0, 10, -10, 0] }}
                         transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
                         style={{
@@ -119,7 +132,7 @@ export default function BookingModalTrigger({ children, className, style, locale
                     </motion.div>
 
                     {/* Title */}
-                    <h3 style={{
+                    <h3 className="bb-modal-title" style={{
                         fontFamily: BASE_FONT,
                         fontWeight: 900,
                         fontSize: '1.8rem',
@@ -131,7 +144,7 @@ export default function BookingModalTrigger({ children, className, style, locale
                     </h3>
 
                     {/* Message */}
-                    <p style={{
+                    <p className="bb-modal-msg" style={{
                         fontFamily: BASE_FONT,
                         fontWeight: 700,
                         fontSize: '1.15rem',
@@ -153,6 +166,7 @@ export default function BookingModalTrigger({ children, className, style, locale
 
                     {/* Close CTA */}
                     <button
+                        className="bb-modal-close-btn"
                         type="button"
                         onClick={() => setOpen(false)}
                         style={{

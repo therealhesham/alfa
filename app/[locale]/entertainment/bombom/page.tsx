@@ -22,6 +22,7 @@ import type { Locale } from "@/i18n";
 import { getBombomContent, getBombomPlayZones } from "@/lib/bombom-data";
 import BombomZoneGallery from "./BombomZoneGallery";
 import BookingModalTrigger from "./BookingModal";
+import BombomMobileNav from "./BombomMobileNav";
 
 export const revalidate = 60;
 
@@ -152,21 +153,68 @@ export default async function BombomPage({ params }: BombomPageProps) {
         .bb-jelly:active { transform: scale(0.95) translateY(4px) !important; box-shadow: 0 2px 0 rgba(0,0,0,0.1) !important; }
         .bb-icon-spin { animation: bbBounce 2s ease-in-out infinite; }
         @keyframes bbBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-20px)} }
-        @media (max-width: 768px) {
-          .bb-grid-3 { grid-template-columns: 1fr !important; }
-          .bb-grid-2 { flex-direction: column !important; }
+        /* NAV */
+        .bb-nav-links { display: flex; gap: 1.5rem; align-items: center; }
+        .bb-nav-book { display: inline-flex; }
+        .bb-mobile-nav { display: none; }
+        /* ── Mobile ── */
+        .bb-footer-grid {
+          max-width: 80rem;
+          margin: 0 auto;
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 3rem;
+          margin-bottom: 4rem;
+        }
+        @media (max-width: 640px) {
+          .bb-nav-links { display: none !important; }
+          .bb-nav-book { display: none !important; }
+          .bb-mobile-nav { display: flex !important; }
+          .bb-nav-inner { padding: 0.6rem 1rem !important; border-radius: 1.5rem !important; }
+          .bb-hero-title { font-size: 2.4rem !important; }
+          .bb-hero-desc { font-size: 1rem !important; }
+          .bb-hero-tag { font-size: 0.95rem !important; padding: 0.4rem 1.2rem !important; }
+          .bb-hero-btns { flex-direction: column !important; align-items: center !important; }
+          .bb-hero-btn { font-size: 1.1rem !important; padding: 0.9rem 1.8rem !important; width: 90vw !important; justify-content: center !important; }
+          .bb-section-pad { padding: 4rem 1rem !important; }
+          .bb-gallery-section { padding: 3rem 1rem !important; }
+          .bb-gallery-title { font-size: 1.8rem !important; }
+          .bb-zones-title { font-size: 2rem !important; }
+          .bb-zones-sub { font-size: 1rem !important; }
+          .bb-zones-header { margin-bottom: 2.5rem !important; }
+          .bb-grid-3 { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
+          .bb-card { padding: 1.5rem !important; border-radius: 1.5rem !important; }
           .bb-card-mid { transform: none !important; }
+          .bb-events-wrap { flex-direction: column !important; gap: 2rem !important; padding: 1.5rem !important; border-radius: 1.5rem !important; }
+          .bb-events-badge { bottom: -1rem !important; right: -0.5rem !important; padding: 0.75rem 1rem !important; font-size: 1rem !important; }
+          .bb-events-title { font-size: 1.8rem !important; }
+          .bb-cta-section { padding: 5rem 1rem !important; }
+          .bb-cta-title { font-size: 2.5rem !important; }
+          .bb-cta-desc { font-size: 1rem !important; margin-bottom: 2rem !important; }
+          .bb-cta-btns { flex-direction: column !important; align-items: center !important; gap: 1rem !important; }
+          .bb-cta-btn { font-size: 1.2rem !important; padding: 1rem 2rem !important; width: 90vw !important; justify-content: center !important; }
+          .bb-footer-grid { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
+          .bb-footer-pad { padding: 3rem 1rem 2rem !important; }
+          .bb-deco { display: none !important; }
+        }
+        @media (min-width: 641px) and (max-width: 768px) {
+          .bb-nav-links { gap: 1rem !important; }
+          .bb-nav-links a, .bb-nav-links span { font-size: 0.9rem !important; }
           .bb-hero-title { font-size: 3.5rem !important; }
+          .bb-grid-3 { grid-template-columns: 1fr 1fr !important; }
+          .bb-card-mid { transform: none !important; }
+          .bb-events-wrap { flex-direction: column !important; gap: 2.5rem !important; padding: 2rem !important; }
+          .bb-cta-title { font-size: 3.5rem !important; }
           .bb-cta-btns { flex-direction: column !important; align-items: center !important; }
-          .bb-footer-grid { grid-template-columns: 1fr 1fr !important; }
+          .bb-footer-grid { grid-template-columns: 1fr 1fr !important; gap: 2rem !important; }
         }
       `}</style>
 
       <div style={pageStyle}>
         {/* ── NAV ── */}
         <nav style={navStyle}>
-          <div style={navInnerStyle}>
-            <div style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
+          <div className="bb-nav-inner" style={navInnerStyle}>
+            <div className="bb-nav-links" style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
               <Link href={`/${validLocale}/home`} style={{ fontFamily: BASE_FONT, fontWeight: 900, fontSize: "1.1rem", color: BB_BLUE, textDecoration: "none" }}>
                 {t.homeLabel}
               </Link>
@@ -178,22 +226,31 @@ export default async function BombomPage({ params }: BombomPageProps) {
               </a>
             </div>
             <div style={{ position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
-              <Image alt="Bom Bom Logo" src={t.heroLogo || "/logo.png"} width={80} height={64} unoptimized style={{ height: 64, width: "auto", objectFit: "contain", filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.15))" }} />
+              <Image alt="Bom Bom Logo" src={t.heroLogo || "/logo.png"} width={80} height={64} unoptimized style={{ height: 56, width: "auto", objectFit: "contain", filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.15))" }} />
             </div>
-            <BookingModalTrigger locale={validLocale} className="bb-jelly" style={{ ...jellyBtnBase, background: BB_PINK, color: "#fff", padding: "0.5rem 2rem", fontSize: "1.05rem", borderRadius: "999px", boxShadow: "0 4px 0 rgba(0,0,0,0.15)", textDecoration: "none" }}>
+            <BookingModalTrigger locale={validLocale} className="bb-nav-book bb-jelly" style={{ ...jellyBtnBase, background: BB_PINK, color: "#fff", padding: "0.5rem 2rem", fontSize: "1.05rem", borderRadius: "999px", boxShadow: "0 4px 0 rgba(0,0,0,0.15)", textDecoration: "none" }}>
               {t.bookNowLabel}
             </BookingModalTrigger>
+            {/* Mobile hamburger nav — hidden on desktop via CSS */}
+            <div className="bb-mobile-nav" style={{ display: 'none', alignItems: 'center' }}>
+              <BombomMobileNav
+                locale={validLocale}
+                homeLabel={t.homeLabel || (isAr ? 'الرئيسية' : 'Home')}
+                zonesLabel={t.zonesLabel || (isAr ? 'مناطق اللعب' : 'Play Zones')}
+                bookNowLabel={t.bookNowLabel || (isAr ? 'احجز الآن' : 'Book Now')}
+              />
+            </div>
           </div>
         </nav>
 
         {/* ── HERO ── */}
         <section style={{ position: "relative", minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", paddingTop: "7rem", paddingLeft: "1.5rem", paddingRight: "1.5rem", overflow: "hidden" }}>
-          <div className="bb-icon-spin" style={{ position: "absolute", top: "10rem", right: "8%", opacity: 0.6 }}>
+          <div className="bb-deco bb-icon-spin" style={{ position: "absolute", top: "10rem", right: "8%", opacity: 0.6 }}>
             <Sun size={160} color={BB_YELLOW} strokeWidth={2.5} />
           </div>
 
-          <div style={{ position: "relative", zIndex: 1, textAlign: "center", maxWidth: "56rem" }}>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: BB_YELLOW, color: BB_PINK, padding: "0.5rem 2rem", borderRadius: "999px", fontFamily: BASE_FONT, fontWeight: 900, fontSize: "1.3rem", marginBottom: "2rem", transform: "rotate(-2deg)", border: "4px solid #fff", boxShadow: "0 4px 16px rgba(0,0,0,0.1)" }}>
+          <div style={{ position: "relative", zIndex: 1, textAlign: "center", maxWidth: "56rem", width: "100%" }}>
+            <div className="bb-hero-tag" style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", background: BB_YELLOW, color: BB_PINK, padding: "0.5rem 2rem", borderRadius: "999px", fontFamily: BASE_FONT, fontWeight: 900, fontSize: "1.3rem", marginBottom: "2rem", transform: "rotate(-2deg)", border: "4px solid #fff", boxShadow: "0 4px 16px rgba(0,0,0,0.1)" }}>
               {t.tagline}
               <Sparkles size={22} strokeWidth={2.5} style={{ flexShrink: 0 }} />
             </div>
@@ -204,35 +261,35 @@ export default async function BombomPage({ params }: BombomPageProps) {
                 <><span style={{ color: BB_PINK }}>{t.heroBrand}</span> {t.heroTitle2}</>
               )}
             </h1>
-            <p style={{ fontFamily: BASE_FONT, fontSize: "1.4rem", fontWeight: 700, color: "#4b5563", marginBottom: "3rem", lineHeight: 1.7 }}>
+            <p className="bb-hero-desc" style={{ fontFamily: BASE_FONT, fontSize: "1.4rem", fontWeight: 700, color: "#4b5563", marginBottom: "3rem", lineHeight: 1.7 }}>
               {t.heroDesc}
             </p>
-            <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "1.5rem" }}>
-              <BookingModalTrigger locale={validLocale} className="bb-jelly" style={{ ...jellyBtnBase, background: BB_PINK, color: "#fff", padding: "1.25rem 3rem", fontSize: "1.5rem", borderRadius: "1.5rem", border: "4px solid #fff", boxShadow: "0 8px 0 rgba(0,0,0,0.1)", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+            <div className="bb-hero-btns" style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "1.5rem" }}>
+              <BookingModalTrigger locale={validLocale} className="bb-hero-btn bb-jelly" style={{ ...jellyBtnBase, background: BB_PINK, color: "#fff", padding: "1.25rem 3rem", fontSize: "1.5rem", borderRadius: "1.5rem", border: "4px solid #fff", boxShadow: "0 8px 0 rgba(0,0,0,0.1)", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
                 {t.playBtn}
                 <PartyPopper size={26} strokeWidth={2.5} style={{ flexShrink: 0 }} />
               </BookingModalTrigger>
-              <a href="#zones" className="bb-jelly" style={{ ...jellyBtnBase, background: BB_YELLOW, color: BB_PINK, padding: "1.25rem 3rem", fontSize: "1.5rem", borderRadius: "1.5rem", border: "4px solid #fff", boxShadow: "0 8px 0 rgba(0,0,0,0.1)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+              <a href="#zones" className="bb-hero-btn bb-jelly" style={{ ...jellyBtnBase, background: BB_YELLOW, color: BB_PINK, padding: "1.25rem 3rem", fontSize: "1.5rem", borderRadius: "1.5rem", border: "4px solid #fff", boxShadow: "0 8px 0 rgba(0,0,0,0.1)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
                 {t.exploreBtn}
                 <Sparkles size={26} strokeWidth={2.5} style={{ flexShrink: 0 }} />
               </a>
             </div>
           </div>
 
-          <div style={{ position: "absolute", left: "-5%", bottom: "2.5rem", opacity: 0.15, pointerEvents: "none" }}>
+          <div className="bb-deco" style={{ position: "absolute", left: "-5%", bottom: "2.5rem", opacity: 0.15, pointerEvents: "none" }}>
             <ToyBrick size={260} color={BB_BLUE} strokeWidth={1.5} />
           </div>
-          <div style={{ position: "absolute", right: "-5%", bottom: "5rem", opacity: 0.15, pointerEvents: "none" }}>
+          <div className="bb-deco" style={{ position: "absolute", right: "-5%", bottom: "5rem", opacity: 0.15, pointerEvents: "none" }}>
             <MountainSnow size={220} color={BB_PINK} strokeWidth={1.5} />
           </div>
         </section>
 
         {/* ── GALLERY (above zones) ── */}
         {t.showGallery && (t.gallery?.length ?? 0) > 0 && (
-          <section style={{ padding: "6rem 1.5rem", background: "rgba(255,255,255,0.4)", position: "relative", zIndex: 1 }}>
+          <section className="bb-gallery-section" style={{ padding: "6rem 1.5rem", background: "rgba(255,255,255,0.4)", position: "relative", zIndex: 1 }}>
             <div style={{ maxWidth: "80rem", margin: "0 auto" }}>
               <div style={{ textAlign: "center", marginBottom: "3rem" }}>
-                <h2 style={{ fontFamily: BASE_FONT, fontWeight: 900, fontSize: "3rem", color: BB_BLUE, marginBottom: "0.75rem" }}>{t.galleryTitle}</h2>
+                <h2 className="bb-gallery-title" style={{ fontFamily: BASE_FONT, fontWeight: 900, fontSize: "3rem", color: BB_BLUE, marginBottom: "0.75rem" }}>{t.galleryTitle}</h2>
                 <p style={{ fontFamily: BASE_FONT, fontWeight: 700, fontSize: "1.2rem", color: "#6b7280" }}>{t.gallerySub}</p>
               </div>
               <BombomZoneGallery images={t.gallery} variant="main" />
@@ -241,11 +298,11 @@ export default async function BombomPage({ params }: BombomPageProps) {
         )}
 
         {/* ── ZONES ── */}
-        <section id="zones" style={{ padding: "8rem 1.5rem", position: "relative", zIndex: 1 }}>
+        <section id="zones" className="bb-section-pad" style={{ padding: "8rem 1.5rem", position: "relative", zIndex: 1 }}>
           <div style={{ maxWidth: "80rem", margin: "0 auto" }}>
-            <div style={{ textAlign: "center", marginBottom: "5rem" }}>
-              <h2 style={{ fontFamily: BASE_FONT, fontWeight: 900, fontSize: "3.5rem", color: BB_BLUE, marginBottom: "1rem" }}>{t.zonesTitle}</h2>
-              <p style={{ fontFamily: BASE_FONT, fontWeight: 700, fontSize: "1.3rem", color: "#6b7280" }}>{t.zonesSub}</p>
+            <div className="bb-zones-header" style={{ textAlign: "center", marginBottom: "5rem" }}>
+              <h2 className="bb-zones-title" style={{ fontFamily: BASE_FONT, fontWeight: 900, fontSize: "3.5rem", color: BB_BLUE, marginBottom: "1rem" }}>{t.zonesTitle}</h2>
+              <p className="bb-zones-sub" style={{ fontFamily: BASE_FONT, fontWeight: 700, fontSize: "1.3rem", color: "#6b7280" }}>{t.zonesSub}</p>
             </div>
 
             <div className="bb-grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "2rem", alignItems: "start" }}>
@@ -277,9 +334,9 @@ export default async function BombomPage({ params }: BombomPageProps) {
         </section>
 
         {/* ── EVENTS ── */}
-        <section style={{ padding: "8rem 1.5rem", background: "rgba(255,255,255,0.6)" }}>
+        <section className="bb-section-pad" style={{ padding: "8rem 1.5rem", background: "rgba(255,255,255,0.6)" }}>
           <div style={{ maxWidth: "80rem", margin: "0 auto" }}>
-            <div className="bb-grid-2" style={{ display: "flex", alignItems: "center", gap: "4rem", background: "#fff", borderRadius: "4rem", padding: "3rem", border: `4px solid rgba(0,191,255,0.08)`, boxShadow: "0 20px 60px rgba(0,191,255,0.06)" }}>
+            <div className="bb-events-wrap" style={{ display: "flex", alignItems: "center", gap: "4rem", background: "#fff", borderRadius: "4rem", padding: "3rem", border: `4px solid rgba(0,191,255,0.08)`, boxShadow: "0 20px 60px rgba(0,191,255,0.06)" }}>
               {/* Image side */}
               <div style={{ flex: 1, minWidth: 0, position: "relative" }}>
                 <div style={{ position: "relative", display: "inline-block", width: "100%" }}>
@@ -291,7 +348,7 @@ export default async function BombomPage({ params }: BombomPageProps) {
                     unoptimized
                     style={{ width: "100%", height: "auto", borderRadius: "3rem", border: `8px solid ${BB_YELLOW}`, boxShadow: "0 20px 60px rgba(0,0,0,0.12)", transform: "rotate(3deg)" }}
                   />
-                  <div style={{ position: "absolute", bottom: "-2rem", right: "-2rem", background: BB_PINK, padding: "1.5rem 2rem", borderRadius: "1.5rem", border: "4px solid #fff", boxShadow: "0 8px 24px rgba(0,0,0,0.15)", transform: "rotate(-6deg)", color: "#fff" }}>
+                  <div className="bb-events-badge" style={{ position: "absolute", bottom: "-2rem", right: "-2rem", background: BB_PINK, padding: "1.5rem 2rem", borderRadius: "1.5rem", border: "4px solid #fff", boxShadow: "0 8px 24px rgba(0,0,0,0.15)", transform: "rotate(-6deg)", color: "#fff" }}>
                     <p style={{ fontFamily: BASE_FONT, fontWeight: 900, fontSize: "1.5rem", margin: 0 }}>{t.eventBadge1}</p>
                     <p style={{ fontFamily: BASE_FONT, fontWeight: 700, fontSize: "1rem", margin: 0 }}>{t.eventBadge2}</p>
                   </div>
@@ -300,7 +357,7 @@ export default async function BombomPage({ params }: BombomPageProps) {
 
               {/* Text side */}
               <div style={{ flex: 1, minWidth: 0 }}>
-                <h2 style={{ fontFamily: BASE_FONT, fontWeight: 900, fontSize: "2.8rem", color: BB_BLUE, marginBottom: "1.25rem", lineHeight: 1.2 }}>
+                <h2 className="bb-events-title" style={{ fontFamily: BASE_FONT, fontWeight: 900, fontSize: "2.8rem", color: BB_BLUE, marginBottom: "1.25rem", lineHeight: 1.2 }}>
                   {t.eventTitle} <span style={{ color: BB_PINK }}>{t.eventTitleBrand}</span> {t.eventTitle2}
                 </h2>
                 <p style={{ fontFamily: BASE_FONT, fontWeight: 700, fontSize: "1.2rem", color: "#4b5563", marginBottom: "2rem", lineHeight: 1.8 }}>{t.eventDesc}</p>
@@ -318,20 +375,20 @@ export default async function BombomPage({ params }: BombomPageProps) {
         </section>
 
         {/* ── CTA ── */}
-        <section style={{ padding: "8rem 1.5rem", background: BB_BLUE, textAlign: "center", position: "relative", overflow: "hidden" }}>
+        <section className="bb-cta-section" style={{ padding: "8rem 1.5rem", background: BB_BLUE, textAlign: "center", position: "relative", overflow: "hidden" }}>
           <div style={{ position: "absolute", inset: 0, opacity: 0.08, backgroundImage: `url("${CLOUD_SVG}")`, backgroundSize: "100px 100px", pointerEvents: "none" }} />
           <div style={{ maxWidth: "56rem", margin: "0 auto", position: "relative", zIndex: 1 }}>
-            <h2 style={{ fontFamily: BASE_FONT, fontWeight: 900, fontSize: "5rem", color: "#fff", marginBottom: "1.5rem", lineHeight: 1.1, display: "inline-flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap", justifyContent: "center" }}>
+            <h2 className="bb-cta-title" style={{ fontFamily: BASE_FONT, fontWeight: 900, fontSize: "5rem", color: "#fff", marginBottom: "1.5rem", lineHeight: 1.1, display: "inline-flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap", justifyContent: "center" }}>
               {t.ctaTitle}
               <PartyPopper size={56} color="#fff" strokeWidth={2.5} style={{ flexShrink: 0 }} />
             </h2>
-            <p style={{ fontFamily: BASE_FONT, fontWeight: 700, fontSize: "1.5rem", color: "rgba(255,255,255,0.9)", marginBottom: "3rem", lineHeight: 1.6 }}>{t.ctaDesc}</p>
+            <p className="bb-cta-desc" style={{ fontFamily: BASE_FONT, fontWeight: 700, fontSize: "1.5rem", color: "rgba(255,255,255,0.9)", marginBottom: "3rem", lineHeight: 1.6 }}>{t.ctaDesc}</p>
             <div className="bb-cta-btns" style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "1.5rem" }}>
-              <BookingModalTrigger locale={validLocale} className="bb-jelly" style={{ ...jellyBtnBase, background: BB_YELLOW, color: BB_PINK, padding: "1.5rem 4rem", fontSize: "1.8rem", borderRadius: "2rem", border: "4px solid #fff", boxShadow: "0 8px 0 rgba(0,0,0,0.1)", display: "inline-flex", alignItems: "center", gap: "0.5rem", textDecoration: "none" }}>
+              <BookingModalTrigger locale={validLocale} className="bb-cta-btn bb-jelly" style={{ ...jellyBtnBase, background: BB_YELLOW, color: BB_PINK, padding: "1.5rem 4rem", fontSize: "1.8rem", borderRadius: "2rem", border: "4px solid #fff", boxShadow: "0 8px 0 rgba(0,0,0,0.1)", display: "inline-flex", alignItems: "center", gap: "0.5rem", textDecoration: "none" }}>
                 {t.ctaBtn1}
                 <Ticket size={28} strokeWidth={2.5} style={{ flexShrink: 0 }} />
               </BookingModalTrigger>
-              <Link href={t.contactUrl || `/${validLocale}/contact`} className="bb-jelly" style={{ ...jellyBtnBase, background: "#fff", color: BB_BLUE, padding: "1.5rem 4rem", fontSize: "1.8rem", borderRadius: "2rem", border: `4px solid ${BB_BLUE}`, boxShadow: "0 8px 0 rgba(0,0,0,0.1)", display: "inline-flex", alignItems: "center", gap: "0.5rem", textDecoration: "none" }}>
+              <Link href={t.contactUrl || `/${validLocale}/contact`} className="bb-cta-btn bb-jelly" style={{ ...jellyBtnBase, background: "#fff", color: BB_BLUE, padding: "1.5rem 4rem", fontSize: "1.8rem", borderRadius: "2rem", border: `4px solid ${BB_BLUE}`, boxShadow: "0 8px 0 rgba(0,0,0,0.1)", display: "inline-flex", alignItems: "center", gap: "0.5rem", textDecoration: "none" }}>
                 {t.ctaBtn2}
                 <Phone size={28} strokeWidth={2.5} style={{ flexShrink: 0 }} />
               </Link>
@@ -340,8 +397,8 @@ export default async function BombomPage({ params }: BombomPageProps) {
         </section>
 
         {/* ── FOOTER ── */}
-        <footer style={{ background: "#fff", padding: "6rem 1.5rem 3rem", borderTop: `8px solid ${BB_YELLOW}`, color: "#1f2937" }}>
-          <div className="bb-footer-grid" style={{ maxWidth: "80rem", margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "3rem", marginBottom: "4rem" }}>
+        <footer className="bb-footer-pad" style={{ background: "#fff", padding: "6rem 1.5rem 3rem", borderTop: `8px solid ${BB_YELLOW}`, color: "#1f2937" }}>
+          <div className="bb-footer-grid" style={{ marginBottom: "4rem" }}>
             <div>
               <Image alt="Footer Logo" src={t.footerLogo || DEFAULT_FOOTER_LOGO} width={120} height={96} unoptimized style={{ height: 80, width: "auto", objectFit: "contain", marginBottom: "1.5rem" }} />
               <p style={{ fontFamily: BASE_FONT, fontWeight: 700, fontSize: "1rem", color: "#6b7280", lineHeight: 1.7 }}>{t.footerDesc}</p>
