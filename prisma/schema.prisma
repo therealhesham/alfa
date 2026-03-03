@@ -498,6 +498,127 @@ model EntertainmentProject {
   createdAt         DateTime @default(now())
 }
 
+model BombomContent {
+  id String @id @default(cuid())
+
+  // Nav
+  homeLabel      String @default("الرئيسية")
+  homeLabelEn    String @default("Home")
+  zonesLabel     String @default("مناطق اللعب")
+  zonesLabelEn   String @default("Play Zones")
+  bookNowLabel   String @default("احجز الآن!")
+  bookNowLabelEn String @default("Book Now!")
+
+  // Hero
+  heroLogo       String  @default("/logo.png")
+  tagline        String  @default("مرح لا ينتهي!")
+  taglineEn      String  @default("Endless Fun!")
+  heroTitle1     String  @default("عالم")
+  heroTitle1En   String  @default("")
+  heroBrand      String  @default("بوم بوم")
+  heroBrandEn    String  @default("Bom Bom")
+  heroTitle2     String  @default("للمرح واللعب!")
+  heroTitle2En   String  @default("World of Fun & Play!")
+  heroDesc       String  @db.Text
+  heroDescEn     String  @db.Text
+  playBtn        String  @default("هيا نلعب!")
+  playBtnEn      String  @default("Let's Play!")
+  exploreBtn     String  @default("اكتشف الزوايا")
+  exploreBtnEn   String  @default("Explore Zones")
+
+  // Gallery Section (above zones)
+  galleryTitle     String @default("معرض الصور")
+  galleryTitleEn   String @default("Photo Gallery")
+  gallerySub       String @default("اكتشف عالم بوم بوم من خلال الصور")
+  gallerySubEn     String @default("Discover Bom Bom world through photos")
+  gallery          String? @db.Text // JSON: [{ image, caption }]
+  showGallery      Boolean @default(true)
+
+  // Zones Section
+  zonesTitle     String @default("مناطق اللعب والمغامرة")
+  zonesTitleEn   String @default("Play & Adventure Zones")
+  zonesSub       String @default("اختر مغامرتك المفضلة اليوم")
+  zonesSubEn     String @default("Choose your favorite adventure today")
+
+  // Events Section
+  eventsImage    String  @default("")
+  eventTitle     String  @default("احتفل بين")
+  eventTitleEn   String  @default("Celebrate with")
+  eventTitleBrand String @default("الأصدقاء")
+  eventTitleBrandEn String @default("Friends")
+  eventTitle2    String  @default("والغيوم")
+  eventTitle2En  String  @default("& Clouds")
+  eventDesc      String  @db.Text
+  eventDescEn    String  @db.Text
+  eventFeat1     String  @default("زينة ملونة مبهجة")
+  eventFeat1En   String  @default("Colorful cheerful decorations")
+  eventFeat2     String  @default("أنشطة ترفيهية مع مدربين")
+  eventFeat2En   String  @default("Fun activities with trainers")
+  eventFeat3     String  @default("هدايا ووجبات شهية للأطفال")
+  eventFeat3En   String  @default("Gifts and delicious meals for kids")
+  eventBadge1    String  @default("حفلات ممتعة!")
+  eventBadge1En  String  @default("Fun Parties!")
+  eventBadge2    String  @default("باقات أعياد الميلاد")
+  eventBadge2En  String  @default("Birthday Packages")
+
+  // CTA Section
+  ctaTitle       String @default("جاهز للعب؟")
+  ctaTitleEn     String @default("Ready to Play?")
+  ctaDesc        String @db.Text
+  ctaDescEn      String @db.Text
+  ctaBtn1        String @default("احجز تذكرتك")
+  ctaBtn1En      String @default("Book Your Ticket")
+  ctaBtn2        String @default("تواصل معنا")
+  ctaBtn2En      String @default("Contact Us")
+  bookTicketUrl  String? @default("#")
+  contactUrl     String? @default("#")
+
+  // Footer
+  footerLogo     String  @default("")
+  footerDesc     String  @db.Text
+  footerDescEn   String  @db.Text
+  footerExplore  String  @default("استكشف")
+  footerExploreEn String @default("Explore")
+  footerAbout    String  @default("عن مركزنا")
+  footerAboutEn  String  @default("About Us")
+  footerZones    String  @default("مناطق اللعب")
+  footerZonesEn  String  @default("Play Zones")
+  footerPrices   String  @default("الأسعار والباقات")
+  footerPricesEn String  @default("Prices & Packages")
+  footerContact  String  @default("تواصل معنا")
+  footerContactEn String @default("Contact Us")
+  footerCountry  String  @default("المملكة العربية السعودية")
+  footerCountryEn String @default("Saudi Arabia")
+  footerPhone    String  @default("هاتف: ٩٢٠٠-بوم-بوم")
+  footerPhoneEn  String  @default("Phone: 9200-Bom-Bom")
+  footerFollow   String  @default("تابع مرحنا")
+  footerFollowEn String  @default("Follow Our Fun")
+  instagramLink  String? @default("#")
+  facebookLink   String? @default("#")
+  copyright      String  @default("© ٢٠٢٤ بوم بوم بلاي كيد. جميع الحقوق محفوظة.")
+  copyrightEn    String  @default("© 2024 Bom Bom Play Kid. All rights reserved.")
+
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+}
+
+model BombomPlayZone {
+  id          String   @id @default(cuid())
+  title       String   @default("")
+  titleEn     String   @default("")
+  description String   @db.Text
+  descriptionEn String @db.Text
+  buttonLabel String   @default("استكشف الآن")
+  buttonLabelEn String @default("Explore Now")
+  icon        String   @default("FerrisWheel") // FerrisWheel, Castle, Brain, etc.
+  color       String   @default("#00BFFF") // hex
+  gallery     String?  @db.Text // JSON array: [{ image, caption }, ...]
+  order       Int      @default(0)
+  isPublished Boolean  @default(true)
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
+}
+
 model OurClientsContent {
   id String @id @default(cuid())
 

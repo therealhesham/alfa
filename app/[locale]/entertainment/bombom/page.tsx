@@ -15,9 +15,12 @@ import {
   PartyPopper,
   Ticket,
   Phone,
+  type LucideIcon,
 } from "lucide-react";
 import { generateSEOMetadata } from "@/lib/seo";
 import type { Locale } from "@/i18n";
+import { getBombomContent, getBombomPlayZones } from "@/lib/bombom-data";
+import BombomZoneGallery from "./BombomZoneGallery";
 
 export const revalidate = 60;
 
@@ -26,12 +29,19 @@ const BB_BLUE = "#00BFFF";
 const BB_YELLOW = "#FFD700";
 const BB_LIGHT_BLUE = "#E0F7FF";
 
-const BOMBOM_LOGO ="/logo.png";
-//   "https://lh3.googleusercontent.com/aida-public/AB6AXuBSKWa9_6F3hFigyrRxgpfy1iupVm4BzB_EW6RI6IkPGRRCcipPWCqI8_G40-zCftPdVaLSKmIm1VjMVtthCjoYo_UyMDmOzx8IHCouiBjayfowz2p7p_Y3NWvur0DoD0_QrBYmqPGoAWjYNyEd6_Ni8COCWtPj9GdJeen8eutvPKWzjZb6W0-gSzFRbSdt6BvZwUedntgmPtvhveJQwbVQQx2QnQ7ME67d9tpBTLWSCKtGae9yNt9DKxCLqJw9O7Hh2cl07pVoxWk";
-const BOMBOM_EVENTS_IMG =
+const DEFAULT_EVENTS_IMG =
   "https://lh3.googleusercontent.com/aida-public/AB6AXuBd_mp04_37pqtdIle_Yz0cYv97vLiQUQs_FqzXv8Y4O-ULy1O_TZ_JzKAiDfz9OsCEnO8aQV4DwpFx5dQ_mFLS8-LDEk0kD2KMPNG1qBRbstA4r7a19DpUTFe8vqk1aQjSorKHnXMrXnyo5oobbH5lEFLhscJx_xq76m7Er80TWLlNHmYo9K0AAO4AS2zNUDbMRN58FaZO8qIeklSkqhbNyBIBz_aYGi-8srRIbRXdVJP16tbADyCsxUotvgPKStkP_kNdb5DXHHU";
-const BOMBOM_FOOTER_LOGO =
+const DEFAULT_FOOTER_LOGO =
   "https://lh3.googleusercontent.com/aida-public/AB6AXuB4NP_RNEE9emQW5l6SETS7smg4VR_rPeLJlFLElit56JvBIvRrtqcWaq7QTQXsoh_nz_SX8dXr-9jxfo-9643RcsekxHcF2pZc_5p1KkeRkcVR_BN_iwocE9g4vhSbXqQHr4--E3yUX9YayIkOtdQaIEw5l3ILTA6NXDmXWS9x7DNWoNo72mzZa9l9ewoYCcq1lVMVwfTW_1HunyI41cEcBC3JKsV-MNpRo_qvaGF5_xfQ7H2OY5T2d8dvOI-rG_rSzq3v0NKJKSs";
+
+const ICON_MAP: Record<string, LucideIcon> = {
+  FerrisWheel,
+  Castle,
+  Brain,
+  Sun,
+  ToyBrick,
+  MountainSnow,
+};
 
 const CLOUD_SVG =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath d='M25 40c-5 0-9 4-9 9s4 9 9 9h30c7 0 13-6 13-13s-6-13-13-13c-2 0-4 1-6 2-3-4-8-7-14-7-9 0-16 7-16 16 0 1 0 2 0 3h-4z' fill='%23ffffff' fill-opacity='0.4'/%3E%3C/svg%3E";
@@ -65,57 +75,15 @@ interface BombomPageProps {
 
 export default async function BombomPage({ params }: BombomPageProps) {
   const { locale } = await params;
-  const isAr = (locale === "ar" || locale !== "en");
+  const isAr = locale === "ar";
   const validLocale = (locale === "ar" || locale === "en" ? locale : "ar") as Locale;
 
-  const t = {
-    home: isAr ? "الرئيسية" : "Home",
-    zones: isAr ? "مناطق اللعب" : "Play Zones",
-    bookNow: isAr ? "احجز الآن!" : "Book Now!",
-    tagline: isAr ? "مرح لا ينتهي!" : "Endless Fun!",
-    heroTitle1: isAr ? "عالم" : "",
-    heroBrand: isAr ? "بوم بوم" : "Bom Bom",
-    heroTitle2: isAr ? "للمرح واللعب!" : "World of Fun & Play!",
-    heroDesc: isAr
-      ? "أهلاً بكم في أسعد مكان على الأرض! حيث تتحول الأحلام إلى حقيقة واللعب هو لغتنا الوحيدة."
-      : "Welcome to the happiest place on earth! Where dreams come true and play is our only language.",
-    playBtn: isAr ? "هيا نلعب!" : "Let's Play!",
-    exploreBtn: isAr ? "اكتشف الزوايا" : "Explore Zones",
-    zonesTitle: isAr ? "مناطق اللعب والمغامرة" : "Play & Adventure Zones",
-    zonesSub: isAr ? "اختر مغامرتك المفضلة اليوم" : "Choose your favorite adventure today",
-    zone1Name: isAr ? "منطقة التزحلق" : "Skating Zone",
-    zone1Desc: isAr ? "استمتع بأطول المنزلقات الملونة التي تأخذك إلى عالم من الضحك!" : "Enjoy the longest colorful slides that take you to a world of laughter!",
-    zone1Btn: isAr ? "استكشف الآن" : "Explore Now",
-    zone2Name: isAr ? "قلعة القفز" : "Jump Castle",
-    zone2Desc: isAr ? "اقفز عالياً بين الغيوم في قلعتنا المطاطية الضخمة والآمنة تماماً." : "Jump high among the clouds in our huge, completely safe rubber castle.",
-    zone2Btn: isAr ? "ابدأ القفز" : "Start Jumping",
-    zone3Name: isAr ? "ركن الأذكياء" : "Smart Corner",
-    zone3Desc: isAr ? "مجموعة من الألعاب التعليمية والمكعبات لبناء مدينتك الخيالية الخاصة." : "Educational games and blocks to build your own imaginary city.",
-    zone3Btn: isAr ? "هيا نبني" : "Let's Build",
-    eventTitle: isAr ? "احتفل بين" : "Celebrate with",
-    eventTitleBrand: isAr ? "الأصدقاء" : "Friends",
-    eventTitle2: isAr ? "والغيوم" : "& Clouds",
-    eventDesc: isAr ? "نحول عيد ميلاد طفلك إلى يوم لا ينسى مليء بالمفاجآت والنشاطات الحركية الممتعة." : "We turn your child's birthday into an unforgettable day full of surprises and fun activities.",
-    feat1: isAr ? "زينة ملونة مبهجة" : "Colorful cheerful decorations",
-    feat2: isAr ? "أنشطة ترفيهية مع مدربين" : "Fun activities with trainers",
-    feat3: isAr ? "هدايا ووجبات شهية للأطفال" : "Gifts and delicious meals for kids",
-    eventBadge1: isAr ? "حفلات ممتعة!" : "Fun Parties!",
-    eventBadge2: isAr ? "باقات أعياد الميلاد" : "Birthday Packages",
-    ctaTitle: isAr ? "جاهز للعب؟" : "Ready to Play?",
-    ctaDesc: isAr ? "احجز مكان طفلك الآن في بوم بوم بلاي كيد واستعد ليوم مليء بالبهجة!" : "Book your child's spot now at Bom Bom Play Kid and get ready for a day full of joy!",
-    ctaBtn1: isAr ? "احجز تذكرتك" : "Book Your Ticket",
-    ctaBtn2: isAr ? "تواصل معنا" : "Contact Us",
-    footerAbout: isAr ? "عن مركزنا" : "About Us",
-    footerZones: isAr ? "مناطق اللعب" : "Play Zones",
-    footerPrices: isAr ? "الأسعار والباقات" : "Prices & Packages",
-    footerExplore: isAr ? "استكشف" : "Explore",
-    footerContact: isAr ? "تواصل معنا" : "Contact Us",
-    footerCountry: isAr ? "المملكة العربية السعودية" : "Saudi Arabia",
-    footerPhone: isAr ? "هاتف: ٩٢٠٠-بوم-بوم" : "Phone: 9200-Bom-Bom",
-    footerFollow: isAr ? "تابع مرحنا" : "Follow Our Fun",
-    footerDesc: isAr ? "بوم بوم بلاي كيد: حيث تبدأ أعظم مغامرات الأطفال الحركية والذهنية." : "Bom Bom Play Kid: Where the greatest adventures of children begin.",
-    copyright: isAr ? "© ٢٠٢٤ بوم بوم بلاي كيد. جميع الحقوق محفوظة." : "© 2024 Bom Bom Play Kid. All rights reserved.",
-  };
+  const [content, zones] = await Promise.all([
+    getBombomContent(validLocale),
+    getBombomPlayZones(validLocale),
+  ]);
+
+  const t = content;
 
   const pageStyle: React.CSSProperties = {
     fontFamily: BASE_FONT,
@@ -199,18 +167,18 @@ export default async function BombomPage({ params }: BombomPageProps) {
           <div style={navInnerStyle}>
             <div style={{ display: "flex", gap: "2rem", alignItems: "center" }}>
               <Link href={`/${validLocale}/home`} style={{ fontFamily: BASE_FONT, fontWeight: 900, fontSize: "1.1rem", color: BB_BLUE, textDecoration: "none" }}>
-                {t.home}
+                {t.homeLabel}
               </Link>
               <a href="#zones" style={{ fontFamily: BASE_FONT, fontWeight: 900, fontSize: "1.1rem", color: BB_BLUE, textDecoration: "none" }}>
-                {t.zones}
+                {t.zonesLabel}
               </a>
             </div>
             <div style={{ position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
-              <Image alt="Bom Bom Logo" src={BOMBOM_LOGO} width={80} height={64} unoptimized style={{ height: 64, width: "auto", objectFit: "contain", filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.15))" }} />
+              <Image alt="Bom Bom Logo" src={t.heroLogo || "/logo.png"} width={80} height={64} unoptimized style={{ height: 64, width: "auto", objectFit: "contain", filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.15))" }} />
             </div>
-            <button type="button" className="bb-jelly" style={{ ...jellyBtnBase, background: BB_PINK, color: "#fff", padding: "0.5rem 2rem", fontSize: "1.05rem", borderRadius: "999px", boxShadow: "0 4px 0 rgba(0,0,0,0.15)" }}>
-              {t.bookNow}
-            </button>
+            <Link href={t.bookTicketUrl || "#"} className="bb-jelly" style={{ ...jellyBtnBase, background: BB_PINK, color: "#fff", padding: "0.5rem 2rem", fontSize: "1.05rem", borderRadius: "999px", boxShadow: "0 4px 0 rgba(0,0,0,0.15)", textDecoration: "none" }}>
+              {t.bookNowLabel}
+            </Link>
           </div>
         </nav>
 
@@ -255,6 +223,19 @@ export default async function BombomPage({ params }: BombomPageProps) {
           </div>
         </section>
 
+        {/* ── GALLERY (above zones) ── */}
+        {t.showGallery && (t.gallery?.length ?? 0) > 0 && (
+          <section style={{ padding: "6rem 1.5rem", background: "rgba(255,255,255,0.4)", position: "relative", zIndex: 1 }}>
+            <div style={{ maxWidth: "80rem", margin: "0 auto" }}>
+              <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+                <h2 style={{ fontFamily: BASE_FONT, fontWeight: 900, fontSize: "3rem", color: BB_BLUE, marginBottom: "0.75rem" }}>{t.galleryTitle}</h2>
+                <p style={{ fontFamily: BASE_FONT, fontWeight: 700, fontSize: "1.2rem", color: "#6b7280" }}>{t.gallerySub}</p>
+              </div>
+              <BombomZoneGallery images={t.gallery} variant="main" />
+            </div>
+          </section>
+        )}
+
         {/* ── ZONES ── */}
         <section id="zones" style={{ padding: "8rem 1.5rem", position: "relative", zIndex: 1 }}>
           <div style={{ maxWidth: "80rem", margin: "0 auto" }}>
@@ -263,36 +244,30 @@ export default async function BombomPage({ params }: BombomPageProps) {
               <p style={{ fontFamily: BASE_FONT, fontWeight: 700, fontSize: "1.3rem", color: "#6b7280" }}>{t.zonesSub}</p>
             </div>
 
-            <div className="bb-grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "2rem", alignItems: "start" }}>
-              {/* Zone 1 */}
-              <div className="bb-card" style={cardStyle}>
-                <div style={{ width: 112, height: 112, background: BB_LIGHT_BLUE, borderRadius: "50%", margin: "0 auto 2rem", display: "flex", alignItems: "center", justifyContent: "center", border: `4px solid ${BB_BLUE}` }}>
-                  <FerrisWheel size={56} color={BB_BLUE} strokeWidth={2.5} />
-                </div>
-                <h3 style={{ fontFamily: BASE_FONT, fontWeight: 900, fontSize: "2rem", color: BB_BLUE, marginBottom: "1rem" }}>{t.zone1Name}</h3>
-                <p style={{ fontFamily: BASE_FONT, fontWeight: 700, fontSize: "1rem", color: "#6b7280", marginBottom: "2rem", lineHeight: 1.6 }}>{t.zone1Desc}</p>
-                <button type="button" className="bb-jelly" style={{ ...jellyBtnBase, background: BB_BLUE, color: "#fff", padding: "1rem 0", width: "100%", fontSize: "1.1rem", borderRadius: "0.75rem" }}>{t.zone1Btn}</button>
-              </div>
-
-              {/* Zone 2 — elevated */}
-              <div className="bb-card bb-card-mid" style={{ ...cardStyle, boxShadow: "0 20px 50px rgba(255,20,147,0.12)" }}>
-                <div style={{ width: 112, height: 112, background: "#fff", borderRadius: "50%", margin: "0 auto 2rem", display: "flex", alignItems: "center", justifyContent: "center", border: `4px solid ${BB_PINK}`, boxShadow: "inset 0 2px 8px rgba(0,0,0,0.06)" }}>
-                  <Castle size={56} color={BB_PINK} strokeWidth={2.5} />
-                </div>
-                <h3 style={{ fontFamily: BASE_FONT, fontWeight: 900, fontSize: "2rem", color: BB_PINK, marginBottom: "1rem" }}>{t.zone2Name}</h3>
-                <p style={{ fontFamily: BASE_FONT, fontWeight: 700, fontSize: "1rem", color: "#6b7280", marginBottom: "2rem", lineHeight: 1.6 }}>{t.zone2Desc}</p>
-                <button type="button" className="bb-jelly" style={{ ...jellyBtnBase, background: BB_PINK, color: "#fff", padding: "1rem 0", width: "100%", fontSize: "1.1rem", borderRadius: "0.75rem" }}>{t.zone2Btn}</button>
-              </div>
-
-              {/* Zone 3 */}
-              <div className="bb-card" style={cardStyle}>
-                <div style={{ width: 112, height: 112, background: "#fff", borderRadius: "50%", margin: "0 auto 2rem", display: "flex", alignItems: "center", justifyContent: "center", border: `4px solid ${BB_YELLOW}` }}>
-                  <Brain size={56} color={BB_YELLOW} strokeWidth={2.5} />
-                </div>
-                <h3 style={{ fontFamily: BASE_FONT, fontWeight: 900, fontSize: "2rem", color: BB_YELLOW, marginBottom: "1rem" }}>{t.zone3Name}</h3>
-                <p style={{ fontFamily: BASE_FONT, fontWeight: 700, fontSize: "1rem", color: "#6b7280", marginBottom: "2rem", lineHeight: 1.6 }}>{t.zone3Desc}</p>
-                <button type="button" className="bb-jelly" style={{ ...jellyBtnBase, background: BB_YELLOW, color: BB_PINK, padding: "1rem 0", width: "100%", fontSize: "1.1rem", borderRadius: "0.75rem" }}>{t.zone3Btn}</button>
-              </div>
+            <div className="bb-grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "2rem", alignItems: "start" }}>
+              {zones.map((zone, idx) => {
+                const ZoneIcon = ICON_MAP[zone.icon] || FerrisWheel;
+                const isMid = zones.length >= 3 && idx === 1;
+                return (
+                  <div
+                    key={zone.id}
+                    className={`bb-card ${isMid ? "bb-card-mid" : ""}`}
+                    style={{ ...cardStyle, ...(isMid ? { boxShadow: "0 20px 50px rgba(255,20,147,0.12)" } : {}) }}
+                  >
+                    <div style={{ width: 112, height: 112, background: zone.color === BB_PINK ? "#fff" : BB_LIGHT_BLUE, borderRadius: "50%", margin: "0 auto 2rem", display: "flex", alignItems: "center", justifyContent: "center", border: `4px solid ${zone.color}`, boxShadow: zone.color === BB_PINK ? "inset 0 2px 8px rgba(0,0,0,0.06)" : undefined }}>
+                      <ZoneIcon size={56} color={zone.color} strokeWidth={2.5} />
+                    </div>
+                    <h3 style={{ fontFamily: BASE_FONT, fontWeight: 900, fontSize: "2rem", color: zone.color, marginBottom: "1rem" }}>{zone.title}</h3>
+                    <p style={{ fontFamily: BASE_FONT, fontWeight: 700, fontSize: "1rem", color: "#6b7280", marginBottom: "1rem", lineHeight: 1.6 }}>{zone.description}</p>
+                    {zone.gallery.length > 0 && (
+                      <div style={{ marginBottom: "1.5rem" }}>
+                        <BombomZoneGallery images={zone.gallery} variant="card" />
+                      </div>
+                    )}
+                    <button type="button" className="bb-jelly" style={{ ...jellyBtnBase, background: zone.color, color: zone.color === BB_YELLOW ? BB_PINK : "#fff", padding: "1rem 0", width: "100%", fontSize: "1.1rem", borderRadius: "0.75rem" }}>{zone.buttonLabel}</button>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -306,7 +281,7 @@ export default async function BombomPage({ params }: BombomPageProps) {
                 <div style={{ position: "relative", display: "inline-block", width: "100%" }}>
                   <Image
                     alt="Events"
-                    src={BOMBOM_EVENTS_IMG}
+                    src={t.eventsImage || DEFAULT_EVENTS_IMG}
                     width={600}
                     height={400}
                     unoptimized
@@ -326,7 +301,7 @@ export default async function BombomPage({ params }: BombomPageProps) {
                 </h2>
                 <p style={{ fontFamily: BASE_FONT, fontWeight: 700, fontSize: "1.2rem", color: "#4b5563", marginBottom: "2rem", lineHeight: 1.8 }}>{t.eventDesc}</p>
                 <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "1rem" }}>
-                  {[t.feat1, t.feat2, t.feat3].map((feat, i) => (
+                  {[t.eventFeat1, t.eventFeat2, t.eventFeat3].map((feat, i) => (
                     <li key={i} style={{ display: "flex", alignItems: "center", gap: "1rem", fontFamily: BASE_FONT, fontWeight: 900, fontSize: "1.1rem", color: "#374151" }}>
                       <CheckCircle2 size={28} color={BB_PINK} strokeWidth={2.5} style={{ flexShrink: 0 }} />
                       {feat}
@@ -348,14 +323,14 @@ export default async function BombomPage({ params }: BombomPageProps) {
             </h2>
             <p style={{ fontFamily: BASE_FONT, fontWeight: 700, fontSize: "1.5rem", color: "rgba(255,255,255,0.9)", marginBottom: "3rem", lineHeight: 1.6 }}>{t.ctaDesc}</p>
             <div className="bb-cta-btns" style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "1.5rem" }}>
-              <button type="button" className="bb-jelly" style={{ ...jellyBtnBase, background: BB_YELLOW, color: BB_PINK, padding: "1.5rem 4rem", fontSize: "1.8rem", borderRadius: "2rem", border: "4px solid #fff", boxShadow: "0 8px 0 rgba(0,0,0,0.1)", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
-              {t.ctaBtn1}
-              <Ticket size={28} strokeWidth={2.5} style={{ flexShrink: 0 }} />
-            </button>
-              <button type="button" className="bb-jelly" style={{ ...jellyBtnBase, background: "#fff", color: BB_BLUE, padding: "1.5rem 4rem", fontSize: "1.8rem", borderRadius: "2rem", border: `4px solid ${BB_BLUE}`, boxShadow: "0 8px 0 rgba(0,0,0,0.1)", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
-              {t.ctaBtn2}
-              <Phone size={28} strokeWidth={2.5} style={{ flexShrink: 0 }} />
-            </button>
+              <Link href={t.bookTicketUrl || "#"} className="bb-jelly" style={{ ...jellyBtnBase, background: BB_YELLOW, color: BB_PINK, padding: "1.5rem 4rem", fontSize: "1.8rem", borderRadius: "2rem", border: "4px solid #fff", boxShadow: "0 8px 0 rgba(0,0,0,0.1)", display: "inline-flex", alignItems: "center", gap: "0.5rem", textDecoration: "none" }}>
+                {t.ctaBtn1}
+                <Ticket size={28} strokeWidth={2.5} style={{ flexShrink: 0 }} />
+              </Link>
+              <Link href={t.contactUrl || `/${validLocale}/contact`} className="bb-jelly" style={{ ...jellyBtnBase, background: "#fff", color: BB_BLUE, padding: "1.5rem 4rem", fontSize: "1.8rem", borderRadius: "2rem", border: `4px solid ${BB_BLUE}`, boxShadow: "0 8px 0 rgba(0,0,0,0.1)", display: "inline-flex", alignItems: "center", gap: "0.5rem", textDecoration: "none" }}>
+                {t.ctaBtn2}
+                <Phone size={28} strokeWidth={2.5} style={{ flexShrink: 0 }} />
+              </Link>
             </div>
           </div>
         </section>
@@ -364,7 +339,7 @@ export default async function BombomPage({ params }: BombomPageProps) {
         <footer style={{ background: "#fff", padding: "6rem 1.5rem 3rem", borderTop: `8px solid ${BB_YELLOW}`, color: "#1f2937" }}>
           <div className="bb-footer-grid" style={{ maxWidth: "80rem", margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "3rem", marginBottom: "4rem" }}>
             <div>
-              <Image alt="Footer Logo" src={BOMBOM_FOOTER_LOGO} width={120} height={96} unoptimized style={{ height: 80, width: "auto", objectFit: "contain", marginBottom: "1.5rem" }} />
+              <Image alt="Footer Logo" src={t.footerLogo || DEFAULT_FOOTER_LOGO} width={120} height={96} unoptimized style={{ height: 80, width: "auto", objectFit: "contain", marginBottom: "1.5rem" }} />
               <p style={{ fontFamily: BASE_FONT, fontWeight: 700, fontSize: "1rem", color: "#6b7280", lineHeight: 1.7 }}>{t.footerDesc}</p>
             </div>
             <div>
@@ -383,12 +358,26 @@ export default async function BombomPage({ params }: BombomPageProps) {
             <div>
               <h5 style={{ fontFamily: BASE_FONT, fontWeight: 900, fontSize: "1.3rem", color: BB_YELLOW, marginBottom: "1.5rem" }}>{t.footerFollow}</h5>
               <div style={{ display: "flex", gap: "0.75rem" }}>
-                <a href="#" style={{ width: 52, height: 52, background: BB_LIGHT_BLUE, borderRadius: "0.75rem", display: "flex", alignItems: "center", justifyContent: "center", color: BB_BLUE, textDecoration: "none" }}>
-                  <ThumbsUp size={22} color={BB_BLUE} strokeWidth={2.5} />
-                </a>
-                <a href="#" style={{ width: 52, height: 52, background: BB_LIGHT_BLUE, borderRadius: "0.75rem", display: "flex", alignItems: "center", justifyContent: "center", color: BB_BLUE, textDecoration: "none" }}>
-                  <Camera size={22} color={BB_BLUE} strokeWidth={2.5} />
-                </a>
+                {t.instagramLink && (
+                  <a href={t.instagramLink} target="_blank" rel="noopener noreferrer" style={{ width: 52, height: 52, background: BB_LIGHT_BLUE, borderRadius: "0.75rem", display: "flex", alignItems: "center", justifyContent: "center", color: BB_BLUE, textDecoration: "none" }}>
+                    <Camera size={22} color={BB_BLUE} strokeWidth={2.5} />
+                  </a>
+                )}
+                {t.facebookLink && (
+                  <a href={t.facebookLink} target="_blank" rel="noopener noreferrer" style={{ width: 52, height: 52, background: BB_LIGHT_BLUE, borderRadius: "0.75rem", display: "flex", alignItems: "center", justifyContent: "center", color: BB_BLUE, textDecoration: "none" }}>
+                    <ThumbsUp size={22} color={BB_BLUE} strokeWidth={2.5} />
+                  </a>
+                )}
+                {!t.instagramLink && !t.facebookLink && (
+                  <>
+                    <a href="#" style={{ width: 52, height: 52, background: BB_LIGHT_BLUE, borderRadius: "0.75rem", display: "flex", alignItems: "center", justifyContent: "center", color: BB_BLUE, textDecoration: "none" }}>
+                      <ThumbsUp size={22} color={BB_BLUE} strokeWidth={2.5} />
+                    </a>
+                    <a href="#" style={{ width: 52, height: 52, background: BB_LIGHT_BLUE, borderRadius: "0.75rem", display: "flex", alignItems: "center", justifyContent: "center", color: BB_BLUE, textDecoration: "none" }}>
+                      <Camera size={22} color={BB_BLUE} strokeWidth={2.5} />
+                    </a>
+                  </>
+                )}
               </div>
             </div>
           </div>
