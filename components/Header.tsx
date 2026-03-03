@@ -68,98 +68,93 @@ export default function Header({ locale, settings, headerLogo, isHomePage = fals
   };
 
   return (
-    <header className={isMenuOpen ? "menu-active" : ""}>
-      <Link href={`/${locale}/home`} onClick={closeMenu} className="logo-link">
-        <Image
-          src={headerLogo || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
-          alt={t.common.logoAlt}
-          width={75}
-          height={75}
-          className="logo"
-          unoptimized
-        />
-      </Link>
-      <div className="header-right">
-        <button
-          className="menu-toggle"
-          onClick={toggleMenu}
-          aria-label={t.common.menuLabel}
-          aria-expanded={isMenuOpen}
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-      </div>
-      {isMenuOpen && (
-        <div
-          className="menu-backdrop"
-          onClick={closeMenu}
-          aria-hidden="true"
-        />
-      )}
-      {/* Desktop Navigation */}
-      <nav className="desktop-nav">
-        {settings?.showHome !== false && (
-          <Link href={`/${locale}/home`}>
-            {t.nav.home}
-          </Link>
-        )}
-        {settings?.showAbout !== false && (
-          isHomePage ? (
-            <a href="#about" onClick={(e) => handleSmoothScroll(e, 'about')}>
-              {t.nav.about}
-            </a>
-          ) : (
-            <Link href={`/${locale}/home#about`}>
-              {t.nav.about}
+    <>
+      <header className={isMenuOpen ? "menu-active" : ""}>
+        <Link href={`/${locale}/home`} onClick={closeMenu} className="logo-link">
+          <Image
+            src={headerLogo || "https://res.cloudinary.com/duo8svqci/image/upload/v1763643456/dattvtozngwdrakiop4j.png"}
+            alt={t.common.logoAlt}
+            width={75}
+            height={75}
+            className="logo"
+            unoptimized
+          />
+        </Link>
+        <div className="header-right">
+          <button
+            className="menu-toggle"
+            onClick={toggleMenu}
+            aria-label={t.common.menuLabel}
+            aria-expanded={isMenuOpen}
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+        {/* Desktop Navigation */}
+        <nav className="desktop-nav">
+          {settings?.showHome !== false && (
+            <Link href={`/${locale}/home`}>
+              {t.nav.home}
             </Link>
-          )
-        )}
-        {settings?.showServices !== false && (
-          isHomePage ? (
-            <a href="#services" onClick={(e) => handleSmoothScroll(e, 'services')}>
-              {t.nav.services}
-            </a>
-          ) : (
-            <Link href={`/${locale}/home#services`}>
-              {t.nav.services}
+          )}
+          {settings?.showAbout !== false && (
+            isHomePage ? (
+              <a href="#about" onClick={(e) => handleSmoothScroll(e, 'about')}>
+                {t.nav.about}
+              </a>
+            ) : (
+              <Link href={`/${locale}/home#about`}>
+                {t.nav.about}
+              </Link>
+            )
+          )}
+          {settings?.showServices !== false && (
+            isHomePage ? (
+              <a href="#services" onClick={(e) => handleSmoothScroll(e, 'services')}>
+                {t.nav.services}
+              </a>
+            ) : (
+              <Link href={`/${locale}/home#services`}>
+                {t.nav.services}
+              </Link>
+            )
+          )}
+          {settings?.showProjects !== false && (
+            isHomePage ? (
+              <a href="#projects" onClick={(e) => handleSmoothScroll(e, 'projects')}>
+                {t.nav.projects}
+              </a>
+            ) : (
+              <Link href={`/${locale}/home#projects`}>
+                {t.nav.projects}
+              </Link>
+            )
+          )}
+          {settings?.showEntertainment !== false && (
+            <Link href={`/${locale}/entertainment`}>
+              {locale === "ar" ? "عالم الترفيه" : "Entertainment"}
             </Link>
-          )
-        )}
-        {settings?.showProjects !== false && (
-          isHomePage ? (
-            <a href="#projects" onClick={(e) => handleSmoothScroll(e, 'projects')}>
-              {t.nav.projects}
-            </a>
-          ) : (
-            <Link href={`/${locale}/home#projects`}>
-              {t.nav.projects}
-            </Link>
-          )
-        )}
-        {settings?.showEntertainment !== false && (
-          <Link href={`/${locale}/entertainment`}>
-            {locale === "ar" ? "عالم الترفيه" : "Entertainment"}
-          </Link>
-        )}
-        {settings?.showContact !== false && (
-          isHomePage ? (
-            <a href="#contact" onClick={(e) => handleSmoothScroll(e, 'contact')}>
-              {t.nav.contact}
-            </a>
-          ) : (
-            <Link href={`/${locale}/contact-us`}>
-              {t.nav.contact}
-            </Link>
-          )
-        )}
-        {settings?.showLanguageSwitcher !== false && (
-          <LanguageSwitcher currentLocale={locale} />
-        )}
-      </nav>
+          )}
+          {settings?.showContact !== false && (
+            isHomePage ? (
+              <a href="#contact" onClick={(e) => handleSmoothScroll(e, 'contact')}>
+                {t.nav.contact}
+              </a>
+            ) : (
+              <Link href={`/${locale}/contact-us`}>
+                {t.nav.contact}
+              </Link>
+            )
+          )}
+          {settings?.showLanguageSwitcher !== false && (
+            <LanguageSwitcher currentLocale={locale} />
+          )}
+        </nav>
+      </header>
 
-      {/* Mobile Sidebar */}
+      {/* Mobile Backdrop — outside header to escape its transform containing block */}
       {isMenuOpen && (
         <div
           className="menu-backdrop"
@@ -167,13 +162,11 @@ export default function Header({ locale, settings, headerLogo, isHomePage = fals
           aria-hidden="true"
         />
       )}
+
+      {/* Mobile Sidebar — outside header to escape its transform containing block */}
       <nav className={`mobile-sidebar ${isMenuOpen ? "nav-open" : ""}`}>
         <div className="sidebar-header">
-          {settings?.showLanguageSwitcher !== false && (
-            <div className="sidebar-language-switcher-top">
-              <LanguageSwitcher currentLocale={locale} />
-            </div>
-          )}
+
           {/* <button
             className="sidebar-close-btn"
             onClick={closeMenu}
@@ -237,6 +230,21 @@ export default function Header({ locale, settings, headerLogo, isHomePage = fals
               </Link>
             )
           )}
+          {/* Language Switcher at the bottom of the links */}
+          {settings?.showLanguageSwitcher !== false && (
+            <div className="sidebar-language-switcher-bottom">
+              <button
+                className="language-button language-toggle-btn"
+                onClick={() => {
+                  const newLocale = locale === "ar" ? "en" : "ar";
+                  const newPathname = window.location.pathname.replace(`/${locale}`, `/${newLocale}`);
+                  window.location.href = newPathname;
+                }}
+              >
+                {locale === "ar" ? "English" : "عربي"}
+              </button>
+            </div>
+          )}
         </div>
         {/* Mobile Social Media Icons */}
         <div className="mobile-social-icons">
@@ -277,7 +285,7 @@ export default function Header({ locale, settings, headerLogo, isHomePage = fals
           </a>
         </div>
       </nav>
-    </header>
+    </>
   );
 }
 
