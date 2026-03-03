@@ -537,7 +537,7 @@ export default function AdminBombomPage() {
 
           <CollapsibleSection title={isAr ? "معرض الصور (فوق مناطق اللعب)" : "Photo Gallery (above Play Zones)"}>
             <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}>
-              <input type="checkbox" id="showGallery" checked={content.showGallery !== false} onChange={(e) => setContent({ ...content, showGallery: e.target.checked })} />
+              <input type="checkbox" id="showGallery" checked={String(content.showGallery) !== 'false'} onChange={(e) => setContent({ ...content, showGallery: String(e.target.checked) })} />
               <label htmlFor="showGallery" style={{ fontWeight: 600 }}>{isAr ? "إظهار معرض الصور" : "Show Photo Gallery"}</label>
             </div>
             {renderFormGroup("galleryTitle", "عنوان المعرض (عربي)", "Gallery Title (Arabic)")}
@@ -547,15 +547,15 @@ export default function AdminBombomPage() {
             <div style={{ marginTop: "1rem" }}>
               <label style={labelStyle}>{isAr ? "صور المعرض" : "Gallery Images"}</label>
               <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
-                {((content.gallery as { image: string; caption: string }[]) || []).map((g, i) => (
+                {(((content.gallery as unknown) as { image: string; caption: string }[]) || []).map((g, i) => (
                   <div key={i} style={{ position: "relative" }}>
                     <div style={{ width: 80, height: 60, borderRadius: 6, overflow: "hidden", border: "1px solid #ddd" }}>
                       <Image src={g.image} alt={g.caption} width={80} height={60} style={{ objectFit: "cover", width: "100%", height: "100%" }} unoptimized />
                     </div>
-                    <button type="button" onClick={() => setContent({ ...content, gallery: ((content.gallery as any[]) || []).filter((_, j) => j !== i) })} style={{ position: "absolute", top: 2, right: 2, width: 20, height: 20, background: "#ef4444", color: "#fff", border: "none", borderRadius: 4, cursor: "pointer", fontSize: 12, display: "flex", alignItems: "center", justifyContent: "center" }}><X size={12} /></button>
+                    <button type="button" onClick={() => setContent({ ...content, gallery: ((((content.gallery as unknown) as any[]) || []).filter((_, j) => j !== i) as unknown as string) })} style={{ position: "absolute", top: 2, right: 2, width: 20, height: 20, background: "#ef4444", color: "#fff", border: "none", borderRadius: 4, cursor: "pointer", fontSize: 12, display: "flex", alignItems: "center", justifyContent: "center" }}><X size={12} /></button>
                   </div>
                 ))}
-                <EditableImage src="" alt="Add" width={80} height={60} onChange={(url) => setContent({ ...content, gallery: [...((content.gallery as any[]) || []), { image: url, caption: "" }] })} />
+                <EditableImage src="" alt="Add" width={80} height={60} onChange={(url) => setContent({ ...content, gallery: ([...(((content.gallery as unknown) as any[]) || []), { image: url, caption: "" }] as unknown as string) })} />
               </div>
             </div>
           </CollapsibleSection>
