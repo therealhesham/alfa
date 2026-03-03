@@ -21,6 +21,7 @@ import { generateSEOMetadata } from "@/lib/seo";
 import type { Locale } from "@/i18n";
 import { getBombomContent, getBombomPlayZones } from "@/lib/bombom-data";
 import BombomZoneGallery from "./BombomZoneGallery";
+import BookingModalTrigger from "./BookingModal";
 
 export const revalidate = 60;
 
@@ -176,9 +177,9 @@ export default async function BombomPage({ params }: BombomPageProps) {
             <div style={{ position: "absolute", left: "50%", transform: "translateX(-50%)" }}>
               <Image alt="Bom Bom Logo" src={t.heroLogo || "/logo.png"} width={80} height={64} unoptimized style={{ height: 64, width: "auto", objectFit: "contain", filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.15))" }} />
             </div>
-            <Link href={t.bookTicketUrl || "#"} className="bb-jelly" style={{ ...jellyBtnBase, background: BB_PINK, color: "#fff", padding: "0.5rem 2rem", fontSize: "1.05rem", borderRadius: "999px", boxShadow: "0 4px 0 rgba(0,0,0,0.15)", textDecoration: "none" }}>
+            <BookingModalTrigger locale={validLocale} className="bb-jelly" style={{ ...jellyBtnBase, background: BB_PINK, color: "#fff", padding: "0.5rem 2rem", fontSize: "1.05rem", borderRadius: "999px", boxShadow: "0 4px 0 rgba(0,0,0,0.15)", textDecoration: "none" }}>
               {t.bookNowLabel}
-            </Link>
+            </BookingModalTrigger>
           </div>
         </nav>
 
@@ -204,10 +205,10 @@ export default async function BombomPage({ params }: BombomPageProps) {
               {t.heroDesc}
             </p>
             <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "1.5rem" }}>
-              <button type="button" className="bb-jelly" style={{ ...jellyBtnBase, background: BB_PINK, color: "#fff", padding: "1.25rem 3rem", fontSize: "1.5rem", borderRadius: "1.5rem", border: "4px solid #fff", boxShadow: "0 8px 0 rgba(0,0,0,0.1)", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
+              <BookingModalTrigger locale={validLocale} className="bb-jelly" style={{ ...jellyBtnBase, background: BB_PINK, color: "#fff", padding: "1.25rem 3rem", fontSize: "1.5rem", borderRadius: "1.5rem", border: "4px solid #fff", boxShadow: "0 8px 0 rgba(0,0,0,0.1)", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
                 {t.playBtn}
                 <PartyPopper size={26} strokeWidth={2.5} style={{ flexShrink: 0 }} />
-              </button>
+              </BookingModalTrigger>
               <a href="#zones" className="bb-jelly" style={{ ...jellyBtnBase, background: BB_YELLOW, color: BB_PINK, padding: "1.25rem 3rem", fontSize: "1.5rem", borderRadius: "1.5rem", border: "4px solid #fff", boxShadow: "0 8px 0 rgba(0,0,0,0.1)", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
                 {t.exploreBtn}
                 <Sparkles size={26} strokeWidth={2.5} style={{ flexShrink: 0 }} />
@@ -264,7 +265,7 @@ export default async function BombomPage({ params }: BombomPageProps) {
                         <BombomZoneGallery images={zone.gallery} variant="card" />
                       </div>
                     )}
-                    <button type="button" className="bb-jelly" style={{ ...jellyBtnBase, background: zone.color, color: zone.color === BB_YELLOW ? BB_PINK : "#fff", padding: "1rem 0", width: "100%", fontSize: "1.1rem", borderRadius: "0.75rem" }}>{zone.buttonLabel}</button>
+                    <BookingModalTrigger locale={validLocale} className="bb-jelly" style={{ ...jellyBtnBase, background: zone.color, color: zone.color === BB_YELLOW ? BB_PINK : "#fff", padding: "1rem 0", width: "100%", fontSize: "1.1rem", borderRadius: "0.75rem", display: "block" }}>{zone.buttonLabel}</BookingModalTrigger>
                   </div>
                 );
               })}
@@ -323,10 +324,10 @@ export default async function BombomPage({ params }: BombomPageProps) {
             </h2>
             <p style={{ fontFamily: BASE_FONT, fontWeight: 700, fontSize: "1.5rem", color: "rgba(255,255,255,0.9)", marginBottom: "3rem", lineHeight: 1.6 }}>{t.ctaDesc}</p>
             <div className="bb-cta-btns" style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "1.5rem" }}>
-              <Link href={t.bookTicketUrl || "#"} className="bb-jelly" style={{ ...jellyBtnBase, background: BB_YELLOW, color: BB_PINK, padding: "1.5rem 4rem", fontSize: "1.8rem", borderRadius: "2rem", border: "4px solid #fff", boxShadow: "0 8px 0 rgba(0,0,0,0.1)", display: "inline-flex", alignItems: "center", gap: "0.5rem", textDecoration: "none" }}>
+              <BookingModalTrigger locale={validLocale} className="bb-jelly" style={{ ...jellyBtnBase, background: BB_YELLOW, color: BB_PINK, padding: "1.5rem 4rem", fontSize: "1.8rem", borderRadius: "2rem", border: "4px solid #fff", boxShadow: "0 8px 0 rgba(0,0,0,0.1)", display: "inline-flex", alignItems: "center", gap: "0.5rem", textDecoration: "none" }}>
                 {t.ctaBtn1}
                 <Ticket size={28} strokeWidth={2.5} style={{ flexShrink: 0 }} />
-              </Link>
+              </BookingModalTrigger>
               <Link href={t.contactUrl || `/${validLocale}/contact`} className="bb-jelly" style={{ ...jellyBtnBase, background: "#fff", color: BB_BLUE, padding: "1.5rem 4rem", fontSize: "1.8rem", borderRadius: "2rem", border: `4px solid ${BB_BLUE}`, boxShadow: "0 8px 0 rgba(0,0,0,0.1)", display: "inline-flex", alignItems: "center", gap: "0.5rem", textDecoration: "none" }}>
                 {t.ctaBtn2}
                 <Phone size={28} strokeWidth={2.5} style={{ flexShrink: 0 }} />
