@@ -61,6 +61,7 @@ export async function PUT(request: NextRequest) {
         emptyMessage: body.emptyMessage,
         emptyMessageEn: body.emptyMessageEn,
         ...(body.showBombom !== undefined && { showBombom: body.showBombom }),
+        ...(body.isUnderConstruction !== undefined && { isUnderConstruction: body.isUnderConstruction }),
       },
     });
 

@@ -19,6 +19,7 @@ export interface EntertainmentContent {
   emptyMessage: string;
   showBombom: boolean;
   detailsButtonLabel: string;
+  isUnderConstruction: boolean;
 }
 
 function parseHeroImages(json: string | null | undefined): string[] {
@@ -49,6 +50,7 @@ export async function getEntertainmentContent(locale: string): Promise<Entertain
     emptyMessage: locale === 'ar' ? 'لا توجد مشاريع ترفيهية متاحة حالياً' : 'No entertainment projects available at the moment',
     showBombom: true,
     detailsButtonLabel: locale === 'ar' ? 'عرض التفاصيل' : 'View Details',
+    isUnderConstruction: true,
   };
 
   try {
@@ -77,6 +79,7 @@ export async function getEntertainmentContent(locale: string): Promise<Entertain
       emptyMessage: isEn ? (content.emptyMessageEn || defaults.emptyMessage) : (content.emptyMessage || defaults.emptyMessage),
       showBombom: content.showBombom ?? true,
       detailsButtonLabel: defaults.detailsButtonLabel,
+      isUnderConstruction: (content as any).isUnderConstruction ?? true,
     };
   } catch (error) {
     console.error('Error fetching entertainment content:', error);

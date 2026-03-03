@@ -66,37 +66,81 @@ export default async function EntertainmentPage({ params }: EntertainmentPagePro
         isHomePage={false}
       />
 
-      <EntertainmentHero
-        locale={validLocale}
-        heroTitle={pageContent.heroTitle}
-        heroSubtitle={pageContent.heroSubtitle}
-        heroImages={pageContent.heroImages}
-        showStats={pageContent.showStats}
-        stat1Icon={pageContent.stat1Icon}
-        stat1Number={pageContent.stat1Number}
-        stat1Label={pageContent.stat1Label}
-        stat2Icon={pageContent.stat2Icon}
-        stat2Number={pageContent.stat2Number}
-        stat2Label={pageContent.stat2Label}
-        stat3Icon={pageContent.stat3Icon}
-        stat3Number={pageContent.stat3Number}
-        stat3Label={pageContent.stat3Label}
-      />
-
-      <section style={{
-        padding: '5rem 2rem',
-        fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif',
-        background: 'radial-gradient(ellipse at center top, rgba(212, 193, 157, 0.15) 0%, transparent 60%), radial-gradient(ellipse at center bottom, rgba(232, 217, 192, 0.12) 0%, transparent 60%), #000000',
-        position: 'relative'
-      }}>
-        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-          <EntertainmentClient
-            projects={projects}
-            locale={validLocale}
-            pageContent={pageContent}
-          />
+      {pageContent.isUnderConstruction ? (
+        <div style={{
+          minHeight: '60vh',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '4rem 2rem',
+          textAlign: 'center',
+          fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif',
+          background: 'radial-gradient(ellipse at center top, rgba(212, 193, 157, 0.15) 0%, transparent 60%), #000000',
+        }}>
+          <div style={{
+            color: 'var(--gold, #d4c19d)',
+            marginBottom: '1.5rem',
+            animation: 'pulse 2s infinite'
+          }}>
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+            </svg>
+          </div>
+          <h1 style={{
+            color: '#fff',
+            fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+            marginBottom: '1rem',
+            fontWeight: 'bold'
+          }}>
+            {validLocale === 'ar' ? 'قريباً...' : 'Coming Soon...'}
+          </h1>
+          <p style={{
+            color: 'rgba(255, 255, 255, 0.7)',
+            fontSize: '1.2rem',
+            maxWidth: '600px',
+            lineHeight: '1.6'
+          }}>
+            {validLocale === 'ar'
+              ? 'نعمل حالياً على تطوير منطقة الترفيه لتوفير تجربة استثنائية لكم. شكراً لصبركم.'
+              : 'We are currently working on developing the entertainment area to provide an exceptional experience for you. Thank you for your patience.'}
+          </p>
         </div>
-      </section>
+      ) : (
+        <>
+          <EntertainmentHero
+            locale={validLocale}
+            heroTitle={pageContent.heroTitle}
+            heroSubtitle={pageContent.heroSubtitle}
+            heroImages={pageContent.heroImages}
+            showStats={pageContent.showStats}
+            stat1Icon={pageContent.stat1Icon}
+            stat1Number={pageContent.stat1Number}
+            stat1Label={pageContent.stat1Label}
+            stat2Icon={pageContent.stat2Icon}
+            stat2Number={pageContent.stat2Number}
+            stat2Label={pageContent.stat2Label}
+            stat3Icon={pageContent.stat3Icon}
+            stat3Number={pageContent.stat3Number}
+            stat3Label={pageContent.stat3Label}
+          />
+
+          <section style={{
+            padding: '5rem 2rem',
+            fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif',
+            background: 'radial-gradient(ellipse at center top, rgba(212, 193, 157, 0.15) 0%, transparent 60%), radial-gradient(ellipse at center bottom, rgba(232, 217, 192, 0.12) 0%, transparent 60%), #000000',
+            position: 'relative'
+          }}>
+            <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+              <EntertainmentClient
+                projects={projects}
+                locale={validLocale}
+                pageContent={pageContent}
+              />
+            </div>
+          </section>
+        </>
+      )}
 
       <Footer
         locale={validLocale}

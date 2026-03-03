@@ -1,0 +1,1 @@
+ALTER TABLE EntertainmentContent ADD COLUMN isUnderConstruction BOOLEAN NOT NULL DEFAULT TRUE;

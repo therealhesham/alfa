@@ -44,6 +44,7 @@ interface ContentState {
   sectionSubtitle: string; sectionSubtitleEn: string;
   emptyMessage: string; emptyMessageEn: string;
   showBombom: boolean;
+  isUnderConstruction: boolean;
 }
 
 let currentLocale: Locale = "ar";
@@ -59,8 +60,10 @@ function EditableImage({ src, alt, onChange, width = 300, height = 200 }: {
       onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}
       onClick={() => fileInputRef.current?.click()}>
       {isUploading ? (
-        <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center",
-          background: "rgba(212,193,157,0.1)", border: "2px dashed rgba(212,193,157,0.3)", borderRadius: "8px", color: "var(--gold)" }}>
+        <div style={{
+          width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center",
+          background: "rgba(212,193,157,0.1)", border: "2px dashed rgba(212,193,157,0.3)", borderRadius: "8px", color: "var(--gold)"
+        }}>
           {currentLocale === "ar" ? "جاري الرفع..." : "Uploading..."}
         </div>
       ) : src ? (
@@ -69,17 +72,21 @@ function EditableImage({ src, alt, onChange, width = 300, height = 200 }: {
           border: isHovered ? "3px solid var(--gold)" : "3px solid transparent", transition: "all 0.3s", opacity: isHovered ? 0.8 : 1,
         }} unoptimized />
       ) : (
-        <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center",
-          background: "rgba(212,193,157,0.05)", border: "2px dashed rgba(212,193,157,0.3)", borderRadius: "8px", color: "rgba(212,193,157,0.6)" }}>
+        <div style={{
+          width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center",
+          background: "rgba(212,193,157,0.05)", border: "2px dashed rgba(212,193,157,0.3)", borderRadius: "8px", color: "rgba(212,193,157,0.6)"
+        }}>
           <ImagePlus size={24} style={{ marginRight: "0.5rem" }} />
           {currentLocale === "ar" ? "انقر لاختيار صورة" : "Click to choose image"}
         </div>
       )}
       {!isUploading && src && (
-        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0,
+        <div style={{
+          position: "absolute", bottom: 0, left: 0, right: 0,
           background: isHovered ? "rgba(212,193,157,0.9)" : "rgba(0,0,0,0.65)",
           color: isHovered ? "#000" : "white", padding: "0.4rem 0.75rem", borderRadius: "0 0 8px 8px",
-          fontSize: "0.8rem", pointerEvents: "none", textAlign: "center", transition: "all 0.2s" }}>
+          fontSize: "0.8rem", pointerEvents: "none", textAlign: "center", transition: "all 0.2s"
+        }}>
           {currentLocale === "ar" ? "انقر لتغيير الصورة" : "Click to change image"}
         </div>
       )}
@@ -134,13 +141,19 @@ function Modal({ open, onClose, title, children, wide }: {
         borderRadius: "16px", padding: "2rem", maxWidth: wide ? "1000px" : "700px", width: "95vw",
         maxHeight: "90vh", overflowY: "auto", boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
       }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem",
-          borderBottom: "1px solid rgba(212,193,157,0.15)", paddingBottom: "1rem" }}>
-          <h2 style={{ fontSize: "1.4rem", fontWeight: 700, color: "var(--gold)",
-            fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif' }}>{title}</h2>
-          <button onClick={onClose} style={{ background: "rgba(212,193,157,0.1)", border: "1px solid rgba(212,193,157,0.2)",
+        <div style={{
+          display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem",
+          borderBottom: "1px solid rgba(212,193,157,0.15)", paddingBottom: "1rem"
+        }}>
+          <h2 style={{
+            fontSize: "1.4rem", fontWeight: 700, color: "var(--gold)",
+            fontFamily: 'var(--font-kufi), "DG Kufi", "Noto Kufi Arabic", Arial, sans-serif'
+          }}>{title}</h2>
+          <button onClick={onClose} style={{
+            background: "rgba(212,193,157,0.1)", border: "1px solid rgba(212,193,157,0.2)",
             borderRadius: "50%", width: "36px", height: "36px", display: "flex", alignItems: "center", justifyContent: "center",
-            cursor: "pointer", color: "var(--gold)" }}><X size={18} /></button>
+            cursor: "pointer", color: "var(--gold)"
+          }}><X size={18} /></button>
         </div>
         {children}
       </div>
@@ -177,6 +190,7 @@ export default function AdminEntertainmentPage() {
     sectionTitle: "", sectionTitleEn: "", sectionSubtitle: "", sectionSubtitleEn: "",
     emptyMessage: "", emptyMessageEn: "",
     showBombom: true,
+    isUnderConstruction: true,
   });
 
   const [projects, setProjects] = useState<EntProject[]>([]);
@@ -217,6 +231,7 @@ export default function AdminEntertainmentPage() {
           sectionSubtitle: data.sectionSubtitle || "", sectionSubtitleEn: data.sectionSubtitleEn || "",
           emptyMessage: data.emptyMessage || "", emptyMessageEn: data.emptyMessageEn || "",
           showBombom: data.showBombom ?? true,
+          isUnderConstruction: data.isUnderConstruction ?? true,
         });
       }
     } catch (err) { console.error("Error fetching content:", err); }
@@ -351,18 +366,24 @@ export default function AdminEntertainmentPage() {
                 <Image src={heroImages[heroActiveIndex]} alt="" fill style={{ objectFit: "cover" }} unoptimized />
               </motion.div>
             </AnimatePresence>
-            <div style={{ position: "absolute", inset: 0, zIndex: 1,
-              background: "linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.4) 100%)" }} />
+            <div style={{
+              position: "absolute", inset: 0, zIndex: 1,
+              background: "linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0.4) 100%)"
+            }} />
           </>
         )}
 
         {!hasHeroImages && (
           <>
-            <motion.div style={{ position: "absolute", top: "10%", left: "5%", width: "200px", height: "200px",
-              background: "radial-gradient(circle, rgba(212,193,157,0.2) 0%, transparent 70%)", borderRadius: "50%", filter: "blur(40px)" }}
+            <motion.div style={{
+              position: "absolute", top: "10%", left: "5%", width: "200px", height: "200px",
+              background: "radial-gradient(circle, rgba(212,193,157,0.2) 0%, transparent 70%)", borderRadius: "50%", filter: "blur(40px)"
+            }}
               animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.3, 0.2] }} transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }} />
-            <motion.div style={{ position: "absolute", bottom: "10%", right: "5%", width: "250px", height: "250px",
-              background: "radial-gradient(circle, rgba(212,193,157,0.15) 0%, transparent 70%)", borderRadius: "50%", filter: "blur(40px)" }}
+            <motion.div style={{
+              position: "absolute", bottom: "10%", right: "5%", width: "250px", height: "250px",
+              background: "radial-gradient(circle, rgba(212,193,157,0.15) 0%, transparent 70%)", borderRadius: "50%", filter: "blur(40px)"
+            }}
               animate={{ scale: [1, 1.3, 1], opacity: [0.2, 0.35, 0.2] }} transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }} />
           </>
         )}
@@ -370,19 +391,25 @@ export default function AdminEntertainmentPage() {
         <div style={{ maxWidth: "1000px", margin: "0 auto", padding: "0 2rem", position: "relative", zIndex: 2 }}>
           {!hasHeroImages && (
             <div style={{ display: "flex", justifyContent: "center", marginBottom: "2rem" }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "90px", height: "90px", borderRadius: "50%",
-                background: "linear-gradient(135deg, var(--gold) 0%, rgba(212,193,157,0.7) 100%)", boxShadow: "0 10px 40px rgba(212,193,157,0.4)" }}>
+              <div style={{
+                display: "flex", alignItems: "center", justifyContent: "center", width: "90px", height: "90px", borderRadius: "50%",
+                background: "linear-gradient(135deg, var(--gold) 0%, rgba(212,193,157,0.7) 100%)", boxShadow: "0 10px 40px rgba(212,193,157,0.4)"
+              }}>
                 <Clapperboard size={42} color="var(--dark)" strokeWidth={1.5} />
               </div>
             </div>
           )}
           <div style={{ display: "inline-block", width: "80px", height: "4px", background: "var(--gold)", marginBottom: "2rem", borderRadius: "2px" }} />
-          <h1 style={{ fontSize: "clamp(2.5rem, 6vw, 4rem)", marginBottom: "1.5rem", fontWeight: 700, color: "var(--gold)", lineHeight: 1.2,
-            textShadow: "0 2px 20px rgba(212,193,157,0.3)" }}>
+          <h1 style={{
+            fontSize: "clamp(2.5rem, 6vw, 4rem)", marginBottom: "1.5rem", fontWeight: 700, color: "var(--gold)", lineHeight: 1.2,
+            textShadow: "0 2px 20px rgba(212,193,157,0.3)"
+          }}>
             {localizedTitle || (isAr ? "عالم الترفيه" : "Entertainment World")}
           </h1>
-          <p style={{ fontSize: "clamp(1.1rem, 2.5vw, 1.4rem)", color: "rgba(212,193,157,0.9)", lineHeight: 1.8,
-            maxWidth: "750px", margin: "0 auto 2rem", opacity: 0.9 }}>
+          <p style={{
+            fontSize: "clamp(1.1rem, 2.5vw, 1.4rem)", color: "rgba(212,193,157,0.9)", lineHeight: 1.8,
+            maxWidth: "750px", margin: "0 auto 2rem", opacity: 0.9
+          }}>
             {localizedSubtitle || (isAr ? "نبتكر تجارب ترفيهية استثنائية" : "We create exceptional entertainment experiences")}
           </p>
 
@@ -398,8 +425,10 @@ export default function AdminEntertainmentPage() {
           )}
 
           {content.showStats && (
-            <div style={{ display: "flex", justifyContent: "center", gap: "2.5rem", flexWrap: "wrap", marginTop: "3rem",
-              paddingTop: "2rem", borderTop: "1px solid rgba(212,193,157,0.2)" }}>
+            <div style={{
+              display: "flex", justifyContent: "center", gap: "2.5rem", flexWrap: "wrap", marginTop: "3rem",
+              paddingTop: "2rem", borderTop: "1px solid rgba(212,193,157,0.2)"
+            }}>
               {stats.map((stat, i) => {
                 const Icon = iconMap[stat.icon] || Sparkles;
                 return (
@@ -424,16 +453,20 @@ export default function AdminEntertainmentPage() {
         <div style={{ maxWidth: "1400px", margin: "0 auto" }}>
           {/* Section Header */}
           <div style={{ textAlign: "center", marginBottom: "4rem" }}>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: "0.75rem",
+            <div style={{
+              display: "inline-flex", alignItems: "center", gap: "0.75rem",
               background: "rgba(212,193,157,0.1)", border: "1px solid rgba(212,193,157,0.2)",
-              padding: "0.5rem 1.5rem", borderRadius: "50px", marginBottom: "1.5rem" }}>
+              padding: "0.5rem 1.5rem", borderRadius: "50px", marginBottom: "1.5rem"
+            }}>
               <Sparkles size={18} style={{ color: "var(--gold)" }} />
               <span style={{ color: "var(--gold)", fontSize: "0.9rem" }}>
                 {localizedSectionTitle || (isAr ? "مشاريعنا الترفيهية" : "Our Entertainment Projects")}
               </span>
             </div>
-            <h2 style={{ fontSize: "clamp(1.8rem, 4vw, 2.8rem)", fontWeight: 700, color: "var(--gold)", marginBottom: "1rem",
-              textShadow: "0 2px 20px rgba(212,193,157,0.3)" }}>
+            <h2 style={{
+              fontSize: "clamp(1.8rem, 4vw, 2.8rem)", fontWeight: 700, color: "var(--gold)", marginBottom: "1rem",
+              textShadow: "0 2px 20px rgba(212,193,157,0.3)"
+            }}>
               {localizedSectionTitle || (isAr ? "تجارب ترفيهية لا تُنسى" : "Unforgettable Entertainment Experiences")}
             </h2>
             <p style={{ fontSize: "1.1rem", color: "rgba(212,193,157,0.7)", maxWidth: "600px", margin: "0 auto", lineHeight: 1.8 }}>
@@ -458,8 +491,10 @@ export default function AdminEntertainmentPage() {
                     display: "flex", gap: "0.4rem",
                   }}>
                     {!project.isPublished && (
-                      <span style={{ padding: "0.3rem 0.6rem", background: "rgba(244,67,54,0.9)", color: "#fff",
-                        borderRadius: "6px", fontSize: "0.7rem", fontWeight: 700, display: "flex", alignItems: "center", gap: "0.3rem" }}>
+                      <span style={{
+                        padding: "0.3rem 0.6rem", background: "rgba(244,67,54,0.9)", color: "#fff",
+                        borderRadius: "6px", fontSize: "0.7rem", fontWeight: 700, display: "flex", alignItems: "center", gap: "0.3rem"
+                      }}>
                         <EyeOff size={12} /> {isAr ? "مخفي" : "Hidden"}
                       </span>
                     )}
@@ -483,14 +518,18 @@ export default function AdminEntertainmentPage() {
                   {/* Card Content */}
                   <div style={{ padding: "1.5rem 2rem 1rem" }}>
                     {cat && (
-                      <div style={{ fontSize: "0.75rem", color: "var(--gold)", fontWeight: 700, marginBottom: "0.75rem",
-                        textTransform: "uppercase", letterSpacing: "2px" }}>{cat}</div>
+                      <div style={{
+                        fontSize: "0.75rem", color: "var(--gold)", fontWeight: 700, marginBottom: "0.75rem",
+                        textTransform: "uppercase", letterSpacing: "2px"
+                      }}>{cat}</div>
                     )}
                     <h3 style={{ fontSize: "clamp(1.3rem, 3vw, 1.7rem)", fontWeight: 700, color: "var(--gold)", marginBottom: "0.75rem", lineHeight: 1.3 }}>
                       {title || (isAr ? "(بدون عنوان)" : "(Untitled)")}
                     </h3>
-                    <p style={{ fontSize: "0.95rem", lineHeight: 1.7, color: "rgba(212,193,157,0.75)", marginBottom: "1rem",
-                      display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{desc}</p>
+                    <p style={{
+                      fontSize: "0.95rem", lineHeight: 1.7, color: "rgba(212,193,157,0.75)", marginBottom: "1rem",
+                      display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden"
+                    }}>{desc}</p>
                     <div style={{ display: "flex", gap: "1.5rem", flexWrap: "wrap", fontSize: "0.85rem", color: "rgba(212,193,157,0.7)", marginBottom: "1.25rem" }}>
                       {loc && <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}><MapPin size={14} style={{ color: "var(--gold)" }} />{loc}</div>}
                       {project.year && <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}><Calendar size={14} style={{ color: "var(--gold)" }} />{project.year}</div>}
@@ -505,8 +544,10 @@ export default function AdminEntertainmentPage() {
                           <div key={imgIndex} className="entertainment-mini-thumb">
                             <Image src={img.image} alt={isAr ? img.caption : (img.captionEn || img.caption)} fill style={{ objectFit: "cover" }} unoptimized />
                             {imgIndex === 3 && project.gallery.length > 4 && (
-                              <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.6)",
-                                display: "flex", alignItems: "center", justifyContent: "center", color: "var(--gold)", fontSize: "0.9rem", fontWeight: 700 }}>
+                              <div style={{
+                                position: "absolute", inset: 0, background: "rgba(0,0,0,0.6)",
+                                display: "flex", alignItems: "center", justifyContent: "center", color: "var(--gold)", fontSize: "0.9rem", fontWeight: 700
+                              }}>
                                 +{project.gallery.length - 4}
                               </div>
                             )}
@@ -517,9 +558,11 @@ export default function AdminEntertainmentPage() {
                   )}
 
                   {/* Order badge */}
-                  <div style={{ position: "absolute", bottom: "0.75rem", left: "0.75rem", zIndex: 5,
+                  <div style={{
+                    position: "absolute", bottom: "0.75rem", left: "0.75rem", zIndex: 5,
                     padding: "0.2rem 0.6rem", background: "rgba(212,193,157,0.15)", border: "1px solid rgba(212,193,157,0.2)",
-                    borderRadius: "6px", fontSize: "0.7rem", color: "rgba(212,193,157,0.6)" }}>
+                    borderRadius: "6px", fontSize: "0.7rem", color: "rgba(212,193,157,0.6)"
+                  }}>
                     #{project.order}
                   </div>
                 </div>
@@ -538,8 +581,10 @@ export default function AdminEntertainmentPage() {
                 display: "flex", gap: "0.4rem",
               }}>
                 {!content.showBombom && (
-                  <span style={{ padding: "0.3rem 0.6rem", background: "rgba(244,67,54,0.9)", color: "#fff",
-                    borderRadius: "6px", fontSize: "0.7rem", fontWeight: 700, display: "flex", alignItems: "center", gap: "0.3rem" }}>
+                  <span style={{
+                    padding: "0.3rem 0.6rem", background: "rgba(244,67,54,0.9)", color: "#fff",
+                    borderRadius: "6px", fontSize: "0.7rem", fontWeight: 700, display: "flex", alignItems: "center", gap: "0.3rem"
+                  }}>
                     <EyeOff size={12} /> {isAr ? "مخفي" : "Hidden"}
                   </span>
                 )}
@@ -578,15 +623,19 @@ export default function AdminEntertainmentPage() {
 
               {/* Card Content */}
               <div style={{ padding: "1.5rem 2rem 1rem" }}>
-                <div style={{ fontSize: "0.75rem", color: "var(--gold)", fontWeight: 700, marginBottom: "0.75rem",
-                  textTransform: "uppercase", letterSpacing: "2px" }}>
+                <div style={{
+                  fontSize: "0.75rem", color: "var(--gold)", fontWeight: 700, marginBottom: "0.75rem",
+                  textTransform: "uppercase", letterSpacing: "2px"
+                }}>
                   {isAr ? "صفحة ثابتة" : "STATIC PAGE"}
                 </div>
                 <h3 style={{ fontSize: "clamp(1.3rem, 3vw, 1.7rem)", fontWeight: 700, color: "var(--gold)", marginBottom: "0.75rem", lineHeight: 1.3 }}>
                   {isAr ? "بوم بوم بلاي كيد" : "Bom Bom Play Kid"}
                 </h3>
-                <p style={{ fontSize: "0.95rem", lineHeight: 1.7, color: "rgba(212,193,157,0.75)", marginBottom: "1rem",
-                  display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                <p style={{
+                  fontSize: "0.95rem", lineHeight: 1.7, color: "rgba(212,193,157,0.75)", marginBottom: "1rem",
+                  display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden"
+                }}>
                   {isAr
                     ? "عالم من المرح والمغامرة للأطفال! مناطق لعب متنوعة، قلاع قفز، تزحلق، وركن الأذكياء."
                     : "A world of fun and adventure for kids! Play zones, jump castles, skating, and smart corners."}
@@ -600,9 +649,11 @@ export default function AdminEntertainmentPage() {
               </div>
 
               {/* Static page badge */}
-              <div style={{ position: "absolute", bottom: "0.75rem", left: "0.75rem", zIndex: 5,
+              <div style={{
+                position: "absolute", bottom: "0.75rem", left: "0.75rem", zIndex: 5,
                 padding: "0.2rem 0.6rem", background: "rgba(0,191,255,0.15)", border: "1px solid rgba(0,191,255,0.3)",
-                borderRadius: "6px", fontSize: "0.7rem", color: "#00BFFF", fontWeight: 600 }}>
+                borderRadius: "6px", fontSize: "0.7rem", color: "#00BFFF", fontWeight: 600
+              }}>
                 {isAr ? "صفحة ثابتة" : "Static"}
               </div>
             </div>
@@ -666,8 +717,10 @@ export default function AdminEntertainmentPage() {
                     background: "rgba(244,67,54,0.9)", color: "#fff", border: "none", borderRadius: "4px",
                     cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.7rem",
                   }}>✕</button>
-                  <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, background: "rgba(0,0,0,0.6)",
-                    color: "#fff", fontSize: "0.65rem", textAlign: "center", padding: "0.15rem" }}>{idx + 1}</div>
+                  <div style={{
+                    position: "absolute", bottom: 0, left: 0, right: 0, background: "rgba(0,0,0,0.6)",
+                    color: "#fff", fontSize: "0.65rem", textAlign: "center", padding: "0.15rem"
+                  }}>{idx + 1}</div>
                 </div>
               ))}
             </div>
@@ -688,8 +741,10 @@ export default function AdminEntertainmentPage() {
           const lk = `stat${n}Label` as keyof ContentState;
           const lek = `stat${n}LabelEn` as keyof ContentState;
           return (
-            <div key={n} style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: "0.75rem", marginBottom: "0.75rem",
-              padding: "0.75rem", background: "rgba(212,193,157,0.05)", borderRadius: "8px", border: "1px solid rgba(212,193,157,0.1)" }}>
+            <div key={n} style={{
+              display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: "0.75rem", marginBottom: "0.75rem",
+              padding: "0.75rem", background: "rgba(212,193,157,0.05)", borderRadius: "8px", border: "1px solid rgba(212,193,157,0.1)"
+            }}>
               <div><label style={{ ...labelStyle, fontSize: "0.75rem" }}>{isAr ? "أيقونة" : "Icon"}</label>
                 <select value={content[ik] as string} onChange={e => setContent({ ...content, [ik]: e.target.value })} style={selectStyle}>
                   {iconOptions.map(o => <option key={o} value={o}>{o}</option>)}
@@ -767,6 +822,38 @@ export default function AdminEntertainmentPage() {
           </button>
         </div>
 
+        {/* Under Construction Toggle */}
+        <div style={{
+          marginBottom: "1.5rem", padding: "1rem 1.25rem",
+          background: content.isUnderConstruction ? "rgba(244,143,33,0.08)" : "rgba(76,175,80,0.08)",
+          border: `1px solid ${content.isUnderConstruction ? "rgba(244,143,33,0.3)" : "rgba(76,175,80,0.3)"}`,
+          borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "space-between",
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+            {content.isUnderConstruction
+              ? <EyeOff size={20} style={{ color: "rgba(244,143,33,0.9)" }} />
+              : <Eye size={20} style={{ color: "rgba(76,175,80,0.9)" }} />}
+            <div>
+              <div style={{ fontWeight: 700, color: "var(--gold)", fontSize: "0.95rem" }}>
+                {isAr ? "تحت الإنشاء" : "Under Construction"}
+              </div>
+              <div style={{ fontSize: "0.8rem", color: "rgba(212,193,157,0.6)" }}>
+                {isAr ? "إظهار صفحة 'قريباً' بدلاً من المشاريع" : "Show 'Coming Soon' page instead of projects"}
+              </div>
+            </div>
+          </div>
+          <button onClick={() => setContent({ ...content, isUnderConstruction: !content.isUnderConstruction })} style={{
+            padding: "0.5rem 1.25rem",
+            background: content.isUnderConstruction ? "rgba(76,175,80,0.9)" : "rgba(244,143,33,0.9)",
+            color: "#fff", border: "none", borderRadius: "8px", cursor: "pointer",
+            fontWeight: 700, fontSize: "0.85rem", fontFamily: "inherit",
+          }}>
+            {content.isUnderConstruction
+              ? (isAr ? "نشر الصفحة" : "Publish Page")
+              : (isAr ? "إيقاف (قريباً)" : "Suspend (Soon)")}
+          </button>
+        </div>
+
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
           <button onClick={saveContent} disabled={saving} style={{
             display: "flex", alignItems: "center", gap: "0.5rem",
@@ -840,8 +927,10 @@ function ProjectModal({ open, mode, data, onClose, onSave, saving, isAr }: {
       <div style={{ marginBottom: "1.25rem" }}>
         <label style={labelStyle}>{isAr ? "معرض الصور" : "Photo Gallery"}</label>
         {gallery.map((item, index) => (
-          <div key={index} style={{ display: "flex", gap: "0.75rem", marginBottom: "0.75rem", padding: "0.75rem",
-            background: "rgba(212,193,157,0.05)", borderRadius: "8px", border: "1px solid rgba(212,193,157,0.1)", alignItems: "flex-start" }}>
+          <div key={index} style={{
+            display: "flex", gap: "0.75rem", marginBottom: "0.75rem", padding: "0.75rem",
+            background: "rgba(212,193,157,0.05)", borderRadius: "8px", border: "1px solid rgba(212,193,157,0.1)", alignItems: "flex-start"
+          }}>
             <EditableImage src={item.image} alt="" onChange={p => {
               const g = [...gallery]; g[index] = { ...g[index], image: p }; setGallery(g);
             }} width={120} height={90} />
