@@ -216,7 +216,7 @@ export default function Header({ locale, settings, headerLogo, isHomePage = fals
           )}
           {settings?.showEntertainment !== false && (
             <Link href={`/${locale}/entertainment`} onClick={closeMenu} className="nav-link">
-              <span className="nav-link-text">{locale === "ar" ? "عالم الترفيه" : "Entertainment"}</span>
+              <span className="nav-link-text">{locale === "ar" ? "الرياضة و الترفيه" : "Sports & Entertainment"}</span>
             </Link>
           )}
           {settings?.showContact !== false && (
