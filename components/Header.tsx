@@ -134,7 +134,7 @@ export default function Header({ locale, settings, headerLogo, isHomePage = fals
           )}
           {settings?.showEntertainment !== false && (
             <Link href={`/${locale}/entertainment`}>
-              {locale === "ar" ? "عالم الترفيه" : "Entertainment"}
+              {locale === "ar" ? "الرياضة و الترفيه" : "Entertainment"}
             </Link>
           )}
           {settings?.showContact !== false && (

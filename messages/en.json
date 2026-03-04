@@ -3,7 +3,7 @@
     "home": "Home",
     "about": "About Us",
     "services": "Services",
-    "projects": "Projects",
+    "projects": "Real Estate",
     "contact": "Contact Us",
     "entertainment": "Entertainment"
   },
@@ -46,9 +46,9 @@
     "service4Desc": "Innovative engineering solutions for all challenges"
   },
   "projectsSection": {
-    "title": "Our Projects",
+    "title": "Our investments",
     "subtitle": "We are proud to present exceptional projects around the world",
-    "viewMore": "View More Projects",
+    "viewMore": "View More investments",
     "project1": "Luxury Villa - Dubai",
     "project1Desc": "Luxury architectural design combining Arabic authenticity and modernity",
     "project2": "Residential Complex - Riyadh",
@@ -97,4 +97,3 @@
     }
   }
 }
-
